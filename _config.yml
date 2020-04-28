@@ -1,7 +1,7 @@
 # Setup
 title:               Minds&Company
 tagline:             'AI Tech Blog'
-description:         'A reserved <a href="https://jekyllrb.com" target="_blank">Jekyll</a> theme that places the utmost gravity on content with a hidden drawer. Made by <a href="https://twitter.com/mdo" target="_blank">@mdo</a>.'
+description:         '<a href="http://mnc.ai/" target="_blank">마인즈앤컴퍼니</a>의 AI tech blog입니다. Made by <a href="https://www.linkedin.com/in/jiryang/" target="_blank">뱀눈</a>.'
 url:                 https://jiryang.github.io
 repository:          jiryang/jiryang.github.io
 baseurl:             ''
@@ -10,9 +10,9 @@ permalink:           pretty
 
 # About/contact
 author:
-  name:              Mark Otto
-  url:               https://twitter.com/mdo
-  email:             markdotto@gmail.com
+  name:              Ji Ryang Chung
+  url:               https://www.linkedin.com/in/jiryang/
+  email:             jr.chung@mindslab.ai
 
 # Gems
 plugins:
