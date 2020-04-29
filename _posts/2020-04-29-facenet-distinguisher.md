@@ -3,7 +3,7 @@ layout: post
 title: FaceNet 방식의 얼굴인식
 comments: true
 categories: practical
-tags: FaceNet, Siamese network, Triplet loss
+tags: FaceNet, Siamese_network, Triplet_loss
 ---
 
 <div>
