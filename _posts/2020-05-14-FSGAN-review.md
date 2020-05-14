@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "FSGAN: Subject Agnostic Face Swapping and Reenactment"
-date:   2020-05-14 23:59:59
+date:   2020-05-14 13:59:59
 categories: Deepfake
 tags: deepfake fsgan faceswap 
 excerpt: FSGAN 논문 리뷰
