@@ -21,7 +21,7 @@ mathjax: true
 
 Training data의 분포를 따르는 새로운 instance를 합성하는 `GAN (Generative Adversarial Network)`이 발명되고 수많은 분야에 적용 및 개선이 되어왔습니다. 이후 one-hot vector로 가이드를 줘서 원하는 방향으로 합성 결과를 뽑아내는 [cGAN](https://arxiv.org/pdf/1411.1784.pdf) 방식이 고안되었으며, 이어서 conditional vector의 dimension을 확장하여 한 이미지로 다른 이미지의 스타일을 가이드하여 변경/합성시키는 [pix2pix style transfer](https://arxiv.org/pdf/1611.07004.pdf) 방식이 개발되었습니다. 여기까지가 'innovation' 이라고 하면, 이 이후로는 성능을 최적화한다거나 scale을 높인다거나, 특정 도메인에 특화한다거나 하는 수많은 minor improvement 연구 결과물들이 쏟아져 나오게 되었죠.
 
-![Fig2](https://jiryang.github.io/img/tech_s_curve.png "Innovation S-Curve" =450x)
+![Fig2](https://jiryang.github.io/img/tech_s_curve.png "Innovation S-Curve" | width=450)
 
 
 
