@@ -56,7 +56,7 @@ Negative로 idle 상태를 이루는 막전위는 sensory input (감각뉴런의
 
 이제 biological neuron과 ANN의 neuron 사이의 analogy가 좀 더 명확해졌나요? ECG 잠깐 볼까요?
 
-![Fig6](https://jiryang.github.io/img/ann1.jpg "Biological vs. Artificial Neuron"){: width="100%"}{: .center}
+![Fig6](https://jiryang.github.io/img/ecg_pqrst.png "ECG of Normal Sinus Rythm"){: width="50%"}{: .center}
 
 
 Neoron의 그것과 상당히 유사한 ECG로 측정한 심근세포의 action potential은 한 step이 PQRST 단계로 이루어져 있습니다. 심장의 구조, 동작방식 등의 차이로 인해 조금 모양이 다르긴 하지만, 세포막의 이온 채널에 의한 idle-depolarization-repolarization이라는 일련의 과정은 뉴런의 경우와 대동소이합니다. 6개 정도의 lead를 사용해서 가슴 여러 부위에서 이러한 파형을 측정하고, wave 간의 거리, peak의 높이, 모양 등등을 통해 심박 수 측정 뿐만 아니라 심방세동, 빈맥, 심방조동, 고칼륨혈증, 심실비대증, 심근허혈증, 동맥류, 협심증 등의 질병 가능성을 유추할 수 있다고 합니다. 
