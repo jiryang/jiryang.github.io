@@ -53,4 +53,12 @@ Negative로 idle 상태를 이루는 막전위는 sensory input (감각뉴런의
 
 ![Fig6](https://jiryang.github.io/img/ann1.jpg "Biological vs. Artificial Neuron"){: width="100%"}{: .center}
 
-이제 biological neuron과 ANN의 neuron 사이의 analogy가 좀 더 명확해졌나요?
+
+이제 biological neuron과 ANN의 neuron 사이의 analogy가 좀 더 명확해졌나요? ECG 잠깐 볼까요?
+
+![Fig6](https://jiryang.github.io/img/ann1.jpg "Biological vs. Artificial Neuron"){: width="100%"}{: .center}
+
+
+Neoron의 그것과 상당히 유사한 ECG로 측정한 심근세포의 action potential은 한 step이 PQRST 단계로 이루어져 있습니다. 심장의 구조, 동작방식 등의 차이로 인해 조금 모양이 다르긴 하지만, 세포막의 이온 채널에 의한 idle-depolarization-repolarization이라는 일련의 과정은 뉴런의 경우와 대동소이합니다. 6개 정도의 lead를 사용해서 가슴 여러 부위에서 이러한 파형을 측정하고, wave 간의 거리, peak의 높이, 모양 등등을 통해 심박 수 측정 뿐만 아니라 심방세동, 빈맥, 심방조동, 고칼륨혈증, 심실비대증, 심근허혈증, 동맥류, 협심증 등의 질병 가능성을 유추할 수 있다고 합니다. 
+
+나이, 체중 등에 따른 개인별 차이, 질병의 경중에 따른 차이, 기왕증 유무에 따른 차이 등등 수많은 변수들이 prediction의 성능에 영향을 미칠 것이기 때문에, 이 부분에 ML을 적용하면 진단의 정확도와 정밀도를 높일 가능성이 있겠지요?
