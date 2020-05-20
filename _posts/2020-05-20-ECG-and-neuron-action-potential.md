@@ -24,6 +24,6 @@ mathjax: true
 
 뇌에서 A-to-B의 전달 신호의 세기는 두 지점을 연결하는 뉴런의 갯수, 그 연결을 구성하는 뉴런들의 synapse의 수, 구성 뉴런들 사이의 neurotransmitter의 양 뿐만 아니라 저 myelin 또한 영향을 미칩니다. 이를 굉장히 단순화하여 모델링 한 것이 ANN이고, 여기선 신호 전달의 세기가 weight의 magnitude로 표현이 되지요.
 
-![Fig3](https://jiryang.github.io/img/ann1.jpg "Biological vs. Artificial Neuron"){: width="50%"}{: .center}
+![Fig3](https://jiryang.github.io/img/ann1.jpg "Biological vs. Artificial Neuron"){: width="100%"}{: .center}
 
 이제 biological neuron과 ANN의 neuron 사이의 analogy가 좀 더 명확해졌나요?
