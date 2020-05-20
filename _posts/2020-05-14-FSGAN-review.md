@@ -15,6 +15,7 @@ mathjax: true
 
 ![Fig1](https://jiryang.github.io/img/faceswap_vs_facereenactment.JPG "Face Swap vs. Face Reenactment")
 
+
 이 논문은 왼쪽의 `face swap`에 관한 내용입니다.
 (Deepfake에 악용되었을 경우 `face reenactment`가 더 파장이 클 수 있겠으나 아직은 dummy actor를 놓고 swapping 하는 방식이 quality나 throughput 측면에서 더 낫습니다. 하지만 양쪽 모두 기술이 발전하고 있으니 계속 지켜봐야죠.)
 
@@ -24,6 +25,11 @@ Training data의 분포를 따르는 새로운 instance를 합성하는 `GAN (Ge
 | ![Fig2](https://jiryang.github.io/img/tech_s_curve.png "Innovation S-Curve"){: width="50%"}{: .center} |
 |:--:|
 |*(연구도, 진화도, 비지니스도 innovation S curve를 따르는 것 같습니다)*|
+
+
+최근 FSGAN과 같이 ID 얼굴사진(1)과 Attribute 얼굴사진(2)을 입력하여, (2)의 표정을 따라하는 (1)의 얼굴을 만들어내는 모델들이 많이 개발되고 있는데요, fewer-shot으로 하면서 ID preserving을 얼마나 잘 하는지가 이 분야의 가장 큰 과제인 것 같습니다. Demo 영상에서의 결과물이 썩 괜찮았던것 같아서 FSGAN에 많은 기대를 했었는데요, 안타깝게도 아직 ID preserving 성능이 썩 좋지는 않은 것 같습니다.
+
+[FSGAN Demo](https://www.youtube.com/watch?v=BsITEVX6hkE)
 
 
 
