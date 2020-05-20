@@ -34,7 +34,7 @@ Negative로 idle 상태를 이루는 막전위는 sensory input (감각뉴런의
 
 이같은 action potential이 국지적으로 발생하게 되면 주변 세포막 주위의 이온 분포를 변화시키게 되고, 이 자극으로 인해 action potential이 연속적으로 발생하게 되는 효과를 낳습니다.
 
-![Fig3](https://jiryang.github.io/img/action_potential_propagation.png "Action Potential Propagation"){: width="100%"}{: .center}
+![Fig3](https://jiryang.github.io/img/action_potential_propagation.png "Action Potential Propagation"){: width="50%"}{: .center}
 
 
 
