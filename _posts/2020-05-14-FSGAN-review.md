@@ -29,7 +29,7 @@ Training data의 분포를 따르는 새로운 instance를 합성하는 `GAN (Ge
 
 최근 FSGAN과 같이 ID 얼굴사진(1)과 Attribute 얼굴사진(2)을 입력하여, (2)의 표정을 따라하는 (1)의 얼굴을 만들어내는 모델들이 많이 개발되고 있는데요, fewer-shot으로 하면서 ID preserving을 얼마나 잘 하는지가 이 분야의 가장 큰 과제인 것 같습니다. Demo 영상에서의 결과물이 썩 괜찮았던것 같아서 FSGAN에 많은 기대를 했었는데요, 안타깝게도 아직 ID preserving 성능이 썩 좋지는 않은 것 같습니다.
 
-[FSGAN Demo](https://www.youtube.com/watch?v=BsITEVX6hkE)
+[![FSGAN Demo](https://jiryang.github.io/img/fsgan_demo.PNG)](https://www.youtube.com/watch?v=BsITEVX6hkE)
 
 
 
