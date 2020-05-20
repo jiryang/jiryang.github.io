@@ -40,7 +40,7 @@ Negative로 idle 상태를 이루는 막전위는 sensory input (감각뉴런의
 
 그 결과, 전기 신호가 뉴런을 타고 전달되는 효과를 낳는거죠.
 
-![Fig4](https://jiryang.github.io/img/action_potential.gif "Inter-neuron Signal Transfer"){: width="100%"}{: .center}
+![Fig4](https://jiryang.github.io/img/action_potential.gif "Inter-neuron Signal Transfer"){: width="60%"}{: .center}
 
 
 
