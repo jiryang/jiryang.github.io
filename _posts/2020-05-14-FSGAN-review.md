@@ -26,3 +26,5 @@ Training data의 분포를 따르는 새로운 instance를 합성하는 `GAN (Ge
 |*(연구도, 진화도, 비지니스도 innovation S curve를 따르는 것 같습니다)*|
 
 
+
+
