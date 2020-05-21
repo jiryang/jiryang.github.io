@@ -34,8 +34,7 @@ FSGAN은 아래와 같이 face reenactment & segmentation, inpainting, blending�
 
 1. Face Reenactment & Segmentation (그림의 Gr & Gs)
   >> ID face를 Attribute face로 transform하게되면 interpolation에 의한 face feature의 변형이 불가피합니다. 두 얼굴 간의 distance(표정, 피부색, 각도 등)가 크면 클수록 필요한 transform magnitude도 커지게 되고, GAN을 수렴시키기가 힘들어집니다. Attribute face와 distance가 가까운 ID face가 있으면 좋겠지만, 이러면 one-shot이나 few-shot 학습이 불가능해지고 필요한 source face data의 양이 많아진다는 단점이 생깁니다.
-
-  저자는 이 문제를 최대한 해결해보기 위해 ID와 Attribute 얼굴들의 facial keypoints를 한 방에 transform하지 않고, 그 차이를 세분화하여 여러 개의 intermediate target facial keypoints를 만들어서 단계적으로 transform을 수행하였습니다. ID face(source)를 intermediate face(target)로 변환은, 2D Euler space(roll은 제외) 상에서 target과 가장 distance가 가까운 source를 선택하여 interpolate를 시킴으로써 one-shot도 가능하되, source data가 많아질수록 ID preserving 측면에서 손실이 줄어드는 방식을 꾀하였습니다.
+  >> 저자는 이 문제를 최대한 해결해보기 위해 ID와 Attribute 얼굴들의 facial keypoints를 한 방에 transform하지 않고, 그 차이를 세분화하여 여러 개의 intermediate target facial keypoints를 만들어서 단계적으로 transform을 수행하였습니다. ID face(source)를 intermediate face(target)로 변환은, 2D Euler space(roll은 제외) 상에서 target과 가장 distance가 가까운 source를 선택하여 interpolate를 시킴으로써 one-shot도 가능하되, source data가 많아질수록 ID preserving 측면에서 손실이 줄어드는 방식을 꾀하였습니다.
 
 2. Inpainting (그림의 Gc)
   >> 저자의 예전 논문에서 사용한 inpainting network를 붙여넣어 occlusion augmentation 기능을 구현하였습니다.
