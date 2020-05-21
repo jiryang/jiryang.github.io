@@ -27,6 +27,26 @@ Training data의 분포를 따르는 새로운 instance를 합성하는 `GAN (Ge
 |*(연구도, 진화도, 비지니스도 innovation S curve를 따르는 것 같습니다)*|
 
 
+FSGAN은 아래와 같이 face reenactment & segmentation, inpainting, blending의 세 모듈을 통합한 GAN-based 모델을 구성하였습니다.
+
+![Fig3](https://jiryang.github.io/img/fsgan_model.PNG "FSGAN Model Pipeline")
+
+
+1. Face Reenactment & Segmentation
+>> ID face를 Attribute face로 transform하게되면 interpolation에 의한 face feature의 변형이 불가피합니다. 두 얼굴 간의 distance(표정, 피부색, 각도 등)가 크면 클수록 필요한 transform magnitude도 커지게 되고, GAN을 수렴시키기가 힘들어집니다. Attribute face와 distance가 가까운 ID face가 있으면 좋겠지만, 이러면 one-shot이나 few-shot 학습이 불가능해지고 필요한 source face data의 양이 많아진다는 단점이 생깁니다.
+2. Inpainting
+>> 저자의 예전 논문에서 사용한 inpainting network를 붙여넣어 occlusion augmentation 기능을 구현하였습니다.
+3. Blending
+>> Poisson blending loss를 reconstruction loss에 추가하여 구현하였습니다. Blending 부분은 OpenCV에서 Poisson blending을 구현한 seamlessClone() 함수를 썼네요.
+
+FSGAN은 이론적으로는 one-shot도 가능하지만, 결과 영상(이미지)의 성능을 좋게 하기 위해서는 multiple ID 이미지(혹은 영상)를 필요로 합니다.
+
+![Fig4](https://jiryang.github.io/img/abe2conan.gif "Face Swapping (Abe Shinjo to Conan O'brien)")
+
+
+위 결과는 저자가 'best practice'라고 말하는 옵션으로 아베신조 총리의 ID를 코난 오브라이언의 attribute에 집어넣은 결과입니다.
+ID의 특징이 살아있기는 하지만 ID preserving이 조금 약한 듯 합니다. 아베와 코난의 중간 얼굴이 출력되는 듯한 인상이네요.
+
 최근 FSGAN과 같이 ID 얼굴사진(1)과 Attribute 얼굴사진(2)을 입력하여, (2)의 표정을 따라하는 (1)의 얼굴을 만들어내는 모델들이 많이 개발되고 있는데요, fewer-shot으로 하면서 ID preserving을 얼마나 잘 하는지가 이 분야의 가장 큰 과제인 것 같습니다. Demo 영상에서의 결과물이 썩 괜찮았던것 같아서 FSGAN에 많은 기대를 했었는데요, 안타깝게도 아직 ID preserving 성능이 썩 좋지는 않은 것 같습니다.
 
 [![FSGAN Demo](https://jiryang.github.io/img/fsgan_demo.PNG)](https://www.youtube.com/watch?v=BsITEVX6hkE)
