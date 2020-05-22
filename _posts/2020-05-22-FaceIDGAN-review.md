@@ -27,9 +27,10 @@ Source랑 target이 좀 헷갈릴 수 있는데, 잘 읽어보시면 이해가 �
 하지만, 아직까지 pose-guided 방식의 가장 큰 단점 중 하나가 바로 '얼굴이 애매하게 닮는다'는 점입니다. 아무래도 big data로 general하게 만들다 보니 합성 모델의 튜닝값이 개개인의 얼굴에 최적화될 수 없다는 점 때문일텐데요, pose-guided 방식 합성 모델을 상용화하게 되면 이 ID preservation을 얼마냐 잘 하느냐가 성패를 좌우하게 될 것 같습니다.
 
 ![Fig2](https://jiryang.github.io/img/fsgan_results.PNG "FSGAN Results"){: width="70%"}{: .aligncenter}
+
 (FSGAN의 샘플 결과물입니다. Target의 attribute를 따라하는 source 얼굴을 합성한 결과가 source 얼굴같아 보이시나요? 이미지를 저렇게 늘여놓고 보면 좀 비슷해 보이긴 하지만, 막상 result만 따로 떼어놓고 보면 과연 이게 source ID 인물인지 아닌지 아리까리할 때가 많습니다. 특히 내 얼굴이나 얼굴을 잘 아는 유명인일 경우 별로 안닮은것 처럼 느껴집니다.)
 
-별도 포스팅 없이 배경설명을 하다보니 너무 서론이 길었네요. 오늘 간단히 살펴볼 FaceID-GAN 논문에서는 ID preserving을 위해 classifier를 독특한 방식으로 사용합니다. 
+별도 포스팅 없이 배경설명을 하다보니 너무 서론이 길었네요. 오늘 간단히 살펴볼 FaceID-GAN 논문에서는 ID preserving을 위해 classifier를 독특한 방식으로 사용합니다. 특정 class에 속하는 GAN 합성 결과를 유도하기 위해서 discriminator와 classifier를 함께 뒷단에 배치해서 
 
 
 * _이거에 대해서는 따로 한 번 얘기를 하고 싶은데, 어떤 문제(예를 들면 얼굴 합성)든 난이도가 정해져 있을텐데요, 이 난이도를 학습데이터, 모델 복잡도, generalizability 등의 요소로 분할할 수 있는 것 같습니다. 어느 요소가 희생을 하면 다른 요소에서 득을 보는..._
