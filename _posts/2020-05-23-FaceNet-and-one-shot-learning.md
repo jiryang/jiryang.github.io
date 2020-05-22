@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "FaceNet, One-Shot Learning, Triplet Loss"
-date:   2020-05-22 10:59:59
+date:   2020-05-22 22:59:59
 categories: Deepfake
 tags: facenet one-shot_learning triplet_loss
 excerpt: FaceNet의 Triplelet One-Shot Learning
