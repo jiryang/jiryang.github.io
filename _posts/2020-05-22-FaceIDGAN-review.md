@@ -32,9 +32,15 @@ Source랑 target이 좀 헷갈릴 수 있는데, 잘 읽어보시면 이해가 �
 
 별도 포스팅 없이 배경설명을 하다보니 너무 서론이 길었네요. 오늘 간단히 살펴볼 FaceID-GAN 논문에서는 ID preserving을 위해 classifier를 독특한 방식으로 사용합니다. 특정 class에 속하는 GAN 합성 결과를 유도하기 위해서 discriminator와 classifier를 함께 뒷단에 배치해서 classification 결과에 따라서도 generator를 업데이트하는 방식의 네트워크는 이미 여러 개 있었는데요, 얘들도 역시 애매하게 닮는 한계를 극복하지 못하고 있었습니다. 저자들은 pre-trained 혹은 online training classifier를 단순히 붙여넣는 것에서 그치지 않고, 이 classifier가 discriminator와 다른 domain에서 classification을 하도록 만들어서 generator의 결과물을 real source에 더 가깝게 push하겠다는 아이디어를 구현하였습니다. 무슨 소린지 좀 더 보시죠.
 
-![Fig3](https://jiryang.github.io/img/faceidgan_fig2_01.PNG "FaceID-GAN Fig2 Redrawn"){: width="70%"}{:.aligncenter}
+![Fig3](https://jiryang.github.io/img/GDC_network.PNG "G-D-C Network"){: width="70%"}{:.aligncenter}
 
 
-논문의 Figure 2를 다시 그려보았습니다. 파란 큰 원은 id=1번의 real face ($$f^r_{id1}$$)
+Generator-{Discriminator+Classifier} 로 구성된 GAN 모델의 한 예입니다.
+
+
+![Fig4](https://jiryang.github.io/img/faceidgan_fig2_01.PNG "FaceID-GAN Fig2 Redrawn"){: width="70%"}{:.aligncenter}
+
+
+논문의 Figure 2를 다시 그려보았습니다. 파란 큰 원은 id=1번의 real face($$f^r_{id1}$$)의 class boundary를 나타냅니다. 그 안에 있는 작은 파란 원들은 id=1번 얼굴의 각각 instance들입니다. 다양한 표정, 다양한 각도의 사진들이 있겠지만 그 facial feature는 어느정도 정규분포를 따른다고 봐도 무리가 없을 것 같습니다. 그래서 파란 원의 중심에 가까운 instance일 수록 id=1 인물의 특징을 잘 나타내는 사진이라고 할 수 있겠죠. 녹색 원은 마찬가지로 id=2 얼굴의 class boundary입니다. Fig3과 같은 pose-guided GAN 결과물이 얼굴을 애매하게 닮았다는 것은 id=1을 가진 synthesized face($$f^s_{id1}$$)가 $$class_{id1}$$의 중심에서 멀지만 boundary 안에는 들어있는, 그러니깐 Fig4의 파란 네모와 같은 instance를 생성했다는 의미라고 이해할 수 있습니다. 또한 $$f^s_{id1}$$가 id=2랑도 어느정도 닮았다는 의미는, 이 instance가 $$class_{id2}$$의 boundary에서 벗어나 있기는 하지만 꽤나 가까운 위치에 있다고 이해할 수 있습니다.
 
 * _이거에 대해서는 따로 한 번 얘기를 하고 싶은데, 어떤 문제(예를 들면 얼굴 합성)든 난이도가 정해져 있을텐데요, 이 난이도를 학습데이터, 모델 복잡도, generalizability 등의 요소로 분할할 수 있는 것 같습니다. 어느 요소가 희생을 하면 다른 요소에서 득을 보는..._
