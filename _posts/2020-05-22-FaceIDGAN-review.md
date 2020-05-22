@@ -15,6 +15,7 @@ mathjax: true
 이제 encoder는 source와 target얼굴 모두의 (공통의) latent face를 만들 수 있게 되었고 decoder는 여기서 각각의 원래 얼굴을 복원할 수 있게 되었기 때문에, target decoder를 떼어내고 학습된 encoder - source decoder로만 조합을 해서 target 얼굴 이미지를 입력하면 이 attribute(표정, 각도 등)를 따르는 source의 얼굴을 합성하게 됩니다. 이 합성된 얼굴을 잘라서 원래의 target 이미지에 티 안나게 잘 blending시키면 deepfake가 완성됩니다.
 
 Source랑 target이 좀 헷갈릴 수 있는데, 잘 읽어보시면 이해가 될꺼예요. Face A가 target이고 Face B가 source겠죠?
+
 ![Fig1](https://jiryang.github.io/img/faceswap_autoencoder.png "How Deepfake Works"){: width="70%"}{: .aligncenter}
 
 (Deepfake에 대해 궁금하시다면 이런 [reference](http://news.seoulbar.or.kr/news/articleView.html?idxno=1817)도 있습니다 :) )
@@ -42,7 +43,7 @@ Generator-{Discriminator+Classifier} 로 구성된 GAN 모델의 한 예입니�
 ![Fig4](https://jiryang.github.io/img/faceidgan_fig2_01.PNG "FaceID-GAN Fig2 Redrawn"){: width="70%"}{:.aligncenter}
 
 
-논문의 Figure 2를 다시 그려보았습니다. 파란 큰 원은 id=1번의 real face($$f^r_{id1}$$)의 class boundary를 나타냅니다. 그 안에 있는 작은 파란 원들은 id=1번 얼굴의 각각 instance들입니다. 다양한 표정, 다양한 각도의 사진들이 있겠지만 그 facial feature는 어느정도 정규분포를 따른다고 봐도 무리가 없을 것 같습니다. 그래서 파란 원의 중심에 가까운 instance일 수록 id=1 인물의 특징을 잘 나타내는 사진이라고 할 수 있겠죠. 녹색 원은 마찬가지로 id=2 얼굴의 class boundary입니다. Fig3과 같은 pose-guided GAN 결과물이 얼굴을 애매하게 닮았다는 것은 id=1을 가진 synthesized face($$f^s_{id1}$$)가 $$class_{id1}$$의 중심에서 멀지만 boundary 안에는 들어있는, 그러니깐 Fig4의 파란 네모와 같은 instance를 생성했다는 의미라고 이해할 수 있습니다. 또한 $$f^s_{id1}$$가 id=2랑도 어느정도 닮았다는 의미는, 이 instance가 $$class_{id2}$$의 boundary에서 벗어나 있기는 하지만 꽤나 가까운 위치에 있다고 이해할 수 있습니다. 이러한 classifier의 class 개수를 2N개로 세분화하면 $$f^r_{id1}$$과 $$f^s_{id1}$$ 사이의 영역을 구분하는 효과를 내게 되고, generator와 classifier를 경쟁하게 하여 수렴시키면 생성된 이미지 $$f^{s'}_{id1}$$은 $$f^r_{id1}$$과 $$f^s_{id1}$$ 사이 중간쯤에 생성될 것이고, 결과적으로 $$f^s_{id1}$$보다 $$f^r_{id1}$$에 '가까운' 이미지를 만들게 되어 ID preserving이 더 잘 될 것이라는 충분히 타당한 intuition을 가지고 구현을 한 것입니다.
+논문의 Figure 2를 다시 그려보았습니다. 파란 큰 원은 id=1번의 real face($$f^r_{id1}$$)의 class boundary를 나타냅니다. 그 안에 있는 작은 파란 원들은 id=1번 얼굴의 각각 instance들입니다. 다양한 표정, 다양한 각도의 사진들이 있겠지만 그 facial feature는 어느정도 정규분포를 따른다고 봐도 무리가 없을 것 같습니다. 그래서 파란 원의 중심에 가까운 instance일 수록 id=1 인물의 특징을 잘 나타내는 사진이라고 할 수 있겠죠. 녹색 원은 마찬가지로 id=2 얼굴의 class boundary입니다. Fig3과 같은 pose-guided GAN 결과물이 얼굴을 애매하게 닮았다는 것은 id=1을 가진 synthesized face($$f^s_{id1}$$)가 $$class_{id1}$$의 중심에서 멀지만 boundary 안에는 들어있는, 그러니깐 Fig4의 파란 네모와 같은 instance를 생성했다는 의미라고 이해할 수 있습니다. 또한 $$f^s_{id1}$$가 id=2와도 어느정도 닮았다는 의미는, 이 instance가 $$class_{id2}$$의 boundary에서 벗어나 있기는 하지만 꽤나 가까운 위치에 있다고 이해할 수 있습니다. 이러한 classifier의 class 개수를 2N개로 세분화하면 $$f^r_{id1}$$과 $$f^s_{id1}$$ 사이의 영역을 구분하는 효과를 내게 되고, generator와 classifier를 경쟁하게 하여 수렴시키면 생성된 이미지 $$f^{s'}_{id1}$$은 $$f^r_{id1}$$과 $$f^s_{id1}$$ 사이 중간쯤에 생성될 것이고, 결과적으로 $$f^s_{id1}$$보다 $$f^r_{id1}$$에 '가까운' 이미지를 만들게 되어 ID preserving이 더 잘 될 것이라는 충분히 타당한 intuition을 가지고 구현을 한 것입니다.
 
 ![Fig5](https://jiryang.github.io/img/faceidgan_fig2_02.PNG "Pulling Effect of G-C Compatition"){: width="70%"}{:.aligncenter}
 
