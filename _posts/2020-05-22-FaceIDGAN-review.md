@@ -42,7 +42,7 @@ Generator-{Discriminator+Classifier} 로 구성된 GAN 모델의 한 예입니�
 ![Fig4](https://jiryang.github.io/img/faceidgan_fig2_01.PNG "FaceID-GAN Fig2 Redrawn"){: width="70%"}{:.aligncenter}
 
 
-논문의 Figure 2를 다시 그려보았습니다. 파란 큰 원은 id=1번의 real face($$f^r_{id1}$$)의 class boundary를 나타냅니다. 그 안에 있는 작은 파란 원들은 id=1번 얼굴의 각각 instance들입니다. 다양한 표정, 다양한 각도의 사진들이 있겠지만 그 facial feature는 어느정도 정규분포를 따른다고 봐도 무리가 없을 것 같습니다. 그래서 파란 원의 중심에 가까운 instance일 수록 id=1 인물의 특징을 잘 나타내는 사진이라고 할 수 있겠죠. 녹색 원은 마찬가지로 id=2 얼굴의 class boundary입니다. Fig3과 같은 pose-guided GAN 결과물이 얼굴을 애매하게 닮았다는 것은 id=1을 가진 synthesized face($$f^s_{id1}$$)가 $$class_{id1}$$의 중심에서 멀지만 boundary 안에는 들어있는, 그러니깐 Fig4의 파란 네모와 같은 instance를 생성했다는 의미라고 이해할 수 있습니다. 또한 $$f^s_{id1}$$가 id=2랑도 어느정도 닮았다는 의미는, 이 instance가 $$class_{id2}$$의 boundary에서 벗어나 있기는 하지만 꽤나 가까운 위치에 있다고 이해할 수 있습니다. 이러한 classifier의 class 개수를 2N개로 세분화하면 $$f^r_{id1}$$과 $$f^s_{id1}$$ 사이의 영역을 구분하는 효과를 내게 되고, generator와 classifier를 경쟁하게 하여 수렴시키면 생성된 이미지 $$f^real_{id1}$$는 
+논문의 Figure 2를 다시 그려보았습니다. 파란 큰 원은 id=1번의 real face($$f^r_{id1}$$)의 class boundary를 나타냅니다. 그 안에 있는 작은 파란 원들은 id=1번 얼굴의 각각 instance들입니다. 다양한 표정, 다양한 각도의 사진들이 있겠지만 그 facial feature는 어느정도 정규분포를 따른다고 봐도 무리가 없을 것 같습니다. 그래서 파란 원의 중심에 가까운 instance일 수록 id=1 인물의 특징을 잘 나타내는 사진이라고 할 수 있겠죠. 녹색 원은 마찬가지로 id=2 얼굴의 class boundary입니다. Fig3과 같은 pose-guided GAN 결과물이 얼굴을 애매하게 닮았다는 것은 id=1을 가진 synthesized face($$f^s_{id1}$$)가 $$class_{id1}$$의 중심에서 멀지만 boundary 안에는 들어있는, 그러니깐 Fig4의 파란 네모와 같은 instance를 생성했다는 의미라고 이해할 수 있습니다. 또한 $$f^s_{id1}$$가 id=2랑도 어느정도 닮았다는 의미는, 이 instance가 $$class_{id2}$$의 boundary에서 벗어나 있기는 하지만 꽤나 가까운 위치에 있다고 이해할 수 있습니다. 이러한 classifier의 class 개수를 2N개로 세분화하면 $$f^r_{id1}$$과 $$f^s_{id1}$$ 사이의 영역을 구분하는 효과를 내게 되고, generator와 classifier를 경쟁하게 하여 수렴시키면 생성된 이미지 $$f^{r'}_{id1}$$는 
 
 
 
