@@ -58,5 +58,7 @@ Odd row는 DR-GAN, even row는 FaceID-GAN의 결과입니다. 수치는 ID simil
 
 GAN이 항상 결과물의 quality를 보장하지 못하기 때문에 논문들에서 발표하는 결과물을 cherry-picking하는 경향이 강합니다. 그래서 오픈소스 돌려보기 전에는 논문만 보고 성능을 믿을 수가 없는데요, 부디 FaceID-GAN은 좀 stable한 결과를 내주기를 바라면서 다음 포스팅을 기약하겠습니다.
 
+논문링크: [FaceID-GAN](http://openaccess.thecvf.com/content_cvpr_2018/papers/Shen_FaceID-GAN_Learning_a_CVPR_2018_paper.pdf)
+
 
 * _이거에 대해서는 따로 한 번 얘기를 하고 싶은데, 어떤 문제(예를 들면 얼굴 합성)든 난이도가 정해져 있을텐데요, 이 난이도를 학습데이터, 모델 복잡도, generalizability 등의 요소로 분할할 수 있는 것 같습니다. 어느 요소가 희생을 하면 다른 요소에서 득을 보는 my loss is your gain 같은..._
