@@ -35,6 +35,6 @@ Source랑 target이 좀 헷갈릴 수 있는데, 잘 읽어보시면 이해가 �
 ![Fig3](https://jiryang.github.io/img/faceidgan_fig2_01.PNG "FaceID-GAN Fig2 Redrawn"){: width="70%"}{:.aligncenter}
 
 
-논문의 Figure 2를 다시 그려보았습니다. 파란 큰 원은 id=1번의 real face ($$f^r_id1$$)
+논문의 Figure 2를 다시 그려보았습니다. 파란 큰 원은 id=1번의 real face ($$f^r_(id1)$$)
 
 * _이거에 대해서는 따로 한 번 얘기를 하고 싶은데, 어떤 문제(예를 들면 얼굴 합성)든 난이도가 정해져 있을텐데요, 이 난이도를 학습데이터, 모델 복잡도, generalizability 등의 요소로 분할할 수 있는 것 같습니다. 어느 요소가 희생을 하면 다른 요소에서 득을 보는..._
