@@ -42,7 +42,7 @@ FSGAN은 아래와 같이 face reenactment & segmentation, inpainting, blending�
 3. Blending (그림의 Gb)
   >> Poisson blending loss를 reconstruction loss에 추가하여 구현하였습니다. Blending 부분은 OpenCV에서 Poisson blending을 구현한 seamlessClone() 함수를 썼네요.
 
-FSGAN은 이론적으로는 one-shot도 가능하지만, 결과 영상(이미지)의 성능을 좋게 하기 위해서는 multiple ID 이미지(혹은 영상)를 필요로 합니다.
+앞서 언급한대로 FSGAN은 이론적으로는 one-shot도 가능하지만, 결과 영상(이미지)의 성능을 좋게 하기 위해서는 multiple ID 이미지(혹은 영상)를 필요로 합니다.
 
 ![Fig4](https://jiryang.github.io/img/abe2conan.gif "Face Swapping (Abe Shinjo to Conan O'brien)")
 
