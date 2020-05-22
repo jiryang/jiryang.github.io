@@ -30,17 +30,20 @@ Source랑 target이 좀 헷갈릴 수 있는데, 잘 읽어보시면 이해가 �
 
 (FSGAN의 샘플 결과물입니다. Target의 attribute를 따라하는 source 얼굴을 합성한 결과가 source 얼굴같아 보이시나요? 약간씩 성능차이가 있긴 하지만 모든 pose-guided 방식 모델들의 결과 이미지를 저렇게 늘여놓고 보면 좀 비슷해 보이긴 하지만, 막상 result만 따로 떼어놓고 보면 과연 이게 source ID 인물인지 아닌지 아리까리할 때가 많습니다. Source와 target의 중간 얼굴같은 느낌도 들고요. 특히 내 얼굴이나 얼굴을 잘 아는 유명인일 경우 별로 안닮은것 처럼 느껴집니다.)
 
-별도 포스팅 없이 배경설명을 하다보니 너무 서론이 길었네요. 오늘 간단히 살펴볼 FaceID-GAN 논문에서는 ID preserving을 위해 classifier를 독특한 방식으로 사용합니다. 특정 class에 속하는 GAN 합성 결과를 유도하기 위해서 discriminator와 classifier를 함께 뒷단에 배치해서 classification 결과에 따라서도 generator를 업데이트하는 방식의 네트워크는 이미 여러 개 있었는데요, 얘들도 역시 애매하게 닮는 한계를 극복하지 못하고 있었습니다. 저자들은 pre-trained 혹은 online training classifier를 단순히 붙여넣는 것에서 그치지 않고, 이 classifier가 discriminator와 다른 domain에서 classification을 하도록 만들어서 generator의 결과물을 real source에 더 가깝게 push하겠다는 아이디어를 구현하였습니다. 무슨 소린지 좀 더 보시죠.
+별도 포스팅 없이 배경설명을 하다보니 너무 서론이 길었네요. 오늘 간단히 살펴볼 FaceID-GAN 논문에서는 ID preserving을 위해 classifier를 독특한 방식으로 사용합니다. 특정 class에 속하는 GAN 합성 결과를 유도하기 위해서 discriminator와 classifier를 함께 뒷단에 배치해서 classification 결과에 따라서도 generator를 업데이트하는 방식의 네트워크는 이미 여러 개 있었는데요, 얘들도 역시 애매하게 닮는 한계를 극복하지 못하고 있었습니다. 저자들은 pre-trained 혹은 online training classifier를 단순히 붙여넣는 것에서 그치지 않고, (1) 이 classifier를 real id=n과 synth id=n 이미지를 구분할 수 있도록 하고 (2) 이 classifier가 discriminator와 같이 generator와 경쟁적으로 학습하도록 함으로써 generator의 결과물을 real source에 더 가깝게 push하겠다는 아이디어를 구현하였습니다. 무슨 소린지 좀 더 보시죠.
 
-![Fig3](https://jiryang.github.io/img/GDC_network.PNG "G-D-C Network"){: width="70%"}{:.aligncenter}
-
+![Fig3](https://jiryang.github.io/img/GDC_network.PNG "G-D-C Network"){: width="100%"}{:.aligncenter}
 
 Generator-{Discriminator+Classifier} 로 구성된 GAN 모델의 한 예입니다.
 
 
+우선 저자는 FaceID-GAN의 classifier에 input face와 동일한 N개의 class 대신 각 id의 class를 $$f^{real}$$ vs $$f^{synth}$$로 한차례 더 나눈 2N개의 class를 부여해서 classifier가 동일한 id를 가진 얼굴이라도 real vs synth 구분을 할 수 있도록 학습시킵니다. 그리고 classifier를 사용한 여타 논문들에선 이 classifier가 단순히 generator의 결과물인 합성 이미지의 id가 올바른 class에 속하는지를 판단해 주었던 반면, 본 논문의 classifier는 discriminator와 유사하게 generator와 minimax 게임을 벌여 generator로 하여금 classifier를 '속이는' 이미지를 합성하도록 유도합니다. Discriminator는 일반 GAN과 마찬가지로 real vs synth를 구분하는 역할을 합니다. 이럼으로써 generator는 discriminator를 속이기 위해 '진짜같은 얼굴' 이미지를 만들어 내게 되고, 동시에 classifier를 속이기 위해 '특정 인물 내에서 좀 더 진짜같은 얼굴'을 만들어 내게 되는 것입니다. 아직도 헷갈리니깐 좀 더 보겠습니다.
+
 ![Fig4](https://jiryang.github.io/img/faceidgan_fig2_01.PNG "FaceID-GAN Fig2 Redrawn"){: width="70%"}{:.aligncenter}
 
 
-논문의 Figure 2를 다시 그려보았습니다. 파란 큰 원은 id=1번의 real face($$f^r_{id1}$$)의 class boundary를 나타냅니다. 그 안에 있는 작은 파란 원들은 id=1번 얼굴의 각각 instance들입니다. 다양한 표정, 다양한 각도의 사진들이 있겠지만 그 facial feature는 어느정도 정규분포를 따른다고 봐도 무리가 없을 것 같습니다. 그래서 파란 원의 중심에 가까운 instance일 수록 id=1 인물의 특징을 잘 나타내는 사진이라고 할 수 있겠죠. 녹색 원은 마찬가지로 id=2 얼굴의 class boundary입니다. Fig3과 같은 pose-guided GAN 결과물이 얼굴을 애매하게 닮았다는 것은 id=1을 가진 synthesized face($$f^s_{id1}$$)가 $$class_{id1}$$의 중심에서 멀지만 boundary 안에는 들어있는, 그러니깐 Fig4의 파란 네모와 같은 instance를 생성했다는 의미라고 이해할 수 있습니다. 또한 $$f^s_{id1}$$가 id=2랑도 어느정도 닮았다는 의미는, 이 instance가 $$class_{id2}$$의 boundary에서 벗어나 있기는 하지만 꽤나 가까운 위치에 있다고 이해할 수 있습니다.
+논문의 Figure 2를 다시 그려보았습니다. 파란 큰 원은 id=1번의 real face($$f^r_{id1}$$)의 class boundary를 나타냅니다. 그 안에 있는 작은 파란 원들은 id=1번 얼굴의 각각 instance들입니다. 다양한 표정, 다양한 각도의 사진들이 있겠지만 그 facial feature는 어느정도 정규분포를 따른다고 봐도 무리가 없을 것 같습니다. 그래서 파란 원의 중심에 가까운 instance일 수록 id=1 인물의 특징을 잘 나타내는 사진이라고 할 수 있겠죠. 녹색 원은 마찬가지로 id=2 얼굴의 class boundary입니다. Fig3과 같은 pose-guided GAN 결과물이 얼굴을 애매하게 닮았다는 것은 id=1을 가진 synthesized face($$f^s_{id1}$$)가 $$class_{id1}$$의 중심에서 멀지만 boundary 안에는 들어있는, 그러니깐 Fig4의 파란 네모와 같은 instance를 생성했다는 의미라고 이해할 수 있습니다. 또한 $$f^s_{id1}$$가 id=2랑도 어느정도 닮았다는 의미는, 이 instance가 $$class_{id2}$$의 boundary에서 벗어나 있기는 하지만 꽤나 가까운 위치에 있다고 이해할 수 있습니다. 이러한 classifier의 class 개수를 2N개로 세분화하면 $$f^r_{id1}$$과 $$f^s_{id1}$$ 사이의 영역을 구분하는 효과를 내게 되고, generator와 classifier를 경쟁하게 하여 수렴시키면 생성된 이미지 $$f^real_{id1}$$는 
+
+
 
 * _이거에 대해서는 따로 한 번 얘기를 하고 싶은데, 어떤 문제(예를 들면 얼굴 합성)든 난이도가 정해져 있을텐데요, 이 난이도를 학습데이터, 모델 복잡도, generalizability 등의 요소로 분할할 수 있는 것 같습니다. 어느 요소가 희생을 하면 다른 요소에서 득을 보는..._
