@@ -3,7 +3,7 @@ layout: post
 title:  "FaceID-GAN: Learning a Symmetry Three-Player GAN for Identity-Preserving Face Synthesis"
 date:   2020-05-22 10:59:59
 categories: Deepfake
-tags: deepfake faceidgan id-preserving
+tags: deepfake faceidgan id-preservation
 excerpt: FaceID-GAN 논문 리뷰
 mathjax: true
 ---
@@ -15,11 +15,19 @@ mathjax: true
 이제 encoder는 source와 target얼굴 모두의 (공통의) latent face를 만들 수 있게 되었고 decoder는 여기서 각각의 원래 얼굴을 복원할 수 있게 되었기 때문에, target decoder를 떼어내고 학습된 encoder - source decoder로만 조합을 해서 target 얼굴 이미지를 입력하면 이 attribute(표정, 각도 등)를 따르는 source의 얼굴을 합성하게 됩니다. 이 합성된 얼굴을 잘라서 원래의 target 이미지에 티 안나게 잘 blending시키면 deepfake가 완성됩니다.
 
 Source랑 target이 좀 헷갈릴 수 있는데, 잘 읽어보시면 이해가 될꺼예요. Face A가 target이고 Face B가 source겠죠?
-![Fig1](https://jiryang.github.io/img/faceswap_autoencoder.png "How Deepfake Works"){: .center}
+![Fig1](https://jiryang.github.io/img/faceswap_autoencoder.png "How Deepfake Works"){: width="70%"}{: .aligncenter}
+
+(Deepfake에 대해 궁금하시다면 이런 [reference](http://news.seoulbar.or.kr/news/articleView.html?idxno=1817)도 있습니다 :) )
 
 
 이 방식은 비교적 간단한 네트워크를 사용하고, 데이터도 그렇게 많이 들어가지 않으며, source-target 간의 1-to-1 학습이기 때문에 학습이 쉽고 합성 quality도 좋은 편입니다. 하지만 source나 target 인물이 바뀔때마다 학습을 새로 해야한다는 점, source의 데이터가 많아야 한다는 점이 이 모델의 약점입니다.
 
-이후 얼굴 합성 연구는 pose-guided 방식의 face reenactment 알고리즘들이 메인스트림인 듯 합니다. 지금까지 전체적으로 봤을 때,  
+이후 얼굴 합성 연구는 pose-guided 방식의 face reenactment 알고리즘들이 메인스트림인 듯 합니다. 이 방식은 MSCeleb이나 CelebA와 같은 얼굴 빅데이터로 general한 합성 모델을 학습시켜둔 다음, 어떤 source/target 얼굴이 입력되어도 그거에 맞춰서 reenact를 시킵니다. 학습이 오래걸리고 수렴이 어렵다는 단점은 있겠지만, 학습 후에는 합성 결과를 쭉쭉 뽑아낼 수 있다는 장점 때문에 use case에 따라 선호될 수 있겠지요? 게다가 이 모델은 특정 source나 target의 데이터를 많이 필요로 하지 않는다는 점도 큰 장점입니다.*
 
-(Deepfake에 대해 궁금하시다면 이런 [reference](http://news.seoulbar.or.kr/news/articleView.html?idxno=1817)도 있습니다 :) )
+하지만, 아직까지 pose-guided 방식의 가장 큰 단점 중 하나가 바로 '얼굴이 애매하게 닮는다'는 점입니다. 아무래도 big data로 general하게 만들다 보니 합성 모델의 튜닝값이 개개인의 얼굴에 최적화될 수 없다는 점 때문일텐데요, pose-guided 방식 합성 모델을 상용화하게 되면 이 ID preservation을 얼마냐 잘 하느냐가 성패를 좌우하게 될 것 같습니다.
+
+![Fig2](https://jiryang.github.io/img/fsgan_results.PNG "FSGAN Results"){: width="70%"}{: .aligncenter}
+(FSGAN의 샘플 결과물입니다. Target의 attribute를 따라하는 source 얼굴을 합성한 결과가 source 얼굴같아 보이시나요? 이미지를 저렇게 늘여놓고 보면 좀 비슷해 보이긴 하지만, 막상 result만 따로 떼어놓고 보면 과연 이게 source ID 인물인지 아닌지 아리까리할 때가 많습니다. 특히 내 얼굴이나 얼굴을 잘 아는 유명인일 경우 별로 안닮은것 처럼 느껴집니다.)
+
+
+* _이거에 대해서는 따로 한 번 얘기를 하고 싶은데, 어떤 문제(예를 들면 얼굴 합성)든 난이도가 정해져 있을텐데요, 이 난이도를 학습데이터, 모델 복잡도, generalizability 등의 요소로 분할할 수 있는 것 같습니다. 어느 요소가 희생을 하면 다른 요소에서 득을 보는..._
