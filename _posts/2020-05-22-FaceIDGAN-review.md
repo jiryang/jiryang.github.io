@@ -3,7 +3,7 @@ layout: post
 title:  "FaceID-GAN: Learning a Symmetry Three-Player GAN for Identity-Preserving Face Synthesis"
 date:   2020-05-22 10:59:59
 categories: Deepfake
-tags: deepfake faceidgan id-preservation
+tags: faceidgan id-preservation
 excerpt: FaceID-GAN 논문 리뷰
 mathjax: true
 ---
