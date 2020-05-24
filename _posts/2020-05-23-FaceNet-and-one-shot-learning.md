@@ -21,7 +21,12 @@ FaceNet은 이런 문제들을 해결하기 위한 방법론을 제시합니다.
 
 Low-dimensional embedding은 일반 DNN classifier도 사용하는데요? 심지어 PCA를 사용한 eigenface도 low-dimensional embedding을 쓰는건데 무슨 차이가 있을까요? 저자는 Triplet Loss라는 개념을 고안해서 이 문제를 해결하였습니다.
 
-update test
+![Fig1](https://jiryang.github.io/img/triplet_loss.PNG "Triplet Loss"){: width="70%"}{: .aligncenter}
+
+
+Triplet은 위의 그림과 같이 anchor - positive - negative의 dataset으로 구성됩니다. Anchor는 기준이 되는 class의 data이고, positive는 anchor와 동일한 class의 또다른 data instance, negative는 anchor와 다른 class의 data를 말합니다. 이렇게 구성된 dataset을 네트워크에 넣어주면서 low-dimensional embedding 내에서 동일 class의 data instance 사이의 distance가 다른 class의 data instance 사이의 distance보다 가깝도록 학습을 시켜주는 것이지요. Distance(A, P)가 항상 distance(A, N)보다 일정 margin값 이상의 차이를 유지하도록 다음과 같은 수식을 이용합니다.
+
+$${\Vert f(x^a_i)-f(x^p_i) \Vert}^2_2+\alpha<{\Vert f(x^a_i)-f(x^n_i) \Vert}^2_2$$
 
 
 이 Triple Loss는 동일한 구조에 weight까지 공유하는 3개의 동일한 네트워크를 사용하여, 이런걸 샴 네트워크(Siamese network)라고 하죠, 병렬적으로 빠르게 계산이 가능합니다. 하지만 학습 데이터의 triplet을 구성하는 것에 문제가 생깁니다. 예를 들어 학습 데이터에 10,000명의 face ID가 있고 각 ID마다 30장 씩의 사진이 들어있다고 하면, 조합 가능한 triplet의 경우의 수가 $$(30\times10,000)_{anchor}\times29_{positive}\times(30\times9,999)_{negative}$$나 될 것입니다 (계산 맞나요 ㅠㅠ, 암튼 엄청 커집니다).
