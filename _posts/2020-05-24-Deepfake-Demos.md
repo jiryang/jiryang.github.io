@@ -8,13 +8,11 @@ excerpt: Deepfake Demos
 mathjax: true
 ---
 
-asdfasdfasdf
-
-
 # 음성합성 (Tacotron2 + Wavenet)
-|원본 음성|합성1|합성2|
+
+|원본음성|합성1|합성2|
 |------|---|---|
-|![audio](https://jiryang.github.io/resources/voice1_original.wav)|||
+|![audio](https://jiryang.github.io/resources/voice1_original.wav)|aa|bb|
 
 # 영상합성
 ## FaceSwap (AutoEncoder)
