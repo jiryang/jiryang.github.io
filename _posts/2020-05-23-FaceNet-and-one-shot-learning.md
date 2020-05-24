@@ -17,14 +17,14 @@ Classifier로 만들면 예상되는 문제들은 어떤게 있을까요?
 
 이젠 어떻게 해야할까요? FC layer에서 class 숫자를 하나 더 늘리고, 예전 데이터 일부에 추가된 테러리스트 얼굴을 더해서 추가학습을 시켜볼까요? 어느정도는 성능이 나올 수는 있지만 보장이 가능할까요? 데이터베이스가 계속 업데이트가 되면 이 때마다 매번 추가학습을 할 수 있을까요? 학습이 진행되는 동안 테러리스트가 공항에 도착하면 어떻게 하나요?
 
-FaceNet은 이런 문제들을 해결하기 위한 방법론을 제시합니다. 비단 face domain에서 뿐만 아니라, use-case만 맞는다면 다양한 classification-based 솔루션에 적용할 수 있는 솔루션을요. 간단히 말씀드리면 big dataset의 low-dimensional embedding을, 동일한 class를 가지는 data들끼리는 distance가 가깝도록, 다른 class의 data들끼리는 distance가 멀도록 학습해서, 두 data가 같은 클래스인지 아닌지를 이 embedding 안에서의 distance로 구별해내는 generalizable 모델을 만든다는 것입니다. 테러리스트의 예로 이야기하자면, FaceNet은 일반적으로 두 사진의 얼굴이 동일 인물인지 아닌지를 학습하기 때문에 새로운 테러리스트가 추가되더라도 CCTV에 찍힌 인물이 테러리스트 명단에 있는지 없는지는 추가학습 없이 one-shot으로 n+\alpha개의 이미지랑만 비교해보면 된다는 것이죠. 그것도 low-dimensional embedding을 사용하기 때문에 빠르게 가능합니다.
+FaceNet은 이런 문제들을 해결하기 위한 방법론을 제시합니다. 비단 face domain에서 뿐만 아니라, use-case만 맞는다면 다양한 classification-based 솔루션에 적용할 수 있는 솔루션을요. 간단히 말씀드리면 big dataset의 low-dimensional embedding을, 동일한 class를 가지는 data들끼리는 distance가 가깝도록, 다른 class의 data들끼리는 distance가 멀도록 학습해서, 두 data가 같은 클래스인지 아닌지를 이 embedding 안에서의 distance로 구별해내는 generalizable 모델을 만든다는 것입니다. 테러리스트의 예로 이야기하자면, FaceNet은 일반적으로 두 사진의 얼굴이 동일 인물인지 아닌지를 학습하기 때문에 새로운 테러리스트가 추가되더라도 CCTV에 찍힌 인물이 테러리스트 명단에 있는지 없는지는 추가학습 없이 one-shot으로 $$n+\alpha$$개의 이미지랑만 비교해보면 된다는 것이죠. 그것도 low-dimensional embedding을 사용하기 때문에 빠르게 가능합니다.
 
 Low-dimensional embedding은 일반 DNN classifier도 사용하는데요? 심지어 PCA를 사용한 eigenface도 low-dimensional embedding을 쓰는건데 무슨 차이가 있을까요? 저자는 Triplet Loss라는 개념을 고안해서 이 문제를 해결하였습니다.
 
 ![Fig1](https://jiryang.github.io/img/triplet_loss.PNG "Triplet Loss"){: width="70%"}{: .aligncenter}
 
 
-Triplet은 위의 그림과 같이 anchor - positive - negative의 dataset으로 구성됩니다. Anchor는 기준이 되는 class의 data이고, positive는 anchor와 동일한 class의 또다른 data instance, negative는 anchor와 다른 class의 data를 말합니다. 이렇게 구성된 dataset을 네트워크에 넣어주면서 low-dimensional embedding 내에서 동일 class의 data instance 사이의 distance가 다른 class의 data instance 사이의 distance보다 가깝도록 학습을 시켜주는 것이지요. 이렇게 하게되면 class가 같은 인물들은 가깝게, class가 다른 얼굴은 멀게끔 표현하는 embedding이 학습될 것입니다. 아래 그림과 같이 학습 전에는 이 embedding이 A-N이 A-P보다 더 가깝다고 나타냈던 것이, 학습 후에는 A-P 거리가 A-N 거리보다 최소 \alpha 이상 가까와지게 되는거죠.
+Triplet은 위의 그림과 같이 anchor - positive - negative의 dataset으로 구성됩니다. Anchor는 기준이 되는 class의 data이고, positive는 anchor와 동일한 class의 또다른 data instance, negative는 anchor와 다른 class의 data를 말합니다. 이렇게 구성된 dataset을 네트워크에 넣어주면서 low-dimensional embedding 내에서 동일 class의 data instance 사이의 distance가 다른 class의 data instance 사이의 distance보다 가깝도록 학습을 시켜주는 것이지요. 이렇게 하게되면 class가 같은 인물들은 가깝게, class가 다른 얼굴은 멀게끔 표현하는 embedding이 학습될 것입니다. 아래 그림과 같이 학습 전에는 이 embedding이 A-N이 A-P보다 더 가깝다고 나타냈던 것이, 학습 후에는 A-P 거리가 A-N 거리보다 최소 $$\alpha$$ 이상 가까와지게 되는거죠.
 
 ![Fig2](https://jiryang.github.io/img/triplet_loss_learning.PNG "Learning w/ Triplet Loss"){: width="70%"}{: .aligncenter}
 
