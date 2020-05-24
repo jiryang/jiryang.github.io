@@ -12,7 +12,9 @@ mathjax: true
 
 |원본음성|합성1|합성2|
 |------|---|---|
-|![audio](https://jiryang.github.io/resources/voice1_original.wav)|aa|cc|
+|bb|aa|cc|
+
+![audio](https://jiryang.github.io/resources/voice1_original.wav)asdf
 
 # 영상합성
 ## FaceSwap (AutoEncoder)
