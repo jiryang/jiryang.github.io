@@ -1,12 +1,15 @@
 ---
 layout: post
 title:  "Deepfake Demos"
-date:   2020-05-24 12:59:59
+date:   2020-05-24 02:59:59
 categories: Deepfake
 tags: demos faceswap deepfacelab fsgan tacotron
 excerpt: Deepfake Demos
 mathjax: true
 ---
+
+asdfasdfasdf
+
 
 # 음성합성 (Tacotron2 + Wavenet)
 |원본 음성|합성1|합성2|
