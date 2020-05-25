@@ -24,7 +24,7 @@ Low-dimensional embedding은 일반 DNN classifier도 사용하는데요? 심지
 ![Fig1](https://jiryang.github.io/img/triplet_loss.PNG "Triplet Loss"){: width="70%"}{: .aligncenter}
 
 
-Triplet은 위의 그림과 같이 anchor - positive - negative의 dataset으로 구성됩니다. Anchor는 기준이 되는 class의 data이고, positive는 anchor와 동일한 class의 또다른 data instance, negative는 anchor와 다른 class의 data를 말합니다. 이렇게 구성된 dataset을 네트워크에 넣어주면서 low-dimensional embedding 내에서 동일 class의 data instance 사이의 distance가 다른 class의 data instance 사이의 distance보다 가깝도록 학습을 시켜주는 것이지요. 이렇게 하게되면 class가 같은 인물들은 가깝게, class가 다른 얼굴은 멀게끔 표현하는 embedding이 학습될 것입니다. 아래 그림과 같이 학습 전에는 이 embedding이 A-N이 A-P보다 더 가깝다고 나타냈던 것이, 학습 후에는 A-P 거리가 A-N 거리보다 최소 $$\alpha$$ 이상 가까와지게 되는거죠.
+Triplet은 위의 그림과 같이 anchor - positive - negative의 dataset으로 구성됩니다. Anchor는 기준이 되는 class의 data이고, positive는 anchor와 동일한 class의 또다른 data instance, negative는 anchor와 다른 class의 data를 말합니다. 이렇게 구성된 dataset을 네트워크에 넣어주면서 low-dimensional embedding 내에서 동일 class의 data instance 사이의 distance가 다른 class의 data instance 사이의 distance보다 가깝도록 학습을 시켜주는 것이지요. 이렇게 하게되면 class가 같은 인물들은 가깝게, class가 다른 얼굴은 멀게끔 표현하는 embedding이 학습될 것입니다. 아래 그림과 같이 학습 전에는 이 embedding이 A-N이 A-P보다 더 가깝다고 나타냈던 것이, 학습 후에는 A-P 거리가 A-N 거리보다 최대 $$\alpha$$ 미만으로 가까와지게 되는거죠.
 
 ![Fig2](https://jiryang.github.io/img/triplet_loss_learning.PNG "Learning w/ Triplet Loss"){: width="70%"}{: .aligncenter}
 
