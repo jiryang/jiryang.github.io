@@ -1,14 +1,0 @@
-I"<p>asdfasdfasdf</p>
-
-<h1 id="음성합성-tacotron2--wavenet">음성합성 (Tacotron2 + Wavenet)</h1>
-<p>|원본 음성|합성1|합성2|
-|——|—|—|
-|<img src="https://jiryang.github.io/resources/voice1_original.wav" alt="audio" />|||</p>
-
-<h1 id="영상합성">영상합성</h1>
-<h2 id="faceswap-autoencoder">FaceSwap (AutoEncoder)</h2>
-<h2 id="deepfacelab-autoencoder">DeepFaceLab (AutoEncoder)</h2>
-<h2 id="mnc-proprietary-pose-guided">MNC Proprietary (Pose-Guided)</h2>
-<h2 id="recyclegan">RecycleGAN</h2>
-<h2 id="fsgan">FSGAN</h2>
-:ET

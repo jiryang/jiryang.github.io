@@ -13,6 +13,13 @@ url: "https://jiryang.github.io/" # the base hostname & protocol for your site
 
 permalink: /:year/:month/:day/:title/
 
+
+# SEO
+tagline: machine learning, 머신러닝, 인공지능, 마인즈앤컴퍼니, mnc
+author: Ji Ryang Chung, 정지량
+description: 머신러닝 블로그, machine learning blog
+lang: ko_KR
+
 # other links
 twitter_username: 
 facebook_username: ji.r.chung
@@ -59,3 +66,6 @@ excerpt_separator: "\n\n\n\n"
 gems: [jekyll-paginate]
 plugins: [jekyll-paginate]
 paginate: 6
+
+# seo-tag
+plugins: [jekyll-seo-tag]
