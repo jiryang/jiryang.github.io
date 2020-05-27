@@ -63,9 +63,14 @@ tag_dir: tag/
 excerpt_separator: "\n\n\n\n"
 
 # paginate
-gems: [jekyll-paginate]
-plugins: [jekyll-paginate]
+gems: [jekyll-paginate, jekyll-seo-tag, jekyll-sitemap]
+plugins: [jekyll-paginate, jekyll-seo-tag, jekyll-sitemap]
 paginate: 6
 
 # seo-tag
-plugins: [jekyll-seo-tag]
+#gems: [jekyll-seo-tag]
+#plugins: [jekyll-seo-tag]
+
+# sitemap
+#gems: [jekyll-sitemap]
+#plugins: [jekyll-sitemap]
