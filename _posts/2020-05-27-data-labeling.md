@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Efficient Data Labeling: Online Learning & Active Learning"
-date:   2020-05-27 12:00:00
+date:   2020-05-27 02:00:00
 categories: GeneralML
 tags: bigdata labeling online_learning active_learning
 excerpt: 머신러닝 모델을 학습시키기 위해 어떤 데이터를 얼마나 레이블링 해야 하나요?
