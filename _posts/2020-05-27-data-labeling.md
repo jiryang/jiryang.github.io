@@ -4,7 +4,7 @@ title:  "Efficient Data Labeling: Online Learning & Active Learning"
 date:   2020-05-27 02:00:00
 categories: GeneralML
 tags: bigdata labeling online_learning active_learning
-excerpt: 머신러닝 모델을 학습시키기 위해 어떤 데이터를 얼마나, 어떻게 레이블링 해야 하는가
+excerpt: 머신러닝 모델을 학습시키기 위해 어떤 데이터를 얼마나, 어떻게 레이블링 해야 하는가 (예고)
 mathjax: true
 ---
 
@@ -20,4 +20,4 @@ PoC를 하자는 업체에서 많은 데이터를 받았습니다. 그런데 원
 많은 양의 quality data가 필요하다는 점은 현대 supervised deep learning의 커다란 단점으로 지적되고 있습니다.
 (AAAI keynote speech에서 얀 르쿤 박사께서도 지적하신 부분이지요 [Self-supervised learning: The plan to make deep learning data-efficient](https://bdtechtalks.com/2020/03/23/yann-lecun-self-supervised-learning/amp/))
 
-$\color{white}{[Uber에서 대량 해고와 더불어 미래지향적 AI 프로젝트를 닫는다는 기사](https://analyticsindiamag.com/uber-ai-labs-layoffs/)에서 시작해서, 그 곳에서 Neuroevolution 관련 연구중이신 사숙 격인 Dr. Kenneth O'Stanley의  Generative Teaching Networks ([GTN](https://eng.uber.com/generative-teaching-networks/?fbclid=IwAR00lrSBj1fFnfhNc4U6RIopIwmt7EFomm7xXf_Ikj56GkRIeb5uuHagRYY))을 읽다가 금주 업체 미팅의 한 꼭지였던 NAS(Neural Architecture Search)가 나오고 efficient }$
+... (미완성)
