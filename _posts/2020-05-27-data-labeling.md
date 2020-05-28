@@ -4,21 +4,20 @@ title:  "Efficient Data Labeling: Online Learning & Active Learning"
 date:   2020-05-27 02:00:00
 categories: GeneralML
 tags: bigdata labeling online_learning active_learning
-excerpt: 머신러닝 모델을 학습시키기 위해 어떤 데이터를 얼마나 레이블링 해야 하나요?
+excerpt: 머신러닝 모델을 학습시키기 위해 어떤 데이터를 얼마나, 어떻게 레이블링 해야 하는가
 mathjax: true
 ---
 
-어제 한 업체에 다녀왔습니다. 이곳도 'AI는 해야겠는데 어떻게 할 지는 모르는' 곳 중 하나였습니다.
+한 업체에 다녀왔습니다. 이곳도 'AI는 해야겠는데 어떻게 할 지는 모르는' 곳 중 하나였습니다.
 많은 기업들이 비용을 들이자니 palpable한 효과가 잘 그려지지 않고, 손을 놓고 있자니 뒤처질 것 같아 불안한 상태인 것 같습니다.
 그래서 동종 업계의 success나 failure case를 요구하기도 하고, PoC를 해보자고 하는 것이겠지요.
 
-PoC는 좋지요. 적은 규모의 비용으로 솔루션을 검증한 후 결정하겠다는건 합리적인 생각입니다. 그런데 데이터는 있으신가요?
+
+"AI를 언제든 적용할 수 있도록 데이터는 미리 모아두었습니다."
+PoC를 하자는 업체에서 많은 데이터를 받았습니다. 그런데 원하는 모델에 넣기에 레이블이 제대로 되어있지 않습니다. PoC 기간과 예산은 충분하지 않습니다. 어떻게 하면 될까요?
 
 
-레이블이 제대로 되어있지 않은 데이터를 받았습니다. 양은 엄청나게 많습니다. PoC 기간과 예산은 충분하지 않습니다. 어떻게 하면 될까요?
+많은 양의 quality data가 필요하다는 점은 현대 supervised deep learning의 커다란 단점으로 지적되고 있습니다.
+(AAAI keynote speech에서 얀 르쿤 박사께서도 지적하신 부분이지요 [Self-supervised learning: The plan to make deep learning data-efficient](https://bdtechtalks.com/2020/03/23/yann-lecun-self-supervised-learning/amp/))
 
-
-
-
-
-*논문을 읽다가 '이걸 적어야겠다'는 생각이 들어서 material을 정리하다보면 그 전에 이것도 하나 적으면 좋겠고, 그 옆에 저것도 하나 적으면 좋겠고... 머신러닝의 각 화두들이 어디서 뚝 떨어진 것이 아니라 히스토리가 있고 연결 관계들이 있는 것들이어서... 손은 딸리는데 큰일입니다.*
+$\color{white}{[Uber에서 대량 해고와 더불어 미래지향적 AI 프로젝트를 닫는다는 기사](https://analyticsindiamag.com/uber-ai-labs-layoffs/)에서 시작해서, 그 곳에서 Neuroevolution 관련 연구중이신 사숙 격인 Dr. Kenneth O'Stanley의  Generative Teaching Networks ([GTN](https://eng.uber.com/generative-teaching-networks/?fbclid=IwAR00lrSBj1fFnfhNc4U6RIopIwmt7EFomm7xXf_Ikj56GkRIeb5uuHagRYY))을 읽다가 금주 업체 미팅의 한 꼭지였던 NAS(Neural Architecture Search)가 나오고 efficient }$
