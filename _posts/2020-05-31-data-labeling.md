@@ -26,7 +26,7 @@ PoC를 하자는 업체에서 많은 데이터를 받았습니다. 그런데 원
 
 Active learning은 "모든 데이터가 모델 학습에 동일한 영향을 미치지 않는다"는 아이디어에서 비롯된 오래된 방법론입니다. 아래 그림은 2-class Gaussian 분포를 가진 400개짜리 dataset에서 random sampling과 active learning 방식을 사용하여 30개씩을 추출하고 binary classifier를 학습한 결과입니다. 동일한 숫자의 데이터로 같은 모델을 학습하였는데도 decision boundary가 다르고, 그 결과 accuracy도 다르게 나온 것을 볼 수 있습니다. Random sampling으로 선택된 데이터는 모 데이터셋의 분포에서 골고루 선택된 것처럼 보이는데, active learning 방식으로 선택된 데이터는 decision boundary 부근에 몰려있는 차이가 있네요. 모델의 decision boundary 학습에 영향력이 큰 데이터들을 선택한다면 같은 숫자의 데이터라도 효과적인 학습을 할 수 있는 것 같지요? 다르게 표현하면, 무조건 data label 작업을 할 것이 아니라 학습에 더 도움이 될 것 같은 데이터만 전문가(active learning에서는 이를 _human oracle_ 이라고도 합니다)에게 의뢰하여 labeling을 하면 된다는 의미이기도 합니다. 이것이 사실이라면 학습에 별로 영향이 없는 데이터는 굳이 labeling을 하지 않아도 될테니 시간과 비용을 줄일 수 있을 것입니다. 이렇게 '중요한' 데이터들에 대해서만 label을 추가해서 모델을 학습하면 목표한 성능을 달성하는데 필요한 학습 시간도 빨라질 것입니다. 
 
-![Fig1](https://jiryang.github.io/img/active_vs_random.png "Random Sampling vs Active Learning"){: width="70%"}{: .aligncenter}
+![Fig1](https://jiryang.github.io/img/active_vs_random.png "Random Sampling vs Active Learning"){: width="100%"}{: .aligncenter}
 
 
 아래 그래프를 보시면 active learning 방식으로 '중요한' 데이터를 선별하여 label을 달면서 학습한 모델과, 그렇지 않고 모든 데이터를 label한 다음 random하게 학습데이터에 추가하면서 (training data 양을 늘려가면서) 학습한 모델의 데이터 양에 따른 정확도를 비교해보실 수 있습니다. 참고로 모든 데이터에 label을 달게 된다면 두 방법 모두 정확도는 이론적으로 같을 것입니다 (Active learning과 반대로 모든 데이터에 label을 달아놓고 모델을 학습하는 것을 _passive learning_ 이라고 부릅니다). 하지만 우리가 특정 성능을 달성하는데 필요한 label cost를 최적화하고자 한다면 active learning이 유리하다는 걸 알 수 있습니다. 점선을 보시면 80% 정확도를 달성하기 위해 active learning 방법을 사용하면 45% 정도의 labeled data만 있으면 되는 반면, passive learning으로는 70% 정도의 labeled data가 필요합니다. 
@@ -38,7 +38,7 @@ Active learning은 "모든 데이터가 모델 학습에 동일한 영향을 미
 
 ![Fig3](https://jiryang.github.io/img/active_learning_loop.png "Active Learning Loop"){: width="70%"}{: .aligncenter}
 
-![Fig4](https://jiryang.github.io/img/active_learning_dataset.png "Active Learning Dataset"){: width="70%"}{: .aligncenter}
+![Fig4](https://jiryang.github.io/img/active_learning_dataset.png "Active Learning Dataset"){: width="100%"}{: .aligncenter}
 
 
 그럼 학습에 더 도움을 주는 '중요한' 데이터란 어떤 것이고, 어떻게 골라낼 수 있을까요? 
@@ -69,7 +69,7 @@ Shannon의 entropy (level of surprise) 개념을 사용하여 모든 class membe
 아래 그림은 3-label classification task에서 위의 3종류 uncertainty sampling을 적용한 (Margin Sampling의 경우는 LC를 적용) 결과 heatmap입니다. 각 방식이 어느 영역에 위치하는 데이터를 선호하는 지를 관찰할 수 있습니다.\
 _* binary task라면 위의 방식 모두 결과는 동일합니다_
 
-![Fig5](https://jiryang.github.io/img/active_learning_heatmap.PNG "Heatmap of Uncertainty Measures Behaviour"){: width="70%"}{: .aligncenter}
+![Fig5](https://jiryang.github.io/img/active_learning_heatmap.PNG "Heatmap of Uncertainty Measures Behaviour"){: width="100%"}{: .aligncenter}
 
 
 Pool-based active learning의 pseudo-code입니다:
