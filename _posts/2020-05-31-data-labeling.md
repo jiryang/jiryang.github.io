@@ -43,4 +43,20 @@ Active learning은 "모든 데이터가 모델 학습에 동일한 영향을 미
 
 그럼 학습에 더 도움을 주는 '중요한' 데이터란 어떤 것이고, 어떻게 골라낼 수 있을까요? 
 
-Active learning을 적용할 수 있는 시나리오는 stream-based selective sampling, membership query synthesis와 같은 방법도 있지만 가장 범용적인 pool-based sampling에 대해서만 살펴보도록 하겠습니다. 우선 일부 label된 데이터로 학습하여 '적당한' 성능을 보이는 baseline 모델이 필요합니다. Baseline 모델에 나머지 unlabeled data를 넣어서 inference를 시켜보고, 그 결과를 이용하여 어떤 data를 label할 것인지를 선택하는 방법입니다. 모델의 입장에서 가장 informative한 데이터는 현재 자신이 판단하기 어려운 헷갈리는 데이터일 것입니다. 이러한 데이터들에 _human oracle_ 이 label을 달아주면 supervised learning을 통해 모델은 기존에 헷갈리던 (inference error가 발생하던) decision boundary를 고쳐나갈 수 있게 됩니다. 그렇기 때문에 inference 결과 uncertainty가 높은 순서대로 데이터를 뽑아 label을 달아주면 됩니다.
+Active learning을 적용할 수 있는 시나리오는 stream-based selective sampling, membership query synthesis와 같은 방법도 있지만 가장 범용적인 pool-based sampling에 대해서만 살펴보도록 하겠습니다. 우선 일부 label된 데이터로 학습하여 '적당한' 성능을 보이는 baseline 모델이 필요합니다. Baseline 모델에 나머지 unlabeled data를 넣어서 inference를 시켜보고, 그 결과를 이용하여 어떤 data에 label을 다는 것이 효과적일지를 정하는 방법입니다. 모델의 입장에서 가장 informative한 데이터는 현재 자신이 판단하기 어려운 헷갈리는 데이터일 것입니다 (위의 첫번째 그림에서 decision boundary에 근접한 데이터들). 이러한 데이터들에 _human oracle_ 이 label을 달아주면 supervised learning을 통해 모델은 기존에 헷갈리던 (inference error가 발생하던) decision boundary를 고쳐나갈 수 있게 됩니다. 그렇기 때문에 inference 결과 uncertainty가 높은 순서대로 데이터를 뽑아 label을 달아주면 됩니다.
+
+
+Data의 uncertainty를 측정하는 데는 아래와 같이 여러가지 방법들이 있습니다. 데이터, 모델, 태스크 특성에 따라 적절히 사용하시면 될 것 같습니다:
+
+1. Least Confidence
+
+2. Margin Sampling
+
+3. Entropy-Based
+
+
+Pool-based active learning의 pseudo-code입니다:
+
+'''
+this is code block
+'''
