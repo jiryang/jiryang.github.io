@@ -57,7 +57,7 @@ Data의 uncertainty를 측정하는 데는 아래와 같이 여러가지 방법�
 
 Pool-based active learning의 pseudo-code입니다:
 
->>>
+~~~
 $$\epsilon$$ = training error bound;\
 Divide data into unlabelled pool $$P$$ and test set $$S$$;\
 Split training pool into batches;\
@@ -70,17 +70,4 @@ Select $$k$$ most-informative samples based on uncertainty metric;\
 Move these $$k$$ examples to training set;\
 Remove these $$k$$ examples from pool $$P$$;\
 **end**
->>>
-```
-this is code block
-&#949; = training error bound
-(&#949;)
-\alpha 
-($$\alpha$$)
-
-
-```
-
-\epsilon = training error bound
-\alpha 
-$$\alpha$$
+~~~
