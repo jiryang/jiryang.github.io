@@ -56,9 +56,16 @@ Data의 uncertainty를 측정하는 데는 아래와 같이 여러가지 방법�
 
 
 Pool-based active learning의 pseudo-code입니다:
-\epsilon
+
 ``` python
 this is code block
 \epsilon = training error bound
+\alpha 
+$$\alpha$$
+
 
 ```
+
+\epsilon = training error bound
+\alpha 
+$$\alpha$$
