@@ -50,24 +50,17 @@ Data의 uncertainty를 측정하는 데는 아래와 같이 여러가지 방법�
 
 1. Least Confidence
 
+
 2. Margin Sampling
+여기에는 smallest margin과 largest margin을 이용한 두 가지 방법이 있습니다.\
+  (1) Smallest Margin Sampling
+  $$\phi_{SM}(x)=P_{\theta}(y^*_i|x)-P_{\theta}(y^*_2|x)$$
+  (2) Largets Margin Sampling
 
 3. Entropy-Based
 
 
 Pool-based active learning의 pseudo-code입니다:
 
-~~~{eval=FALSE}
-$$\epsilon$$ = training error bound;\
-Divide data into unlabelled pool $$P$$ and test set $$S$$;\
-Split training pool into batches;\
-Randomly select $$k$$ examples from training pool to put in initialized training set $$T$$;\
-**while** $$Training Error > \epsilon$$ **do**\
-Train the model using $$T$$;\
-Use the trained model with the test-set, get performance measures;\
-For $$e \in P$$, compute uncertainty for $$e$$;\
-Select $$k$$ most-informative samples based on uncertainty metric;\
-Move these $$k$$ examples to training set;\
-Remove these $$k$$ examples from pool $$P$$;\
-**end**
-~~~
+![Fig5](https://jiryang.github.io/img/active_learning_pseudocode.png "Active Learning Pseudocode"){: width="70%"}{: .aligncenter}
+
