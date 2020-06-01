@@ -57,7 +57,8 @@ Data의 uncertainty를 측정하는 데는 아래와 같이 여러가지 방법�
 
 Pool-based active learning의 pseudo-code입니다:
 
-> \epsilon = training error bound;
+> $$\epsilon$$ = training error bound;
+> $#949 = training error bound;
 > Divide
 
 ```
