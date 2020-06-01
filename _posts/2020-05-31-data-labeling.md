@@ -9,11 +9,11 @@ mathjax: true
 ---
 
 한 업체에 다녀왔습니다. 이곳도 'AI는 해야겠는데 어떻게 할 지는 모르는' 곳 중 하나였습니다.<br>
-많은 기업들이 비용을 들이자니 palpable한 효과가 잘 그려지지 않고, 손을 놓고 있자니 뒤처질 것 같아 불안한 상태인 것 같습니다.\
+많은 기업들이 비용을 들이자니 palpable한 효과가 잘 그려지지 않고, 손을 놓고 있자니 뒤처질 것 같아 불안한 상태인 것 같습니다.<br>
 그래서 동종 업계의 success나 failure case를 요구하기도 하고, PoC를 해보자고 하는 것이겠지요.
 
 
-"AI를 언제든 적용할 수 있도록 데이터는 미리 모아두었습니다."\
+"AI를 언제든 적용할 수 있도록 데이터는 미리 모아두었습니다."<br>
 PoC를 하자는 업체에서 많은 데이터를 받았습니다. 그런데 원하는 모델에 넣기에 레이블이 제대로 되어있지 않습니다. PoC 기간과 예산은 충분하지 않습니다. 어떻게 하면 될까요?
 
 
@@ -46,32 +46,32 @@ Active learning은 "모든 데이터가 모델 학습에 동일한 영향을 미
 Active learning을 적용할 수 있는 시나리오는 stream-based selective sampling, membership query synthesis와 같은 방법도 있지만 가장 범용적인 pool-based sampling에 대해서만 살펴보도록 하겠습니다. 우선 일부 label된 데이터로 학습하여 '적당한' 성능을 보이는 baseline 모델이 필요합니다. Baseline 모델에 나머지 unlabeled data를 넣어서 inference를 시켜보고, 그 결과를 이용하여 어떤 data에 label을 다는 것이 효과적일지를 정하는 방법입니다. 모델의 입장에서 가장 informative한 데이터는 현재 자신이 판단하기 어려운 헷갈리는 데이터일 것입니다 (위의 첫번째 그림에서 decision boundary에 근접한 데이터들). 이러한 데이터들에 _human oracle_ 이 label을 달아주면 supervised learning을 통해 모델은 기존에 헷갈리던 (inference error가 발생하던) decision boundary를 고쳐나갈 수 있게 됩니다. 그렇기 때문에 inference 결과 uncertainty가 높은 순서대로 데이터를 뽑아 label을 달아주면 됩니다.
 
 
-Data의 uncertainty를 측정하는 데는 아래와 같이 여러가지 방법들이 있습니다. 데이터, 모델, 태스크 특성에 따라 적절히 사용하시면 될 것 같습니다:\
+Data의 uncertainty를 측정하는 데는 아래와 같이 여러가지 방법들이 있습니다. 데이터, 모델, 태스크 특성에 따라 적절히 사용하시면 될 것 같습니다:<br>
 _Uncertainty sampling 외에 Query-by-Committee나 Expected-Mode-Change 등 여러 기법들이 있지만 생략합니다. 궁금하신 분들은 블로그 하단의 논문 참고하세요._
 
 1. Least Confidence: $$\phi_{LC}(x)=1-P_{\theta}(y^*_1|x)$$
-\
+<br>
 이 방식은 데이터 x의 class membership 확률이 얼마나 명확한지를 보고 labeling 필요성을 판정하는 방법입니다. Most likely class의 확률만을 보기 때문에 간단해서 실제로 많이 사용되고 있습니다.
 
 
 2. Margin Sampling
-\
-여기에는 smallest margin과 largest margin을 이용한 두 가지 방법이 있습니다.\
+<br>
+여기에는 smallest margin과 largest margin을 이용한 두 가지 방법이 있습니다.<br>
   (1) Smallest Margin Sampling: $$\phi_{SM}(x)=P_{\theta}(y^*_i|x)-P_{\theta}(y^*_2|x)$$
-  \
-  위 수식에서 알 수 있듯이, 이 방식은 데이터 x가 속한다고 판정되는 top 2 class의 확률의 차이를 가지고 label이 필요한지 판정하는 방법입니다. 한 데이터가 두 개의 class에 속할 확률이 비슷하다면 결정이 '어려운' 데이터일 것이고, 모델의 학습에 '중요한' 데이터일 것이라는 추정이 가능합니다.\
-  \
+  <br>
+  위 수식에서 알 수 있듯이, 이 방식은 데이터 x가 속한다고 판정되는 top 2 class의 확률의 차이를 가지고 label이 필요한지 판정하는 방법입니다. 한 데이터가 두 개의 class에 속할 확률이 비슷하다면 결정이 '어려운' 데이터일 것이고, 모델의 학습에 '중요한' 데이터일 것이라는 추정이 가능합니다.<br>
+  <br>
   (2) Largets Margin Sampling: $$\phi_{LM}(x)=P_{\theta}(y^*_i|x)-P_{\theta}(y^*_{min}|x)$$
-  \
+  <br>
   이 방식은 데이터 x가 속한다고 판정되는 best와 worst class의 확률 차이를 이용하는 방법입니다. 이 차이가 크다면 class membership이 좀 더 분명하다고 생각할 수 있겠죠? Smallest margin sampling이 top 2 class 확률만을 보는 반면, 이 방식은 좀 더 전체적인 class membership 확률을 본다고 할 수도 있겠습니다.
 
 
 3. Entropy-Based: $$\phi_{ENT}(x)=\sum_i P_{\theta}(y_i|x)log(P_{\theta}(y_i|x))$$
-\
+<br>
 Shannon의 entropy (level of surprise) 개념을 사용하여 모든 class membership을 다 살펴서 데이터 x의 '불확실성'을 파악하는 방식입니다. 
 
 
-아래 그림은 3-label classification task에서 위의 3종류 uncertainty sampling을 적용한 (Margin Sampling의 경우는 LC를 적용) 결과 heatmap입니다. 각 방식이 어느 영역에 위치하는 데이터를 선호하는 지를 관찰할 수 있습니다.\
+아래 그림은 3-label classification task에서 위의 3종류 uncertainty sampling을 적용한 (Margin Sampling의 경우는 LC를 적용) 결과 heatmap입니다. 각 방식이 어느 영역에 위치하는 데이터를 선호하는 지를 관찰할 수 있습니다.<br>
 _* binary task라면 위의 방식 모두 결과는 동일합니다_
 
 ![Fig5](https://jiryang.github.io/img/active_learning_heatmap.PNG "Heatmap of Uncertainty Measures Behaviour"){: width="100%"}{: .aligncenter}
@@ -82,7 +82,7 @@ Pool-based active learning의 pseudo-code입니다:
 ![Fig6](https://jiryang.github.io/img/active_learning_pseudocode.png "Active Learning Pseudocode"){: width="70%"}{: .aligncenter}
 
 
-오늘은 많은 ML 업체나 (예를 들면 [이런 곳](https://www.lunit.io/ko/research/)) data processing 업체에서 사용하고 있고, 앞으로 사용할만한 active learning에 대해 간단히 알아보았습니다. 앞으로 10년간 매년 데이터의 크기가 2배씩 커질 것이라고 합니다 ([링크](https://qz.com/472292/data-is-expected-to-double-every-two-years-for-the-next-decade/)). 동시에 문제의 복잡도도 늘어나고, 요구하는 정확도도 높아질 것입니다. 예산은 항상 부족하고요.\
+오늘은 많은 ML 업체나 (예를 들면 [이런 곳](https://www.lunit.io/ko/research/)) data processing 업체에서 사용하고 있고, 앞으로 사용할만한 active learning에 대해 간단히 알아보았습니다. 앞으로 10년간 매년 데이터의 크기가 2배씩 커질 것이라고 합니다 ([링크](https://qz.com/472292/data-is-expected-to-double-every-two-years-for-the-next-decade/)). 동시에 문제의 복잡도도 늘어나고, 요구하는 정확도도 높아질 것입니다. 예산은 항상 부족하고요.<br>
 Active learning을 활용하여 데이터를 효과적으로 label하고 나머지 '덜 중요한', '좀 더 확실한' 데이터들은 학습된 모델에서 자동으로 labeling을 하게끔 하면 시간과 비용을 많이 절약할 수 있을 것 같습니다. 
 
 
