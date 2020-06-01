@@ -53,7 +53,6 @@ Data의 uncertainty를 측정하는 데는 아래와 같이 여러가지 방법�
 
 
 2. Margin Sampling
-
 여기에는 smallest margin과 largest margin을 이용한 두 가지 방법이 있습니다.\
   (1) Smallest Margin Sampling: $$\phi_{SM}(x)=P_{\theta}(y^*_i|x)-P_{\theta}(y^*_2|x)$$
 
@@ -64,8 +63,7 @@ Data의 uncertainty를 측정하는 데는 아래와 같이 여러가지 방법�
   이 방식은 데이터 x가 속한다고 판정되는 best와 worst class의 확률 차이를 이용하는 방법입니다. 이 차이가 크다면 class membership이 좀 더 분명하다고 생각할 수 있겠죠? Smallest margin sampling이 top 2 class 확률만을 보는 반면, 이 방식은 좀 더 전체적인 class membership 확률을 본다고 할 수도 있겠습니다.
 
 
-3. Entropy-Based: $$\phi_{ENT}(x)=\sum_i P_{\theta}(y_i|x)log(P_{\theta}(y_i|x))$$
-
+3. Entropy-Based: $$\phi_{ENT}(x)=\sum_i P_{\theta}(y_i|x)log(P_{\theta}(y_i|x))$$\
 Shannon의 entropy (level of surprise) 개념을 사용하여 모든 class membership을 다 살펴서 데이터 x의 '불확실성'을 파악하는 방식입니다. 
 
 
