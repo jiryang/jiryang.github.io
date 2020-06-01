@@ -55,7 +55,8 @@ Data의 uncertainty를 측정하는 데는 아래와 같이 여러가지 방법�
 2. Margin Sampling\
 여기에는 smallest margin과 largest margin을 이용한 두 가지 방법이 있습니다.\
   (1) Smallest Margin Sampling: $$\phi_{SM}(x)=P_{\theta}(y^*_i|x)-P_{\theta}(y^*_2|x)$$\
-  위 수식에서 알 수 있듯이, 이 방식은 데이터 x가 속한다고 판정되는 top 2 class의 확률의 차이를 가지고 label이 필요한지 판정하는 방법입니다. 한 데이터가 두 개의 class에 속할 확률이 비슷하다면 결정이 '어려운' 데이터일 것이고, 모델의 학습에 '중요한' 데이터일 것이라는 추정이 가능합니다.\\
+  위 수식에서 알 수 있듯이, 이 방식은 데이터 x가 속한다고 판정되는 top 2 class의 확률의 차이를 가지고 label이 필요한지 판정하는 방법입니다. 한 데이터가 두 개의 class에 속할 확률이 비슷하다면 결정이 '어려운' 데이터일 것이고, 모델의 학습에 '중요한' 데이터일 것이라는 추정이 가능합니다.\
+  \
   (2) Largets Margin Sampling: $$\phi_{LM}(x)=P_{\theta}(y^*_i|x)-P_{\theta}(y^*_{min}|x)$$\
   이 방식은 데이터 x가 속한다고 판정되는 best와 worst class의 확률 차이를 이용하는 방법입니다. 이 차이가 크다면 class membership이 좀 더 분명하다고 생각할 수 있겠죠? Smallest margin sampling이 top 2 class 확률만을 보는 반면, 이 방식은 좀 더 전체적인 class membership 확률을 본다고 할 수도 있겠습니다.
 
