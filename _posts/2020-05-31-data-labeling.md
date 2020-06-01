@@ -61,7 +61,7 @@ Pool-based active learning의 pseudo-code입니다:
 this is code block
 &#949; = training error bound
 \alpha 
-$$\alpha$$
+($$\alpha$$)
 
 
 ```
