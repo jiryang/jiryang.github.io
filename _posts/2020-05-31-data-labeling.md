@@ -59,6 +59,6 @@ Pool-based active learning의 pseudo-code입니다:
 
 ``` python
 this is code block
-$\epsilon$ = training error bound
+\(\epsilon\) = training error bound
 
 ```
