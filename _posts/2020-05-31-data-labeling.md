@@ -50,12 +50,12 @@ Data의 uncertainty를 측정하는 데는 아래와 같이 여러가지 방법�
 _Uncertainty sampling 외에 Query-by-Committee나 Expected-Mode-Change 등 여러 기법들이 있지만 생략합니다. 궁금하신 분들은 블로그 하단의 논문 참고하세요._
 
 1. Least Confidence: $$\phi_{LC}(x)=1-P_{\theta}(y^*_1|x)$$
-
+\
 이 방식은 데이터 x의 class membership 확률이 얼마나 명확한지를 보고 labeling 필요성을 판정하는 방법입니다. Most likely class의 확률만을 보기 때문에 간단해서 실제로 많이 사용되고 있습니다.
 
 
 2. Margin Sampling
-
+\
 여기에는 smallest margin과 largest margin을 이용한 두 가지 방법이 있습니다.\
   (1) Smallest Margin Sampling: $$\phi_{SM}(x)=P_{\theta}(y^*_i|x)-P_{\theta}(y^*_2|x)$$
   
@@ -67,7 +67,7 @@ _Uncertainty sampling 외에 Query-by-Committee나 Expected-Mode-Change 등 여�
 
 
 3. Entropy-Based: $$\phi_{ENT}(x)=\sum_i P_{\theta}(y_i|x)log(P_{\theta}(y_i|x))$$
-
+\
 Shannon의 entropy (level of surprise) 개념을 사용하여 모든 class membership을 다 살펴서 데이터 x의 '불확실성'을 파악하는 방식입니다. 
 
 
