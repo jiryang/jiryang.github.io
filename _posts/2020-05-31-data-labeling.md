@@ -29,7 +29,7 @@ Active learning은 "모든 데이터가 모델 학습에 동일한 영향을 미
 ![Fig1](https://jiryang.github.io/img/active_vs_random.png "Random Sampling vs Active Learning"){: width="100%"}{: .aligncenter}
 
 
-아래 그래프를 보시면 active learning 방식으로 '중요한' 데이터를 선별하여 label을 달면서 학습한 모델과, 그렇지 않고 모든 데이터를 label한 다음 random하게 학습데이터에 추가하면서 (training data 양을 늘려가면서) 학습한 모델의 데이터 양에 따른 정확도를 비교해보실 수 있습니다. 점차적으로 label을 늘려가다가 결국 모든 데이터에 label을 달게 된다면 두 방법 모두 정확도는 이론적으로 같을 것입니다 (Active learning과 반대로 모든 데이터에 label을 달아놓고 모델을 학습하는 것을 _passive learning_ 이라고 부릅니다). 하지만 우리가 특정 성능을 달성하는데 필요한 label cost를 최적화하고자 한다면 active learning이 유리하다는 걸 알 수 있습니다. 점선을 보시면 80% 정확도를 달성하기 위해 active learning 방법을 사용하면 45% 정도의 labeled data만 있으면 되는 반면, passive learning으로는 70% 정도의 labeled data가 필요합니다. 
+아래 그래프를 보시면 active learning 방식으로 '중요한' 데이터를 선별하여 label을 달면서 학습한 모델과, 그렇지 않고 모든 데이터를 label한 다음 random하게 학습데이터에 추가하면서 (training data 양을 늘려가면서) 학습한 모델의 데이터 양에 따른 정확도를 비교해보실 수 있습니다. 점차적으로 label을 늘려가다가 결국 모든 데이터에 label을 달게 된다면 두 방법 모두 정확도는 이론적으로 같을 것입니다 (Active learning과 반대로 모든 데이터에 label을 달아놓고 모델을 학습하는 것을 _passive learning_ 이라고 부릅니다). 하지만 우리가 특정 성능을 달성하는데 필요한 label cost를 최적화하고자 한다면 active learning이 유리하다는 걸 알 수 있습니다. 옅은 점선을 보시면 동일한 약 80% 정확도를 달성하기 위해 active learning 방법에서는 전체 데이터의 45% 정도만 label이 필요한 반면, passive learning으로는 70% 정도의 labeled data가 필요합니다. 
 
 ![Fig2](https://jiryang.github.io/img/model_learning_curve.png "Accuracy per Labeled Data"){: width="70%"}{: .aligncenter}
 
