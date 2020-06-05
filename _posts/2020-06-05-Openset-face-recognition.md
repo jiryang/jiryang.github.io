@@ -16,8 +16,12 @@ FaceNet에 대한 지난[포스트](https://jiryang.github.io/2020/05/23/FaceNet
 
 Discriminative feature를 효과적으로 배워보자는 두 가지 시도가 우선 있었습니다. Contrastive loss(또는 pairwise ranking loss)는 anchor-positive, anchor-negative pair를 구성해서 각 이미지를 Siamese network에 집어넣어 나온 feature들을 이용하여 다음의 loss를 최적화하게 됩니다:<br>
 $$L_{contrasive} = (1-Y) \frac 1 2 (\Vert f(x^i) - f(x^j) \Vert)^2 + Y \frac 1 2{max(0, m - \Vert f(x^i) - f(x^j) \Vert)}^2$$<br>
-$$f(x^i)$$: anchor sample, $$f(x^j)$$: positive ($$Y = 0$$) 또는 negative sample ( $$Y = 1$$)<br>
-위 식에서 $$f(x^i) \approx f(x^j)$$ 이면 (anchor-positive set이란 얘기겠죠) $$(\Vert f(x^i) - f(x^j) \Vert)^2$$의 값이 작아지고 
+$$Y$$: 바이너리 label (anchor-positive이면 0, anchor-negative이면 1)
+$$f(x^i)$$: anchor sample<br>
+$$f(x^j)$$: positive 또는 negative sample<br><br>
+위 식에서 $$f(x^i) \approx f(x^j)$$ 이면 (anchor-positive set이란 얘기겠죠) $$Y$$의 값이 0이 되어서 위 loss 식의 앞 항만 남게 되며, anchor-positive 간의 닮은 정도만큼 $$(\Vert f(x^i) - f(x^j) \Vert)^2$$의 값이 작아져서 최종 loss는 Mean Squared Error (MSE)와 거의 같아집니다. 그 반대로 anchor-negative의 경우에는 loss 식의 뒷 항만 남게 되고, 이 때에도 마찬가지로 anchor-negative의 닮은 정도만큼 $$(\Vert f(x^i) - f(x^j) \Vert)^2$$의 값이 작아지긴 하지만 차이가 작으면 작을수록 loss값은 $$\frac 1 2 m^2$$에 근접하게 됩니다. 이렇게 m이 anchor-negative pair에 대한 margin 역할을 하는거죠.
+
+
 
 
 FaceNet이 triplet을 만들어서 easy-to-hard 순서로 학습한다는 부분에서 curriculum learning에 대해서도 잠깐 언급했었지요.
