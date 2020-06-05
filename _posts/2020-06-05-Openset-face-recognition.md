@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "Open-Set Face Recognition: SphereFace, CosFace, ArcFace, then CurricularFace"
+title:  "Open-Set Face Recognition: SphereFace, CosFace, and ArcFace"
 date:   2020-06-05 00:00:01
 categories: Deepfake
-tags: openset_face_recognition sphereface cosface arcface curricularface curriculum_learning
-excerpt: 얼굴인식에서의 커리큘럼 학습
+tags: openset_face_recognition sphereface cosface arcface
+excerpt: 오픈셋 얼굴인식의 발전
 mathjax: true
 ---
 
@@ -71,10 +71,14 @@ ArcFace는 additive cosine margin을 이용합니다 (CosFace는 additive angula
 ArcFace의 loss formula입니다. $$cos$$를 벗겨서 margin을 넣고 다시 $$cos$$를 씌워주었기 때문에 LMCL과 달리 additive margin이 $$cos$$함수 안에 들어있는 것을 볼 수 있습니다:<br>
 $$L_{ArcFace} = -\frac 1 N \sum_i log(\frac {e^{s(cos(\theta_{y_i}+m))}} {e^{s(cos(\theta_{y_i}+m))}+\sum_{j=1,j \neq y_i}e^{scos\theta_j}})$$
 
-FaceNet이 triplet을 만들어서 easy-to-hard 순서로 학습한다는 부분에서 curriculum learning에 대해서도 잠깐 언급했었지요.
+
+CASIA, LFW 등 다양한 face dataset에서 동일한 모델로 테스트한 결과 ArcFace는 기존 Euclidean space의 softmax기반 방식들보다도, angular space의 여타 솔루션들보다 더 좋은 성적을 거두었습니다 (더 많은 결과는 논문에서 확인).
+
+![Fig7](https://jiryang.github.io/img/arcface_comparative_result.png "Comparision of Verification Results"){: width="70%"}{: .aligncenter}
 
 
-얼굴 인식 모델을 학습하여 
+
+최근에 나온 CurricularFace까지 언급하면서 curriculum learning 이야기를 시작해놓을까 했는데 너무 길어지네요. 다음을 기약합니다.
 
 
 논문링크: 
