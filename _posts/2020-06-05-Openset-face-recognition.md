@@ -17,6 +17,7 @@ FaceNet에 대한 지난[포스트](https://jiryang.github.io/2020/05/23/FaceNet
 Discriminative feature를 효과적으로 배워보자는 두 가지 시도가 우선 있었습니다.<br>
 
 
+
 **Contrastive Loss**<br>
 Contrastive loss(또는 pairwise ranking loss)는 anchor-positive, anchor-negative pair를 구성해서 각 이미지를 Siamese network에 집어넣어 나온 feature들을 이용하여 다음의 loss를 최적화하게 됩니다:<br>
 $$L_{contrasive} = (1-Y) \frac 1 2 (\Vert f(x^i) - f(x^j) \Vert)^2 + Y \frac 1 2{max(0, m - \Vert f(x^i) - f(x^j) \Vert)}^2$$<br>
@@ -28,8 +29,10 @@ $$f(x^j)$$: positive 또는 negative sample<br><br>
 ![Fig2](https://jiryang.github.io/img/contrastive_loss_faces.png "Contrastive Loss"){: width="70%"}{: .aligncenter}
 
 
+
 **_FaceNet_ 의 Triplet Loss**<br>
 Triplet loss에 대해서는 [지난 포스트](https://jiryang.github.io/2020/05/23/FaceNet-and-one-shot-learning/)에서 설명드린 바 있습니다. $$d(A, P) < d(A, N) < d(A, P)+\alpha$$ 조건을 추가하여서 discriminative power를 좀 더 강화하였죠.
+
 
 
 **_SphereFace_ 의 Angular Loss**<br>
@@ -44,10 +47,18 @@ Contrastive와 triplet loss 모두 기존의 softmax loss를 개선하여 latent
 
 
 SphereFace의 A-Softmax 식은 다음과 같습니다:<br>
-$$L_{ang} = \frac 1 N \sum-log(\frac {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)}} {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)+\sum_{j \neq y_i}e^{\Vert x_i \Vert cos(\theta_j, i)}}})$$
+$$L_{SphereFace} = \frac 1 N \sum-log(\frac {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)}} {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)+\sum_{j \neq y_i}e^{\Vert x_i \Vert cos(\theta_j, i)}}})$$
+
 
 
 **_CosFace_ 의 Angular Loss**<br>
+SphereFace가 각도 값에 곱으로 margin (multiplicative angular margin, 위 식의 $\theta$ 앞에 붙은 $$m$$)을 주었는데요, 이 decision boundary는 아래 그림의 3번째 'A-Softmax'와 같이 Euler space에서의 vector로 표시될 수 있습니다 (위 그림의 (6)과 동일한겁니다). A-Softmax의 경우 $$\Vert \theta_1 - \theta_2 \Vert$$ 값에 따라 회색으로 표시된 decision margin이 변한다는 점 때문에, C1과 C2가 유사하다면 (얼굴이 비슷하다면) margin이 작아지는 단점이 있었습니다. Class similarity와 무관하게 constant한 margin을 보장해주자는 생각에서 additive angular margin을 주는 loss를 만든 것이 CosFace입니다 (아래 그림의 Large Margin Cosine Loss, LMCL).
+
+![Fig5](https://jiryang.github.io/img/decision_margin_comparison01.PNG "Comparison of Decision Margins"){: width="70%"}{: .aligncenter}
+
+
+CosFace의 LMCL formula입니다. LMCL의 additive angular margin을 SphereFace의 multiplicative angular margin과 비교해서 보시죠:<br>
+$$L_{CosFace} = -\frac 1 N \sum_i log(\frac {e^{s(cos(\theta_{y_i}, i)-m)}} {e^{s(cos(\theta_{y_i}, i)-m)}+\sum_{j \neq y_i}e^{s(cos(\theta_j, i)-m)}})$$
 
 
 **_ArcFace_ 의 Angular Loss**<br>
