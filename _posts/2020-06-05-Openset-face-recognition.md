@@ -43,7 +43,7 @@ Contrastive와 triplet loss 모두 기존의 softmax loss를 개선하여 latent
 
 아래 그림을 보시면 CASIA face dataset을 사용, (1) classifier를 softmax로 학습한 feature를 Euclidean space에 plot한 것; (2) (1)을 Euler space에 plot; (3) modified softmax (normalized)로 학습한 feature의 Euclidean plot; (4) (3)의 Eulerian plot; (5) angular softmax로 학습한 feature의 Euclidean plot; (6) (5)의 Eulerian plot 을 잘 보여주고 있습니다. 각 Euclidean plot에는 decision boundary가 x=0 으로 나와있고, Eulerian plot들에는 angular bisector가 별도로 표시되어 있습니다. Euclidean보다 Eulerian의 intra-class compactness 및 intra-class dispension이 더 크고, 그 중에서도 angular softmax를 사용한 (6)의 class간 discriminitive power가 가장 크다는 것을 확인할 수 있습니다.
 
-![Fig4](https://jiryang.github.io/img/casia_face_angular_softmax.PNG "Comparison of Features Learned Using Softmax and A-Softmax Loss"){: width="70%"}{: .aligncenter}
+![Fig4](https://jiryang.github.io/img/casia_face_angular_softmax.PNG "Comparison of Features Learned Using Softmax and A-Softmax Loss"){: width="100%"}{: .aligncenter}
 
 
 SphereFace의 A-Softmax 식은 다음과 같습니다:<br>
@@ -54,7 +54,7 @@ $$L_{SphereFace} = -\frac 1 N \sum log(\frac {e^{\Vert x_i \Vert cos(m\theta_{y_
 **_CosFace_ 의 Angular Loss**<br>
 SphereFace가 각도 값에 곱으로 margin (multiplicative angular margin, 위 식의 $\theta$ 앞에 붙은 $$m$$)을 주었는데요, 이 decision boundary는 아래 그림의 3번째 'A-Softmax'와 같이 Euler space에서의 vector로 표시될 수 있습니다 (위 그림의 (6)과 동일한겁니다). A-Softmax의 경우 $$\Vert \theta_1 - \theta_2 \Vert$$ 값에 따라 회색으로 표시된 decision margin이 변한다는 점 때문에, C1과 C2가 유사하다면 (얼굴이 비슷하다면) margin이 작아지는 단점이 있었습니다. 또한 gradient 계산을 용이하게 하기 위해 A-Softmax의 $m$은 정수여야 한다는 큰 단점이 있었습니다. Margin이 큰 값으로 변경되기 때문에 모델을 수렴시키기 어렵게 된 것이죠. Class similarity와 무관하게 constant한 margin을 보장해주고, 수렴을 위해 기존 softmax loss의 도움이 필요없도록 additive angular margin을 주는 loss를 만든 것이 CosFace입니다 (아래 그림의 Large Margin Cosine Loss, LMCL).
 
-![Fig5](https://jiryang.github.io/img/decision_margin_comparison01.PNG "Comparison of Decision Margins"){: width="70%"}{: .aligncenter}
+![Fig5](https://jiryang.github.io/img/decision_margin_comparison01.PNG "Comparison of Decision Margins"){: width="100%"}{: .aligncenter}
 
 
 CosFace의 LMCL formula입니다. LMCL의 additive angular margin을 SphereFace의 multiplicative angular margin과 비교해서 보시죠:<br>
@@ -65,7 +65,7 @@ $$L_{CosFace} = -\frac 1 N \sum_i log(\frac {e^{s(cos(\theta_{y_i}, i)-m)}} {e^{
 **_ArcFace_ 의 Angular Loss**<br>
 ArcFace는 additive cosine margin을 이용합니다 (CosFace는 additive angular margin이었죠). Logit에 $$arccos$$함수를 씌워서 similarity가 아닌 실제 angle (angular distance)을 뽑고, 여기에 margin penalty를 더한 후 $$cos$$함수로 logit을 복원하는 방식을 사용하여서 ArcFace라고 이름지었습니다. Normalized 된 hypersphere manifold 상에서 distance를 가지고 inter-class dispersion, intra-class compactness를 maximize하는 것이기 때문에 geodesic distance와 일치하는 angular margin을 사용한다는 점은 학습에 도움이 될 것입니다. 아래 angular plane에서의 decision boundary는 이와 같은 ArcFace의 장점을 보여줍니다. 앞서 보았던 decision margin과 비교해보면 CosFace의 경우 $$cos\theta$$를 axes로 놓고 그렸던 decision margin을 angular ($$\theta$$) plane에 그려보니 일정하지 않게 된 것을 볼 수 있습니다. 반면 ArcFace의 decision margin은 angle이 변함에 따라 constant 하지요.
 
-![Fig6](https://jiryang.github.io/img/decision_margin_comparison02.PNG "Comparison of Decision Margins"){: width="70%"}{: .aligncenter}
+![Fig6](https://jiryang.github.io/img/decision_margin_comparison02.PNG "Comparison of Decision Margins"){: width="100%"}{: .aligncenter}
 
 
 ArcFace의 loss formula입니다. $$cos$$를 벗겨서 margin을 넣고 다시 $$cos$$를 씌워주었기 때문에 LMCL과 달리 additive margin이 $$cos$$함수 안에 들어있는 것을 볼 수 있습니다:<br>
