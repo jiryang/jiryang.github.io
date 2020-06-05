@@ -14,9 +14,10 @@ FaceNet에 대한 지난[포스트](https://jiryang.github.io/2020/05/23/FaceNet
 ![Fig1](https://jiryang.github.io/img/closedset_vs_openset.PNG "Closed vs Open-Set Face Recognition"){: width="70%"}{: .aligncenter}
 
 
-Discriminative feature를 효과적으로 배워보자는 두 가지 시도가 우선 있었습니다. Contrasive loss(또는 pairwise ranking loss)는 anchor-positive, anchor-negative pair를 구성해서 각 이미지를 Siamese network에 집어넣어 나온 feature들을 이용하여 다음의 loss를 최적화하게 됩니다:<br>
-$$L_{contrasive} = (1-Y) \frac 1 2 (\Vert f(x^i) - f(x^j) \Vert)^2 + Y \frac 1 2{max(0, m - \Vert f(x^i) - f(x^j) \Vert)}^2$$
-FaceNet은 
+Discriminative feature를 효과적으로 배워보자는 두 가지 시도가 우선 있었습니다. Contrastive loss(또는 pairwise ranking loss)는 anchor-positive, anchor-negative pair를 구성해서 각 이미지를 Siamese network에 집어넣어 나온 feature들을 이용하여 다음의 loss를 최적화하게 됩니다:<br>
+$$L_{contrasive} = (1-Y) \frac 1 2 (\Vert f(x^i) - f(x^j) \Vert)^2 + Y \frac 1 2{max(0, m - \Vert f(x^i) - f(x^j) \Vert)}^2$$<br>
+$$where f(x^i) is an anchor sample and f(x^j) is either positive (then $$Y = 0$$) or negative sample (then $$Y = 1$$)$$<br>
+위 식에서 $$f(x^i) \approx f(x^j)$$ 이면 (anchor-positive set이란 얘기겠죠) $$(\Vert f(x^i) - f(x^j) \Vert)^2$$의 값이 작아지고 
 
 
 FaceNet이 triplet을 만들어서 easy-to-hard 순서로 학습한다는 부분에서 curriculum learning에 대해서도 잠깐 언급했었지요.
