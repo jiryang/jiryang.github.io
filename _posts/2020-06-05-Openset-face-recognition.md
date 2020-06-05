@@ -43,6 +43,9 @@ Contrastive와 triplet loss 모두 기존의 softmax loss를 개선하여 latent
 ![Fig4](https://jiryang.github.io/img/casia_face_angular_softmax.PNG "Comparison of Features Learned Using Softmax and A-Softmax Loss"){: width="70%"}{: .aligncenter}
 
 
+SphereFace의 A-Softmax 식은 다음과 같습니다:<br>
+$$L_{a-softmax} = \frac 1 N \sum-log( \frac e^{\Vert x_i \Vert}cos(m\theta_{y_i}, i) abc )$$
+
 
 **_CosFace_ 의 Angular Loss**<br>
 
