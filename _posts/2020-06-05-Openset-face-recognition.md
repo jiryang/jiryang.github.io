@@ -47,7 +47,7 @@ Contrastive와 triplet loss 모두 기존의 softmax loss를 개선하여 latent
 
 
 SphereFace의 A-Softmax 식은 다음과 같습니다:<br>
-$$L_{SphereFace} = -\frac 1 N \sum log(\frac {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)}} {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)+\sum_{j \neq y_i}e^{\Vert x_i \Vert cos(\theta_j, i)}}})$$
+$$L_{SphereFace} = -\frac 1 N \sum_i log(\frac {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)}} {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)+\sum_{j \neq y_i}e^{\Vert x_i \Vert cos(\theta_j, i)}}})$$
 
 
 
