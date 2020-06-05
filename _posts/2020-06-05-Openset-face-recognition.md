@@ -78,7 +78,7 @@ CASIA, LFW 등 다양한 face dataset에서 동일한 모델로 테스트한 결
 
 
 
-Normalize된 angular space에서 우수한 성능을 보이는 ArcFace는 scale-invariant, rotational-invariant한 특성 때문에 face 뿐만 아니라 다양한 image data의 open-set recognition에 활용이 가능할 것 같습니다.
+Normalize된 angular space에서 우수한 성능을 보이는 ArcFace는 scale-invariant, rotational-invariant한 특성 때문에 face 뿐만 아니라 다양한 image data의 open-set recognition에 활용이 가능할 것 같습니다. 마침 EstSoft에서 ArcFace로 Kaggle competition에 입상했다는 글도 있네요 ([링크](https://blog.estsoft.co.kr/727)).
 
 
 최근에 나온 CurricularFace까지 언급하면서 curriculum learning 이야기를 시작해놓을까 했는데 너무 길어지네요. 다음을 기약합니다.
