@@ -47,12 +47,12 @@ Contrastive와 triplet loss 모두 기존의 softmax loss를 개선하여 latent
 
 
 SphereFace의 A-Softmax 식은 다음과 같습니다:<br>
-$$L_{SphereFace} = \frac 1 N \sum-log(\frac {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)}} {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)+\sum_{j \neq y_i}e^{\Vert x_i \Vert cos(\theta_j, i)}}})$$
+$$L_{SphereFace} = -\frac 1 N \sum log(\frac {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)}} {e^{\Vert x_i \Vert cos(m\theta_{y_i}, i)+\sum_{j \neq y_i}e^{\Vert x_i \Vert cos(\theta_j, i)}}})$$
 
 
 
 **_CosFace_ 의 Angular Loss**<br>
-SphereFace가 각도 값에 곱으로 margin (multiplicative angular margin, 위 식의 $\theta$ 앞에 붙은 $$m$$)을 주었는데요, 이 decision boundary는 아래 그림의 3번째 'A-Softmax'와 같이 Euler space에서의 vector로 표시될 수 있습니다 (위 그림의 (6)과 동일한겁니다). A-Softmax의 경우 $$\Vert \theta_1 - \theta_2 \Vert$$ 값에 따라 회색으로 표시된 decision margin이 변한다는 점 때문에, C1과 C2가 유사하다면 (얼굴이 비슷하다면) margin이 작아지는 단점이 있었습니다. Class similarity와 무관하게 constant한 margin을 보장해주자는 생각에서 additive angular margin을 주는 loss를 만든 것이 CosFace입니다 (아래 그림의 Large Margin Cosine Loss, LMCL).
+SphereFace가 각도 값에 곱으로 margin (multiplicative angular margin, 위 식의 $\theta$ 앞에 붙은 $$m$$)을 주었는데요, 이 decision boundary는 아래 그림의 3번째 'A-Softmax'와 같이 Euler space에서의 vector로 표시될 수 있습니다 (위 그림의 (6)과 동일한겁니다). A-Softmax의 경우 $$\Vert \theta_1 - \theta_2 \Vert$$ 값에 따라 회색으로 표시된 decision margin이 변한다는 점 때문에, C1과 C2가 유사하다면 (얼굴이 비슷하다면) margin이 작아지는 단점이 있었습니다. 또한 gradient 계산을 용이하게 하기 위해 A-Softmax의 $m$은 정수여야 한다는 큰 단점이 있었습니다. Margin이 큰 값으로 변경되기 때문에 모델을 수렴시키기 어렵게 된 것이죠. Class similarity와 무관하게 constant한 margin을 보장해주고, 수렴을 위해 기존 softmax loss의 도움이 필요없도록 additive angular margin을 주는 loss를 만든 것이 CosFace입니다 (아래 그림의 Large Margin Cosine Loss, LMCL).
 
 ![Fig5](https://jiryang.github.io/img/decision_margin_comparison01.PNG "Comparison of Decision Margins"){: width="70%"}{: .aligncenter}
 
@@ -61,10 +61,15 @@ CosFace의 LMCL formula입니다. LMCL의 additive angular margin을 SphereFace�
 $$L_{CosFace} = -\frac 1 N \sum_i log(\frac {e^{s(cos(\theta_{y_i}, i)-m)}} {e^{s(cos(\theta_{y_i}, i)-m)}+\sum_{j \neq y_i}e^{s(cos(\theta_j, i)-m)}})$$
 
 
+
 **_ArcFace_ 의 Angular Loss**<br>
+ArcFace는 additive cosine margin을 이용합니다 (CosFace는 additive angular margin이었죠). Logit에 $$arccos$$함수를 씌워서 similarity가 아닌 실제 angle (angular distance)을 뽑고, 여기에 margin penalty를 더한 후 $$cos$$함수로 logit을 복원하는 방식을 사용하여서 ArcFace라고 이름지었습니다. Normalized 된 hypersphere manifold 상에서 distance를 가지고 inter-class dispersion, intra-class compactness를 maximize하는 것이기 때문에 geodesic distance와 일치하는 angular margin을 사용한다는 점은 학습에 도움이 될 것입니다. 아래 angular plane에서의 decision boundary는 이와 같은 ArcFace의 장점을 보여줍니다. 앞서 보았던 decision margin과 비교해보면 CosFace의 경우 $$cos\theta$$를 axes로 놓고 그렸던 decision margin을 angular ($$\theta$$) plane에 그려보니 일정하지 않게 된 것을 볼 수 있습니다. 반면 ArcFace의 decision margin은 angle이 변함에 따라 constant 하지요.
+
+![Fig6](https://jiryang.github.io/img/decision_margin_comparison02.PNG "Comparison of Decision Margins"){: width="70%"}{: .aligncenter}
 
 
-
+ArcFace의 loss formula입니다. $$cos$$를 벗겨서 margin을 넣고 다시 $$cos$$를 씌워주었기 때문에 LMCL과 달리 additive margin이 $$cos$$함수 안에 들어있는 것을 볼 수 있습니다:<br>
+$$L_{ArcFace} = -\frac 1 N \sum_i log(\frac {e^{s(cos(\theta_{y_i}+m))}} {e^{s(cos(\theta_{y_i}+m))}+\sum_{j=1,j \neq y_i}e^{scos\theta_j}})$$
 
 FaceNet이 triplet을 만들어서 easy-to-hard 순서로 학습한다는 부분에서 curriculum learning에 대해서도 잠깐 언급했었지요.
 
