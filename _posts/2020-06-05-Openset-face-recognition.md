@@ -15,7 +15,7 @@ FaceNet에 대한 지난[포스트](https://jiryang.github.io/2020/05/23/FaceNet
 
 
 Discriminative feature를 효과적으로 배워보자는 두 가지 시도가 우선 있었습니다. Contrasive loss(또는 pairwise ranking loss)는 anchor-positive, anchor-negative pair를 구성해서 각 이미지를 Siamese network에 집어넣어 나온 feature들을 이용하여 다음의 loss를 최적화하게 됩니다:<br>
-$$L_{contrasive} = (1-Y) \frac 1 2 (\Vert f(x^i - x^j)-f() \Vert)^2 + Y \frac 1 2{max(0, m - \Vert f(x^i - x^j)-f() \Vert)}^2
+$$L_{contrasive} = (1-Y) \frac 1 2 (\Vert f(x^i - x^j)-f() \Vert)^2 + Y \frac 1 2{max(0, m - \Vert f(x^i - x^j)-f() \Vert)}^2$$
 FaceNet은 
 
 
