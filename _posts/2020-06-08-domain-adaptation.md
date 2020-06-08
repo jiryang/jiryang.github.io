@@ -34,7 +34,7 @@ Real-world example을 이용해서 좀 다른 방향으로 이야기를 해보�
 $$\mathcal{D}={\mathcal{X}, P(\mathcal{X})}$$
 
 
-$$\mathcal{X}$$의 특정 set인 $$X={x_1, x_2, ..., x_n}\in\mathcal{X}$$의 label을 $$Y={y_1, y_2, ..., y_n}\in\mathcal{Y}$$라고 할 때, task $$\mathcal{T}$$를 입력 $$X$$가 $$Y$$의 확률을 가질 경우를 나타내는 조건부 확률인 $$P(Y|X)$$ 라고 정의할 수 있습니다.
+$$\mathcal{X}$$의 특정 set인 $$X={x_1, x_2, ..., x_n}\in\mathcal{X}$$의 label을 $$Y={y_1, y_2, ..., y_n}\in\mathcal{Y}$$라고 할 때, task $$\mathcal{T}$$를 입력 $$X$$가 $$Y$$의 확률을 가질 경우를 나타내는 조건부 확률인 $$P(Y\midX)$$ 라고 정의할 수 있습니다.
 
 
 
