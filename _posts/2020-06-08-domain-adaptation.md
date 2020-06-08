@@ -30,10 +30,11 @@ Real-world example을 이용해서 좀 다른 방향으로 이야기를 해보�
 있습니다. 서론이 길었습니다만 오늘의 주제인 domain adaptation이 이런 경우의 문제를 해결해 줄 수 있는 한 방법입니다. 우선 문제를 formalize 하는 것부터 설명을 시작하겠습니다. 그러면서 transfer learning과 domain adaptation이 어떤 차이가 있는지도 이야기를 해보도록 하겠습니다.
 
 
-문제가 정의되는, 혹은 데이터가 정의되는 도메인 $$\mathcal{D}$$는 다음과 같이 정의됩니다:<br>
-$$\mathcal{D}={\mathcal{X}, P(\mathcal{X})}$$<br>
-where $$\mathcal{X}\subset\mathcal{R^d}$$ ($$\mathcal{d}$$: dimension) and<br>
-$$P(\mathcal{X})$$: marginal probability distribution
+문제가 정의되는, 혹은 데이터가 정의되는 도메인 $$\mathcal{D}$$는 $$\mathcal{d}$$ 차원을 가지는 데이터 $$\mathcal{X}$$와 그 확률분포 $$P(\mathcal{X})$$로써 다음과 같이 정의됩니다:<br>
+$$\mathcal{D}={\mathcal{X}, P(\mathcal{X})}$$
+
+
+$$\mathcal{X}$$의 특정 set인 $$X={x_1, x_2, ..., x_n}\in\mathcal{X}$$의 label을 $$Y={y_1, y_2, ..., y_n}\in\mathcal{Y}$$라고 할 때, task $$\mathcal{T}$$를 입력 $$X$$가 $$Y$$의 확률을 가질 경우를 나타내는 조건부 확률인 $$P(Y|X)$$ 라고 정의할 수 있습니다.
 
 
 
