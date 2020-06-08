@@ -31,7 +31,7 @@ Real-world example을 이용해서 좀 다른 방향으로 이야기를 해보�
 
 
 문제가 정의되는, 혹은 데이터가 정의되는 도메인 $$\mathcal{D}$$는 $$\mathcal{d}$$ 차원을 가지는 데이터 $$\mathcal{X}$$와 그 확률분포 $$P(\mathcal{X})$$로써 다음과 같이 정의됩니다:<br>
-$$\mathcal{D}={\mathcal{X}, P(\mathcal{X})}$$
+$$\mathcal{D}=\{\mathcal{X}, P(\mathcal{X})\}$$
 
 
 $$\mathcal{X}$$의 특정 set인 $$X={x_1, x_2, ..., x_n}\in\mathcal{X}$$의 label을 $$Y={y_1, y_2, ..., y_n}\in\mathcal{Y}$$라고 할 때, task $$\mathcal{T}$$를 입력 $$X$$가 $$Y$$의 확률을 가질 경우를 나타내는 조건부 확률인 $$P(Y \mid X)$$ 라고 정의할 수 있습니다.
@@ -41,5 +41,5 @@ $$\mathcal{X}$$의 특정 set인 $$X={x_1, x_2, ..., x_n}\in\mathcal{X}$$의 lab
 
 
 앞에서의 domain과 task 정의를 이용하여 source와 target의 domain과 task를 다음과 같이 표현할 수 있습니다:<br>
-Source domain: $$\mathcal{D^S}={\mathcal{X^S}, P(\mathcal{X^S})}$$, source task: $$\mathcal{T^S}={\mathcal{Y^S}, P(Y^S \mid X^S)}$$<br>
-Target domain: $$\mathcal{D^T}={\mathcal{X^T}, P(\mathcal{X^T})}$$, target task: $$\mathcal{T^T}={\mathcal{Y^T}, P(Y^T \mid X^T)}$$
+Source domain: $$\mathcal{D^S}=\{\mathcal{X^S}, P(\mathcal{X^S})\}$$, source task: $$\mathcal{T^S}=\{\mathcal{Y^S}, P(Y^S \mid X^S)\}$$<br>
+Target domain: $$\mathcal{D^T}=\{\mathcal{X^T}, P(\mathcal{X^T})\}$$, target task: $$\mathcal{T^T}=\{\mathcal{Y^T}, P(Y^T \mid X^T)\}$$
