@@ -85,7 +85,7 @@ _Homogeneous DA_ 문제를 해결하기 위한 수많은 연구가 있어왔습�
 ![Fig4](homo_da_categorization.PNG "Different Approaches of Homogeneous DA"){: width="80%"}{: .aligncenter}
 
 
-1. **Discrepancy-based**<br>
+**Discrepancy-based**<br>
 딥 네트워크 모델을 fine-tuning 함으로써 두 domain 사이의 shift를 줄여나가는 방식<br>
   **Discrepancy-based: Categorical**<br>
 asdfasdfasdf
@@ -103,7 +103,7 @@ asdfasdfdf
 asdfasdfdf
 
 
-1. **Adversarial-based**<br>
+**Adversarial-based**<br>
 데이터가 어느 domain에서 왔는지를 구분하는 domain discriminator가 confusion을 일으키도록 함으로써 source와 target domain의 구분을 '못하게끔' 네트워크를 학습하는 방식<br>
   **Adversarial-based: Generative**<br>
 asdfasdfdf
@@ -113,7 +113,7 @@ asdfasdfdf
 asdfasdfdf
 
 
-1. **Reconstruction-based**<br>
+**Reconstruction-based**<br>
 Source나 target domain 데이터를 reconstruct하여 intra-domain specificity와 inter-domain indistinguishability를 높이는 방식<br>
   **Reconstruction-based: Encoder-decoder**<br>
 asdfasdfdf
