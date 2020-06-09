@@ -53,7 +53,7 @@ $$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S}=\mathcal{T^T}$$<br>
 
 
 
-** 2. Different domain, different task ** <br>
+**2. Different domain, different task** <br>
 $$\mathcal{D^S} \neq \mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
 아.. 생각만 해도 제일 골치아픈 경우입니다. 이런 문제를 과연 풀 수 있을까요.. Source와 target domain이 완전히 다른 경우는 knowledge transfer를 한다는 것 자체가 말이 안되고, 다르긴 하지만 어느정도 유사성이 있어야 합니다. Task의 경우도 마찬가지입니다. 구분을 하자면 _inductive transfer learning_ 이나 _unsupervised transfer learning_ 에 속하는 문제들이겠지만, 이런 경우는 그냥 새로운 데이터로 재학습하는게 나을 것 같습니다. Self-taught learning 이라는 기법도 있지만 toy example에서 6-70% 정도 성능을 보였고, 이후 지속적으로 개선되지 않은 것 같습니다 (제가 모르는 것일 수도 있음). 여튼 이번에 다루고자 하는 topic이 아니므로 이정도에서 패쓰합니다.
 
