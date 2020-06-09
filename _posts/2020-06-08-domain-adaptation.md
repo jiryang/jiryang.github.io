@@ -85,9 +85,16 @@ _Homogeneous DA_ 문제를 해결하기 위한 수많은 연구가 있어왔습�
 ![Fig4](homo_da_categorization.PNG "Different Approaches of Homogeneous DA"){: width="80%"}{: .aligncenter}
 
 
-1. {asdfasdfasdf}
-2. {asdfasdfadsf}
-3. {adgawetacdasdf}
+1. asdfasdfasdf
+asdfasdfasdf
+
+
+2. asdfasdfadsf
+asdfasdfasdf
+
+
+3. adgawetacdas
+asdfasdfdf
 
 
 
