@@ -19,7 +19,7 @@ Real-world example을 이용해서 좀 다른 방향으로 이야기를 해보�
 우리나라의 인공위성 중 아리랑 3호는 약 하루 2회 (주간, 야간) 한반도 상공을 지나며 고해상도 전자광학카메라로 사진을 촬영해왔습니다. 기상, 군사 등 다양한 목적을 가지고 다량의 사진을 찍었을 텐데요, 70cm급 해상도를 가지고 있다고 하니 촬영된 물체가 무엇인지 육안으로도 어느정도는 확인이 가능할 것 같긴 합니다만, 그래도 명확치 않은 것들도 있고 워낙 사진의 양이 많으니 object recognizer를 만들어서 자동으로 분류시키기로 하였습니다. 비용과 시간을 들여서 detect하고자 하는 object들에 대해 수많은 optical image들에 대한 annotation 작업을 마쳤습니다. 이제 위성에서 사진을 보내오면 자동으로 물체를 인식하여서 비구름이 어떻게 움직이는지 알아 강수를 예측하고, 북한의 어떤 함정이 몇 대 어느 항구에 정박해 있는지 알아 자동으로 국군의 준비태세를 갖추게 되었습니다.
 
 
-그런데 optical camera에는 커다란 단점이 있었는데요, 그 이름 그대로 optical하다는 점입니다. 빛이 없거나 가리면 촬영할 수가 없다는 뜻이지요. 하루에 2회 한반도 상공을 촬영할 수 있는데 구름이 끼어 있으면 지상 촬영이 안된다거나, 야간의 경우 촬영한 이미지로 지상의 object 관찰이 어렵다는 취약점이 있었습니다. 이러한 단점을 극복하고자 위성에서 지상에 레이다파를 쏘고, 다양한 굴곡면에 반사되어 나온 레이다파의 시차를 이용하여 해당 굴곡면을 가진 object의 형태를 파악하는 합성개구레이다 (Synthetic Aperture Radar, SAR) 기술을 개발, 차기 위성인 아리랑 5호와 아리랑 3A에 탑재하였습니다. 더이상 빛의 유무와 occlusion에 제약이 없어져서 밤에도, 구름낀 날에도 지상의 object 관찰이 가능해졌습니다. 그런데 바뀐 입력 이미지에서 object recognition을 돌리려니 SAR 이미지로 모델을 새로 학습해야 합니다. 여기서 문제가 발생합니다. 사람의 눈과 동일한 방식으로 동작한Optical image는 우리의 눈과 같은 방식으로 동작하기 때문에 그 결과물도 우리가 인식하는 것과 동일한 반면, SAR은 그렇지가 않다는 점입니다. 기계적으로야 가능하겠지만 SAR 촬영 object를 눈으로 구분하는 것이 쉽지 않습니다. 아래는 optical과 SAR로 촬영한 각종 전술차량의 그림입니다. 눈으로는 식별이 가능하지 않지요.
+그런데 optical camera에는 커다란 단점이 있었는데요, 그 이름 그대로 optical하기 때문에 빛이 없거나 가리면 촬영할 수가 없다는 점입니다. 하루에 2회 한반도 상공을 촬영할 수 있는데 구름이 끼어 있으면 지상 촬영이 안된다거나, 야간의 경우 촬영한 이미지로 지상의 object 관찰이 어렵다는 취약점이 있었습니다. 이러한 단점을 극복하고자 위성에서 지상에 레이다파를 쏘고, 다양한 굴곡면에 반사되어 나온 레이다파의 시차를 이용하여 해당 굴곡면을 가진 object의 형태를 파악하는 합성개구레이다 (Synthetic Aperture Radar, SAR) 기술을 개발, 차기 위성인 아리랑 5호와 아리랑 3A에 탑재하였습니다. 더이상 빛의 유무와 occlusion에 제약이 없어져서 밤에도, 구름낀 날에도 지상의 object 관찰이 가능해졌습니다. 그런데 바뀐 입력 이미지에서 object recognition을 돌리려니 SAR 이미지로 모델을 새로 학습해야 합니다. 여기서 문제가 발생합니다. 사람의 눈과 동일한 방식으로 동작한Optical image는 우리의 눈과 같은 방식으로 동작하기 때문에 그 결과물도 우리가 인식하는 것과 동일한 반면, SAR은 그렇지가 않다는 점입니다. 기계적으로야 가능하겠지만 SAR 촬영 object를 눈으로 구분하는 것이 쉽지 않습니다. 아래는 optical과 SAR로 촬영한 각종 전술차량의 그림입니다. 눈으로는 식별이 가능하지 않지요.
 
 ![Fig1](https://jiryang.github.io/img/tank_optical_vs_sar.PNG "Optical and SAR Sample Images"){: width="70%"}{: .aligncenter}
 
@@ -78,7 +78,9 @@ _Homogeneous DA_ 문제를 해결하기 위한 수많은 연구가 있어왔습�
 ![Fig3](instance_reweighting_method.PNG "Instance Re-weighting Method"){: width="70%"}{: .aligncenter}
 
 
-최근에는 deep neural network를 활용한 방법들이 사용되고 있으며, 몇몇 리뷰 논문들에서는 접근 방식에 따라 _discrepancy-based_ , _adversarial-based_ , 그리고 _reconstruction-based_ 의 큰 세 갈래로 구분하고 그 안에서 또 카테고리를 나누어 세분화하고 있습니다.
+최근에는 deep neural network를 활용한 방법들이 사용되고 있으며, 리뷰 논문들에서는 접근 방식에 따라 _discrepancy-based_ , _adversarial-based_ , 그리고 _reconstruction-based_ 의 큰 세 갈래로 구분하고 그 안에서 또 카테고리를 나누어 세분화하고 있습니다. 각 방식들의 대표적인 네트워크를 이용하여 하나씩 간략하게 살펴보겠습니다.
+
+(유사도가 너무 다른 domain간에는 intermediate domain을 정의해서 DA를 조금씩 해 나가는 multi-step 방식도 있으나, 여기서는 domain간 어느정도의 유사성이 있다고 전제하고 one-step DA에 대해서만 고려합니다.)
 
 ![Fig4](homo_da_categorization.PNG "Different Approaches of Homogeneous DA"){: width="80%"}{: .aligncenter}
 
