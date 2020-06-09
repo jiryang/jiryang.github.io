@@ -59,7 +59,7 @@ $$\mathcal{D^S} \neq \mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
 
 
 **3. Same domain, different task** <br>
-$$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
+$$\mathcal{D^S \neq \mathcal{D^T}$$, $$\mathcal{T^S}=\mathcal{T^T}$$<br>
 Source domain의 데이터가 충분하고, target domain의 labeled 데이터가 어느정도 있다면 source domain에서 학습된 모델이 source domain 상에서의 성능을 유지하면서 target domain에서도 동작하도록 학습을 할 수 있습니다. ImageNet pre-trained 모델로 face recognition에 적용하는게 이런 경우의 예라고도 할 수 있겠습니다. _Inductive transfer learning_ 또는 _multi-task learning_ 정도로 구분지을 수 있겠네요. 이 부분도 일단 out of topic입니다.
 
 
@@ -70,10 +70,11 @@ $$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
 
 (일반적으로 말하는 **Transfer learning (전이학습)** 이란 위의 2, 3, 4번, 그러니깐 한 도메인에서 학습된 knowledge를 다른 도메인에 적용하거나, 한 task에 대해 학습한 knowledge를 다른 task에 적용하거나, 혹은 둘 다 동시에 하는 경우를 모두 일컫는 말입니다.)
 
+![Fig2](Transfer_learning_and_domain_adaptation.png "Domain Adaptation"){: width="70%"}{: .aligncenter}
 
 
-논문링크 (survey 논문 위주 리스트업):
-[A Survey on Transfer Learning](https://www.cse.ust.hk/~qyang/Docs/2009/tkde_transfer_learning.pdf)
-[Domain Adaptation for Visual Applications: A Comprehensive Survey](https://arxiv.org/pdf/1702.05374.pdf)
-[Deep Visual Domain Adaptation: A Survey](https://arxiv.org/pdf/1802.03601.pdf)
+논문링크 (survey 논문 위주 리스트업):<br>
+[A Survey on Transfer Learning](https://www.cse.ust.hk/~qyang/Docs/2009/tkde_transfer_learning.pdf)<br>
+[Domain Adaptation for Visual Applications: A Comprehensive Survey](https://arxiv.org/pdf/1702.05374.pdf)<br>
+[Deep Visual Domain Adaptation: A Survey](https://arxiv.org/pdf/1802.03601.pdf)<br>
 [Recent Advances in Transfer Learning for Cross-Dataset Visual Recognition: A Problem-Oriented Perspective](https://arxiv.org/pdf/1705.04396.pdf)
