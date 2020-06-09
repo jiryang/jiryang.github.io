@@ -84,8 +84,8 @@ Normalize된 angular space에서 우수한 성능을 보이는 ArcFace는 scale-
 최근에 나온 CurricularFace까지 언급하면서 curriculum learning 이야기를 시작해놓을까 했는데 너무 길어지네요. 다음을 기약합니다.
 
 
-논문링크: 
-[SphereFace](https://arxiv.org/pdf/1704.08063.pdf)
-[CosFace](https://arxiv.org/pdf/1801.09414.pdf)
-[ArcFace](https://arxiv.org/pdf/1801.07698.pdf)
+논문링크:<br>
+[SphereFace](https://arxiv.org/pdf/1704.08063.pdf)<br>
+[CosFace](https://arxiv.org/pdf/1801.09414.pdf)<br>
+[ArcFace](https://arxiv.org/pdf/1801.07698.pdf)<br>
 [CurricularFace](https://arxiv.org/pdf/2004.00288.pdf)
