@@ -59,7 +59,7 @@ $$\mathcal{D^S} \neq \mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
 
 
 **3. Same domain, different task** <br>
-$$\mathcal{D^S \neq \mathcal{D^T}$$, $$\mathcal{T^S}=\mathcal{T^T}$$<br>
+$$\mathcal{D^S} \neq \mathcal{D^T}$$, $$\mathcal{T^S}=\mathcal{T^T}$$<br>
 Source domain의 데이터가 충분하고, target domain의 labeled 데이터가 어느정도 있다면 source domain에서 학습된 모델이 source domain 상에서의 성능을 유지하면서 target domain에서도 동작하도록 학습을 할 수 있습니다. ImageNet pre-trained 모델로 face recognition에 적용하는게 이런 경우의 예라고도 할 수 있겠습니다. _Inductive transfer learning_ 또는 _multi-task learning_ 정도로 구분지을 수 있겠네요. 이 부분도 일단 out of topic입니다.
 
 
