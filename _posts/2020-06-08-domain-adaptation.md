@@ -47,7 +47,7 @@ Target domain: $$\mathcal{D^T}=\{\mathcal{X^T}, P(\mathcal{X^T})\}$$, target tas
 
 우리가 일반적으로 모델을 학습시키는 경우에는 training과 test 사이에 task도 변하지 않고, 하나의 domain에 속한 데이터셋을 training/test 셋으로 나누어 사용하기 때문에 $$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S}=\mathcal{T^T}$$ 라고 할 수 있겠습니다. 그럼 위에서 얘기한 optical vs SAR image data의 경우는 어떨까요? 이 경우는 object recognition이라는 task는 변하지 않았지만 data의 domain은 optical에서 SAR로 바뀌었다고 볼 수 있기 때문에 $$\mathcal{D^S} \neq \mathcal{D^T}$$, $$\mathcal{T^S}=\mathcal{T^T}$$ 라고 할 수 있겠습니다. 이런 식으로 $$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$ 인 경우도 있겠지요? 각각의 경우를 좀 더 general하게 구분해보겠습니다.
 
-** 1. Same domain, same task ** <br>
+**1. Same domain, same task** <br>
 $$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S}=\mathcal{T^T}$$<br>
 앞서 설명한대로 일반적인 ML 문제의 경우입니다. 주어진 데이터를 training과 test로 나눠서 학습하고 infer하면 됩니다.
 
@@ -58,12 +58,12 @@ $$\mathcal{D^S} \neq \mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
 아.. 생각만 해도 제일 골치아픈 경우입니다. 이런 문제를 과연 풀 수 있을까요.. Source와 target domain이 완전히 다른 경우는 knowledge transfer를 한다는 것 자체가 말이 안되고, 다르긴 하지만 어느정도 유사성이 있어야 합니다. Task의 경우도 마찬가지입니다. 구분을 하자면 _inductive transfer learning_ 이나 _unsupervised transfer learning_ 에 속하는 문제들이겠지만, 이런 경우는 그냥 새로운 데이터로 재학습하는게 나을 것 같습니다. Self-taught learning 이라는 기법도 있지만 toy example에서 6-70% 정도 성능을 보였고, 이후 지속적으로 개선되지 않은 것 같습니다 (제가 모르는 것일 수도 있음). 여튼 이번에 다루고자 하는 topic이 아니므로 이정도에서 패쓰합니다.
 
 
-** 3. Same domain, different task ** <br>
+**3. Same domain, different task** <br>
 $$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
 Source domain의 데이터가 충분하고, target domain의 labeled 데이터가 어느정도 있다면 source domain에서 학습된 모델이 source domain 상에서의 성능을 유지하면서 target domain에서도 동작하도록 학습을 할 수 있습니다. ImageNet pre-trained 모델로 face recognition에 적용하는게 이런 경우의 예라고도 할 수 있겠습니다. _Inductive transfer learning_ 또는 _multi-task learning_ 정도로 구분지을 수 있겠네요. 이 부분도 일단 out of topic입니다.
 
 
-** 4. Different domain, same task ** <br>
+**4. Different domain, same task** <br>
 $$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
 이게 바로 오늘 이야기를 하고자 하는 DA 입니다. 도메인을 다음과 같이 정의하였죠: $$\mathcal{D}=\{\mathcal{X}, P(\mathcal{X})\}$$. DA를 좀 더 세분하자면 data source 자체가 다른, 그러니까 $$\mathcal{X^S} \neq \mathcal{X^T}$$ 때문에 $$\mathcal{D^S} \neq \mathcal{D^T}$$가 되는 경우를 _heterogeneous DA_ 라고 하고, data source 자체는 같지만 ($$\mathcal{X^S} = \mathcal{X^T}$$) 그 분포가 달라서 ($$P(\mathcal{X^S}) \neq P(\mathcal{X^T})$$) $$\mathcal{D^S} \neq \mathcal{D^T}$$가 되는 경우를 _homogeneous DA_ 라고 합니다. Optical vs SAR object recognition는 식별하고자 하는 object는 동일하나, 촬영 기법의 변화로 인해 해당 object를 나타내는 데이터(이미지)의 분포가 달라진 경우이기 때문에 _homogeneous DA_ 로 구분됩니다. 특히 후자에 집중해서 볼 예정인데요, 실제 field에서 이러한 요구사항이 적지 않을 것 같기 때문입니다. Optical vs SAR의 경우와 같이 측정 장비의 업그레이드로 인해 task는 동일하나 예전 모델과 데이터 domain이 달라져버리는 경우가 종종 있지 싶습니다. 예를 들면 MRI 장비를 가지고 있던 병원에서 CT 기계를 들여놓는 경우도 마찬가지이죠. MRI 종양 검출 모델을 학습시켜놓았는데 CT로 바꾸고 나서 쌓여있던 데이터와 모델을 버리기엔 아깝겠죠. 여러 논문들에 나온 experiment들에는 webcam 이미지와 DSLR 이미지를 사용한 object recognition, 실제와 합성 이미지를 사용한 드론 detection, 하나의 빅데이터의 object annotation을 이용해 다른 빅데이터 object annotation 달기, USPS 숫자데이터와 MNIST를 이용한 손글씨 숫자인식 등 다양한 문제들을 다루고 있습니다.
 
