@@ -43,3 +43,8 @@ $$\mathcal{X}$$의 특정 set인 $$X={x_1, x_2, ..., x_n}\in\mathcal{X}$$의 lab
 앞에서의 domain과 task 정의를 이용하여 source와 target의 domain과 task를 다음과 같이 표현할 수 있습니다:<br>
 Source domain: $$\mathcal{D^S}=\{\mathcal{X^S}, P(\mathcal{X^S})\}$$, source task: $$\mathcal{T^S}=\{\mathcal{Y^S}, P(Y^S \mid X^S)\}$$<br>
 Target domain: $$\mathcal{D^T}=\{\mathcal{X^T}, P(\mathcal{X^T})\}$$, target task: $$\mathcal{T^T}=\{\mathcal{Y^T}, P(Y^T \mid X^T)\}$$
+
+
+우리가 일반적으로 모델을 학습시키는 경우에는 training과 test 사이에 task도 변하지 않고, 하나의 domain에 속한 데이터셋을 training/test 셋으로 나누어 사용하기 때문에 $$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S}=\mathcal{T^T}$$ 라고 할 수 있겠습니다. 그럼 위에서 얘기한 optical vs SAR image data의 경우는 어떨까요? 이 경우는 object recognition이라는 task는 변하지 않았지만 data의 domain은 optical에서 SAR로 바뀌었다고 볼 수 있기 때문에 $$\mathcal{D^S} \neq \mathcal{D^T}$$, $$\mathcal{T^S}=\mathcal{T^T}$$ 라고 할 수 있겠습니다.
+
+
