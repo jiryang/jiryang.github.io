@@ -87,19 +87,20 @@ _Homogeneous DA_ 문제를 해결하기 위한 수많은 연구가 있어왔습�
 
 **Discrepancy-based**<br>
 딥 네트워크 모델을 fine-tuning 함으로써 두 domain 사이의 shift를 줄여나가는 방식<br>
-  **Discrepancy-based: Categorical**<br>
+
+_Discrepancy-based: Categorical_<br>
 asdfasdfasdf
 
 
-  **Discrepancy-based: Statistical**<br>
+_Discrepancy-based: Statistical_ <br>
 asdfasdfasdf
 
 
-  **Discrepancy-based: Architectural**<br>
+_Discrepancy-based: Architectural_ <br>
 asdfasdfdf
 
 
-  **Discrepancy-based: Geometric**<br>
+_Discrepancy-based: Geometric_ <br>
 asdfasdfdf
 
 
