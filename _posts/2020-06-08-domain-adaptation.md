@@ -65,12 +65,15 @@ Source domain의 데이터가 충분하고, target domain의 labeled 데이터�
 
 **4. Different domain, same task** <br>
 $$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
-이게 바로 오늘 이야기를 하고자 하는 DA 입니다. 도메인을 다음과 같이 정의하였죠: $$\mathcal{D}=\{\mathcal{X}, P(\mathcal{X})\}$$. DA를 좀 더 세분하자면 data source 자체가 다른, 그러니까 $$\mathcal{X^S} \neq \mathcal{X^T}$$ 때문에 $$\mathcal{D^S} \neq \mathcal{D^T}$$가 되는 경우를 _heterogeneous DA_ 라고 하고, data source 자체는 같지만 ($$\mathcal{X^S} = \mathcal{X^T}$$) 그 분포가 달라서 ($$P(\mathcal{X^S}) \neq P(\mathcal{X^T})$$) $$\mathcal{D^S} \neq \mathcal{D^T}$$가 되는 경우를 _homogeneous DA_ 라고 합니다. Optical vs SAR object recognition는 식별하고자 하는 object는 동일하나, 촬영 기법의 변화로 인해 해당 object를 나타내는 데이터(이미지)의 분포가 달라진 경우이기 때문에 _homogeneous DA_ 로 구분됩니다. 특히 후자에 집중해서 볼 예정인데요, 실제 field에서 이러한 요구사항이 적지 않을 것 같기 때문입니다. Optical vs SAR의 경우와 같이 측정 장비의 업그레이드로 인해 task는 동일하나 예전 모델과 데이터 domain이 달라져버리는 경우가 종종 있지 싶습니다. 예를 들면 MRI 장비를 가지고 있던 병원에서 CT 기계를 들여놓는 경우도 마찬가지이죠. MRI 종양 검출 모델을 학습시켜놓았는데 CT로 바꾸고 나서 쌓여있던 데이터와 모델을 버리기엔 아깝겠죠. 여러 논문들에 나온 experiment들에는 webcam 이미지와 DSLR 이미지를 사용한 object recognition, 실제와 합성 이미지를 사용한 드론 detection, 하나의 빅데이터의 object annotation을 이용해 다른 빅데이터 object annotation 달기, USPS 숫자데이터와 MNIST를 이용한 손글씨 숫자인식 등 다양한 문제들을 다루고 있습니다.
+이게 바로 오늘 이야기를 하고자 하는 DA 입니다. 도메인을 다음과 같이 정의하였죠: $$\mathcal{D}=\{\mathcal{X}, P(\mathcal{X})\}$$. DA를 좀 더 세분하자면 data source 자체가 다른, 그러니까 $$\mathcal{X^S} \neq \mathcal{X^T}$$ 때문에 $$\mathcal{D^S} \neq \mathcal{D^T}$$가 되는 경우를 _heterogeneous DA_ 라고 하고, data source 자체는 같지만 ($$\mathcal{X^S} = \mathcal{X^T}$$) 그 분포가 달라서 ($$P(\mathcal{X^S}) \neq P(\mathcal{X^T})$$) $$\mathcal{D^S} \neq \mathcal{D^T}$$가 되는 경우를 _homogeneous DA_ 라고 합니다. Optical vs SAR object recognition는 식별하고자 하는 object는 동일하나, 촬영 기법의 변화로 인해 해당 object를 나타내는 데이터(이미지)의 분포가 달라진 경우이기 때문에 _homogeneous DA_ 로 구분됩니다. 특히 후자에 집중해서 볼 예정인데요, 실제 field에서 이러한 요구사항이 적지 않을 것 같기 때문입니다. Optical vs SAR의 경우와 같이 측정 장비의 업그레이드로 인해 task는 동일하나 예전 모델과 데이터 domain이 달라져버리는 경우가 종종 있지 싶습니다. 예를 들면 MRI 장비를 가지고 있던 병원에서 CT 기계를 들여놓는 경우도 마찬가지이죠. MRI 종양 검출 모델을 학습시켜놓았는데 CT로 바꾸고 나서 쌓여있던 데이터와 모델을 활용할 수 없어 버려야 한다면 아까운 일입니다. 여러 논문들에 나온 실험들에는 'webcam 이미지와 DSLR 이미지를 사용한 object recognition', '실사와 합성 이미지를 사용한 드론 detection', '하나의 빅데이터의 object annotation을 이용해 다른 빅데이터 object annotation 달기', 'USPS 숫자데이터와 MNIST를 이용한 손글씨 숫자인식' 등과 같은 다양한 문제들도 다루고 있습니다.
 
 
 (일반적으로 말하는 **Transfer learning (전이학습)** 이란 위의 2, 3, 4번, 그러니깐 한 도메인에서 학습된 knowledge를 다른 도메인에 적용하거나, 한 task에 대해 학습한 knowledge를 다른 task에 적용하거나, 혹은 둘 다 동시에 하는 경우를 모두 일컫는 말입니다.)
 
 ![Fig2](Transfer_learning_and_domain_adaptation.png "Domain Adaptation"){: width="70%"}{: .aligncenter}
+
+
+
 
 
 논문링크 (survey 논문 위주 리스트업):<br>
