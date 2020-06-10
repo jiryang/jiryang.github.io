@@ -73,19 +73,19 @@ $$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
 
 (일반적으로 말하는 **Transfer learning (전이학습)** 이란 위의 2, 3, 4번, 그러니깐 한 도메인에서 학습된 knowledge를 다른 도메인에 적용하거나, 한 task에 대해 학습한 knowledge를 다른 task에 적용하거나, 혹은 둘 다 동시에 하는 경우를 모두 일컫는 말입니다.)
 
-![Fig2](Transfer_learning_and_domain_adaptation.png "Domain Adaptation"){: width="70%"}{: .aligncenter}
+![Fig2](https://jiryang.github.io/img/Transfer_learning_and_domain_adaptation.png "Domain Adaptation"){: width="70%"}{: .aligncenter}
 
 
 _Homogeneous DA_ 문제를 해결하기 위한 수많은 연구가 있어왔습니다. Deep vs Shallow learning에서처럼 DA도 Deep 모델과 shallow 모델이 있는데 shallow model은 후다닥 넘기기로 하죠. Source와 target task를 둘 다 만족하도록 data instance의 weight를 조정하여 decision boundary를 바꿔주는 _instance re-weighting method_ (아래 그림), perturbation function을 이용해서 점차적으로 decision boundary를 변경하는 adaptive-SVM 등의 _parameter adaptation method_ 등과 같은 방법들이 _shallow homogeneous DA_ 의 몇가지 예입니다.
 
-![Fig3](instance_reweighting_method.PNG "Instance Re-weighting Method"){: width="70%"}{: .aligncenter}
+![Fig3](https://jiryang.github.io/img/instance_reweighting_method.PNG "Instance Re-weighting Method"){: width="70%"}{: .aligncenter}
 
 
 최근에는 deep neural network를 활용한 방법들이 사용되고 있으며, 리뷰 논문들에서는 접근 방식에 따라 _discrepancy-based_ , _adversarial-based_ , 그리고 _reconstruction-based_ 의 큰 세 갈래로 구분하고 그 안에서 또 카테고리를 나누어 세분화하고 있습니다. 각 방식들의 대표적인 네트워크를 이용하여 하나씩 간략하게 살펴보겠습니다.
 
 (유사도가 너무 다른 domain간에는 intermediate domain을 정의해서 DA를 조금씩 해 나가는 multi-step 방식도 있으나, 여기서는 domain간 어느정도의 유사성이 있다고 전제하고 one-step DA에 대해서만 고려합니다.)
 
-![Fig4](homo_da_categorization.PNG "Different Approaches of Homogeneous DA"){: width="80%"}{: .aligncenter}
+![Fig4](https://jiryang.github.io/img/homo_da_categorization.PNG "Different Approaches of Homogeneous DA"){: width="80%"}{: .aligncenter}
 
 
 **Discrepancy-based**<br>
@@ -96,16 +96,16 @@ Data의 class label을 discrepancy의 기준으로 사용하는 방식으로,<br
 1. _$$\mathcal{X^S}$$와 $$\mathcal{X^T}$$ 모두 label이 달려있는 경우,_<br>두 domain의 class들 간의 관계성을 유지하기 위해 soft label loss를 사용한다던가 (일반적인 경우에 class간 구분을 maximize하는 softmax loss를 쓰는데, 이러면 너무 한 domain 내에서의 class 구분에만 모델이 최적화되어버릴 수가 있습니다), 두 도메인의 동일 class 데이터는 가깝게 만들면서 다른 class 데이터 간의 거리는 멀게 만드는 embedding metric을 학습시키는 (어디서 많이 본 내용이지요, 지난 [ArcFace 포스트](https://jiryang.github.io/2020/06/05/Openset-face-recognition/)에서 다루었던 내용과 같은 개념입니다) 방법 등이 있습니다.
 2. _$$\mathcal{X^T}$$의 class label이 없는 경우,_<br>$$\mathcal{X^T}$$의 class label이 일부만 존재하는 경우에는 attribute 마다 softmax layer를 붙여서 category level loss와 각 attribute level loss를 조합해서 사용하는 multi-task DA 방식도 있고, $$\mathcal{X^T}$$ class label이 아예 없는 경우에는 $$\mathcal{X^S}$$로 학습시킨 모델에 unlabeled $$\mathcal{X^T}$$를 넣어서 class posterior probability를 구한 뒤, 이를 $$\mathcal{X^T}$$의 class label로 넣고 모델을 재학습시키는 pseudo-label 방식 등이 가능합니다 (pseudo-label에 대해선 [여기](https://www.stand-firm-peter.me/2018/08/22/pseudo-label/) 참조). 아래 그림은 multi-task DA architecture의 예시입니다. 설명이 길어지니 caption을 그대로 올리고, 논문도 [링크](http://openaccess.thecvf.com/content_ICCV_2017/papers/Gebru_Fine-Grained_Recognition_in_ICCV_2017_paper.pdf)합니다.
 
-![Fig5](multitask_DA.PNG "Multi-task DA Architecture"){: width="80%"}{: .aligncenter}
+![Fig5](https://jiryang.github.io/img/multitask_DA.PNG "Multi-task DA Architecture"){: width="80%"}{: .aligncenter}
 
 
 _Discrepancy-based: Statistical_ <br>
 앞서 categorical 방식이 양 domain 데이터의 class label을 이용하여 divergence를 맞춰주려 했던 반면, 보다 근본적으로 domain의 data distribution discrepancy를 최소화하여 unsupervised 방법으로 domain-invariant feature representation을 학습하겠다는 것이 statistical 접근 방식입니다. 이 방식에서 사용되는 대표적인 discrepancy metric 중에는 MMD(maximum mean diiscrepancy) 및 그 variant들과 CORAL(correlation alignment)이 있습니다. MMD는 두 data sample이 동일한 probability distribution에서 추출한 것인지를 테스트하는 metric으로, 데이터 샘플을 재생핵 힐베르트 공간(reproducing kernel Hilbert space, RKHS)이란 곳으로 매핑시킨 후 평균을 비교하는 방식으로 동작합니다. 더 자세히 알고싶으신 분들을 위해 [링크](http://www.stat.cmu.edu/~ryantibs/journalclub/mmd.pdf) 남깁니다. 간단히 말하면 (RKHS로 사영한 후의) mean이 가까우면 distribution도 같을 가능성이 높다는 의미입니다. 더 간단히 하면 두 distribution의 similarity measure라고 보셔도 될 것 같습니다. MMD가 크면 mean discrepancy가 크다는 말이니까 distribution도 다르겠지요? 그러니깐 MMD loss를 두고 이걸 최소화시키도록 네트워크를 학습하면 source와 target distribution이 가까와지게 되고, 이는 결국 domain-invariant한 feature representation을 배울 수 있다는 말이 됩니다. 아래 그림은 MMD를 사용하여 DA를 수행하는 모델의 몇가지 예입니다. DAN (Domain Adaptation Network)의 예를 보면 $$\mathcal{X^S}$$를 네트워크에 넣어서 conv layer를 통과시킨 후 여러개의 kernel로 구성된 "adaptation layer"를 지나 class를 출력하도록 학습합니다. 이렇게 학습된 네트워크에 $$\mathcal{X^T}$$를 입력하는데, 이번엔 conv layer 이후 다른 adaptation layer path를 타게끔 하면서, $$\mathcal{X^S}$$와 $$\mathcal{X^T}$$의 매 kernel단 출력값들의 MMD loss를 계산하여 domain-invariance를 학습시키는 방식입니다. CORAL에서의 loss는 두 분포의 공분산간의 L2-distance로, 공분산을 일치시켜 domain-invariance를 학습하게 하는 것입니다 ([링크](https://arxiv.org/pdf/1511.05547.pdf)). 두 번째 아래 그림은 CORAL loss를 딥 네트워크에 적용시킨 예입니다. Labeled $$\mathcal{X^S}$$로 classification loss를 학습하면서, weight를 공유하는 parallel network를 구성하여 unlabeled $$\mathcal{X^T}$$를 집어넣고, 두 네트워크의 FC8 layer의 activation 값으로 공분산을 구해 CORAL loss를 계산하였습니다.
 
-![Fig6](MMD_networks.PNG "DA Networks using MMD"){: width="80%"}{: .aligncenter}
+![Fig6](https://jiryang.github.io/img/MMD_networks.PNG "DA Networks using MMD"){: width="80%"}{: .aligncenter}
 
 
-![Fig7](deep_coral_architecture.PNG "Deep CORAL Architecture"){: width="80%"}{: .aligncenter}
+![Fig7](https://jiryang.github.io/img/deep_coral_architecture.PNG "Deep CORAL Architecture"){: width="80%"}{: .aligncenter}
 
 
 
