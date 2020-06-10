@@ -24,7 +24,7 @@ Transfer learning이라는 말을 여기저기서 들어보셨을 것입니다. 
 ![Fig1](https://jiryang.github.io/img/tanks_optical_vs_sar.PNG "Optical and SAR Sample Images"){: width="70%"}{: .aligncenter}
 
 
-모델 재학습을 하기로 결정하였습니다. 학습 데이터를 모으고 annotation을 달면 되는데, 극소수의 전문가 외에는 SAR 이미지를 식별조차 할 수 없어서 annotation을 달기가 어렵습니다. 예상 비용은 작업 시간은 무한정 늘어 갑니다. [Active learning](https://jiryang.github.io/2020/05/31/data-labeling/)이든 뭐든 비용과 시간만 아낄 수 있다면 어떤 방법이라도 좋습니다. 마음 한 켠에는 아리랑 3호의 작년에 거금을 들여 optical image로 annotation을 달아 만들어두었던 학습 데이터가 아까와 죽겠습니다. 이걸 어떻게 써먹을 방법은 없는걸까요?
+모델 재학습을 하기로 결정하였습니다. 학습 데이터를 모으고 annotation을 달면 되는데, 극소수의 전문가 외에는 SAR 이미지를 식별조차 할 수 없어서 annotation을 달기가 어렵습니다. 예상 비용은 작업 시간은 무한정 늘어 갑니다. [Active learning](https://jiryang.github.io/2020/05/31/data-labeling/)이든 뭐든 비용과 시간만 아낄 수 있다면 어떤 방법이라도 좋습니다. 마음 한 켠에는 작년에 거금을 들여 아리랑 3호의 optical image로 annotation을 달아 만들어두었던 학습 데이터가 아까와 죽겠습니다. 이걸 어떻게 써먹을 방법은 없는걸까요?
 
 
 서론이 길었습니다만 오늘의 주제인 domain adaptation이 이런 경우의 문제를 해결해 줄 수 있는 한 방법입니다. 우선 문제를 formalize 하는 것부터 설명을 시작하겠습니다. 그러면서 transfer learning과 domain adaptation이 어떤 차이가 있는지도 이야기를 해보도록 하겠습니다.
