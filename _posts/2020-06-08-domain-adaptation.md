@@ -21,7 +21,7 @@ Transfer learning이라는 말을 여기저기서 들어보셨을 것입니다. 
 
 그런데 optical camera에는 커다란 단점이 있었는데요, 이름대로 optical하기 때문에 빛이 없거나 가리면 촬영할 수가 없다는 점입니다. 하루에 2회 한반도 상공을 촬영할 수 있는데 구름이 끼어 있으면 지상 촬영이 안된다거나, 야간의 경우 촬영한 이미지로 지상의 object 관찰이 어렵다는 취약점이 있었습니다. 이러한 단점을 극복하고자 위성에서 지상에 레이다파를 쏘고, 다양한 굴곡면에 반사되어 나온 레이다파의 시차를 이용하여 해당 굴곡면을 가진 object의 형태를 파악하는 합성개구레이다 (Synthetic Aperture Radar, SAR) 기술을 개발, 차기 위성인 아리랑 5호와 아리랑 3A에 탑재하였습니다. 더이상 빛의 유무와 occlusion에 제약이 없어져서 밤에도, 구름낀 날에도 지상의 object 관찰이 가능해졌습니다. 그런데 바뀐 입력 이미지에서 object recognition을 돌리려니 SAR 이미지로 모델을 새로 학습해야 합니다. 여기서 문제가 발생합니다. 사람의 눈과 유사한 방식으로 동작한 optical image는 그 결과물도 우리가 인식하는 것과 유사한 반면, SAR은 그렇지가 않습니다. 아래는 optical과 SAR로 촬영한 각종 전술차량의 그림인데요, SAR 촬영 object를 눈으로 구분하는 것이 쉽지 않습니다.
 
-![Fig1](https://jiryang.github.io/img/tank_optical_vs_sar.PNG "Optical and SAR Sample Images"){: width="70%"}{: .aligncenter}
+![Fig1](https://jiryang.github.io/img/tanks_optical_vs_sar.PNG "Optical and SAR Sample Images"){: width="70%"}{: .aligncenter}
 
 
 모델 재학습을 하기로 결정하였습니다. 학습 데이터를 모으고 annotation을 달면 되는데, 극소수의 전문가 외에는 SAR 이미지를 식별조차 할 수 없어서 annotation을 달기가 어렵습니다. 예상 비용은 작업 시간은 무한정 늘어 갑니다. [Active learning](https://jiryang.github.io/2020/05/31/data-labeling/)이든 뭐든 비용과 시간만 아낄 수 있다면 어떤 방법이라도 좋습니다. 마음 한 켠에는 아리랑 3호의 작년에 거금을 들여 optical image로 annotation을 달아 만들어두었던 학습 데이터가 아까와 죽겠습니다. 이걸 어떻게 써먹을 방법은 없는걸까요?
