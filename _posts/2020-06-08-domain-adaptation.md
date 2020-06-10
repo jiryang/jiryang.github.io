@@ -90,7 +90,7 @@ _Homogeneous DA_ 문제를 해결하기 위한 수많은 연구가 있어왔습�
 
 _Discrepancy-based: Categorical_<br>
 Data의 class label을 discrepancy의 기준으로 사용하는 방식으로,<br>
-1. _Source와 target data 모두 label이 달려있는 경우_ 두 domain의 class들 간의 관계성을 유지하기 위해 soft label loss를 사용한다던가 (일반적인 경우에 class간 구분을 maximize하는 softmax loss를 쓰는데, 이러면 너무 한 domain 내에서의 class 구분에만 모델이 최적화되어버릴 수가 있습니다), 두 도메인의 동일 class 데이터는 가깝게 만들면서 다른 class 데이터 간의 거리는 멀게 만드는 embedding metric을 학습시킨다던가 (어디서 많이 본 내용이지요, 지난 [ArcFace 포스트](https://jiryang.github.io/2020/06/05/Openset-face-recognition/)에서 다루었던 내용과 같은 개념입니다) 등이 있습니다.
+1. _Source와 target data 모두 label이 달려있는 경우_<br>두 domain의 class들 간의 관계성을 유지하기 위해 soft label loss를 사용한다던가 (일반적인 경우에 class간 구분을 maximize하는 softmax loss를 쓰는데, 이러면 너무 한 domain 내에서의 class 구분에만 모델이 최적화되어버릴 수가 있습니다), 두 도메인의 동일 class 데이터는 가깝게 만들면서 다른 class 데이터 간의 거리는 멀게 만드는 embedding metric을 학습시킨다던가 (어디서 많이 본 내용이지요, 지난 [ArcFace 포스트](https://jiryang.github.io/2020/06/05/Openset-face-recognition/)에서 다루었던 내용과 같은 개념입니다) 등이 있습니다.
 2. _Target data의 class label이 없는 경우_ 에는 ㅁㄴㅇㄹ
 
 
