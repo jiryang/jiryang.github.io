@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Domain Adaptation: Learning to Learn"
+title:  "Domain Adaptation: Learning to Learn - part 1"
 date:   2020-06-08 00:00:01
 categories: GeneralML
 tags: domain_adaptation transfer_learning
@@ -108,34 +108,8 @@ _Discrepancy-based: Statistical_ <br>
 ![Fig7](deep_coral_architecture.PNG "Deep CORAL Architecture"){: width="80%"}{: .aligncenter}
 
 
-_Discrepancy-based: Architectural_ <br>
-asdfasdfdf
 
-
-_Discrepancy-based: Geometric_ <br>
-asdfasdfdf
-
-
-**Adversarial-based**<br>
-데이터가 어느 domain에서 왔는지를 구분하는 domain discriminator가 confusion을 일으키도록 함으로써 source와 target domain의 구분을 '못하게끔' 네트워크를 학습하는 방식<br>
-  
-_Adversarial-based: Generative_<br>
-asdfasdfdf
-
-
-_Adversarial-based: Non-generative_<br>
-asdfasdfdf
-
-
-**Reconstruction-based**<br>
-Source나 target domain 데이터를 reconstruct하여 intra-domain specificity와 inter-domain indistinguishability를 높이는 방식<br>
-
-_Reconstruction-based: Encoder-decoder_<br>
-asdfasdfdf
-
-
-_Reconstruction-based: Adversarial_<br>
-asdfasdfdf
+포스팅이 너무 길어져서 반으로 나누겠습니다 ^^; Part2는 하루이틀 후에 올릴게요.
 
 
 
