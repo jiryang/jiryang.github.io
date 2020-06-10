@@ -37,7 +37,7 @@ $$\mathcal{D}=\{\mathcal{X}, P(\mathcal{X})\}$$
 $$\mathcal{X}$$의 특정 set인 $$X={x_1, x_2, ..., x_n}\in\mathcal{X}$$의 label을 $$Y={y_1, y_2, ..., y_n}\in\mathcal{Y}$$라고 할 때, task $$\mathcal{T}$$를 입력 $$X$$가 $$Y$$의 확률을 가질 경우를 나타내는 조건부 확률인 $$P(Y \mid X)$$ 라고 정의할 수 있습니다.
 
 
-도메인 적응(Domain Adaptation, DA)은 task(예를 들면 앞에서의 object recognition)의 domain이 모델을 학습했던 것(source domain, 예를 들면 optimal image domain)에서 어느정도 관련은 있지만 동일하지는 않은 다른 도메인(target domain, 예를 들면 SAR image domain)으로 변경되었을 때, source domain에서 학습된 knowledge를 transfer 해 주어 target domain에서 이용할 수 있도록 해줍니다. 계속해서 formalize 보시죠.
+도메인 적응(Domain Adaptation, DA)은 task(예를 들면 앞에서의 object recognition)의 domain이 모델을 학습했던 것(source domain, 예를 들면 optimal image domain)에서 어느정도 관련은 있지만 동일하지는 않은 다른 도메인(target domain, 예를 들면 SAR image domain)으로 변경되었을 때, source domain에서 학습된 knowledge를 transfer 해 주어 target domain에서 이용할 수 있도록 해줍니다. 계속해서 formalization 보시죠.
 
 
 앞에서의 domain과 task 정의를 이용하여 source와 target의 domain과 task를 다음과 같이 표현할 수 있습니다:<br>
