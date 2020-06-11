@@ -25,15 +25,23 @@ $$\mathcal{D^S}$$와 $$\mathcal{D^T}$$의 차이 (domain shift)를 줄여주는 
 
 
 **Adversarial-based**<br>
-Generator-discriminator의 minimax game으로 합성 데이터를 만들어내는 GAN이 큰 성공을 거두면서, GAN에서 착안한 DA 방법론들도 등장하게 되었습니다. 아래는 adversarial-based DA를 일반화한 그림입니다. 우선 labeled $$\mathcal{X^S}$$로 classifier를 학습시킵니다. 그 다음 GAN<sub>source</sub>을 사용해서 synthesized source data를 만들고, 앞의 classifier로 synthesized source data의 class label을 구합니다. 이 GAN과 parallel한  전체적인 구조는 유지한 상태에서 구현의 디테일을 어떻게 가져가느냐, 회색 블럭의 옵션들을 어떻게 선택하느냐에 따라 모델이 달라진다고 할 수 있겠습니다. 특히 첫번째 회색 블럭의 선택지에 따라 합성 데이터를 실제로 만들어내는 부분이 포함된 generative 접근법과, discriminator의 동작 방식을 본뜬 domain discriminator를 '반대로' 학습시켜 domain confusion을 일으키도록 해서 모델을 domain-invariant하게 만드는 non-generative 접근법으로 구분할 수 있습니다.<br>
+Generator-discriminator의 minimax game으로 합성 데이터를 만들어내는 GAN이 큰 성공을 거두면서, GAN에서 착안한 DA 방법론들도 등장하게 되었습니다. 우선 labeled $$\mathcal{X^S}$$로 classifier를 학습시킵니다. 그 다음 GAN<sub>source</sub>를 사용해서 synthesized source data를 만들고, 앞의 classifier로 synthesized source data의 class label을 구합니다. GAN<sub>source</sub>와 parallel한 GAN<sub>target</sub>을 domain-invariant하게 만들어 놓고 동시에 synthesized target data를 생성하게 하면, 이 synthesized target data는 앞의 synthesized source data와 동일한 label을 가지면서도 $$\mathcal{X^T}$$의 분포를 따르는 ($$\mathcal{X^T}$$처럼 생긴) output이 나올꺼라는 것이 기본 아이디어입니다. 그 결과 labeled synthesized target data가 만들어지는 셈이기 때문에, 이것들로 classifier를 학습하면 target classifier가 만들어지는 것이죠. 좀 헷갈릴 수도 있는데 잘 생각해보면 말이 됩니다. 아래는 adversarial-based DA를 일반화한 그림입니다. 전체적인 구조는 유지한 상태에서 구현의 디테일을 어떻게 가져가느냐, 회색 블럭의 옵션들을 어떻게 선택하느냐에 따라 모델이 달라진다고 할 수 있겠습니다. 특히 첫번째 회색 블럭의 선택지에 따라 합성 데이터를 실제로 만들어내는 부분이 포함된 generative 접근법과, discriminator의 동작 방식을 본뜬 domain discriminator를 '반대로' 학습시켜 domain confusion을 일으키도록 해서 모델을 domain-invariant하게 만드는 non-generative 접근법으로 구분할 수 있습니다.<br>
 
 ![Fig2](https://jiryang.github.io/img/adversarial_DA.PNG "Generalized Architecture of Adversarial DA"){: width="80%"}{: .aligncenter}
 
 
 _Adversarial-based: Generative_<br>
-Coupled GAN(CoGAN)에서는 $$\mathcal{X^S}$$와 $$\mathcal{X^T}$$를 합성하는 두 개의 GAN을 parallel하게 놓고, low-level layer들의 weight를 공유시킴으로써 
+Coupled GAN(CoGAN)에서는 $$\mathcal{X^S}$$와 $$\mathcal{X^T}$$를 합성하는 두 개의 paralle한 GAN의 low-level layer들의 weight를 공유시킴으로써 higher (혹은 deeper) layer들이 두 domain을 다 cover하는 (domain-invariant한) 특성을 학습하게끔 하는 방식입니다.
 
 ![Fig3](https://jiryang.github.io/img/cogan.PNG "Coupled Generative Adversarial Networks"){: width="80%"}{: .aligncenter}
+
+아래의 pixel-level domain transfer network는 (1) Encoder-Decoder로 구성된 domain converter; (2) real-fake discriminator; (3) domain-discriminator의 3개 네트워크로 구성되어 각각이 다음과 같은 역할을 수행합니다 (여기서는 어느 정도의 labeled $$\mathcal{X^T}$$가 필요합니다):<br><br>
+(1) Source data를 입력받아 target data를 합성<br>
+(2) Real 또는 synthesized target data를 입력받아 real/fake binary classification 수행<br>
+(3) (1)의 source와 동일한 class의 labeled target data pair를 입력받아 두 data의 association이 있는지 없는지 binary classification을 수행<br><br>
+(2)의 역할 덕분에 (1)의 네트워크는 _realistic fake target data_ 를 만들게 되고, (3)의 역할 덕분에 _realistic fake target associated to the source_ 를 만들게 되는 것입니다.
+
+![Fig4](https://jiryang.github.io/img/pixel_level_domain_transfer.PNG "Architecture of Pixel-Level Domain Transfer"){: width="80%"}{: .aligncenter}
 
 
 _Adversarial-based: Non-generative_<br>
