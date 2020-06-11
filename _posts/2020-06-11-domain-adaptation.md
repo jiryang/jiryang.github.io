@@ -35,13 +35,19 @@ Coupled GAN(CoGAN)에서는 $$\mathcal{X^S}$$와 $$\mathcal{X^T}$$를 합성하�
 
 ![Fig3](https://jiryang.github.io/img/cogan.PNG "Coupled Generative Adversarial Networks"){: width="80%"}{: .aligncenter}
 
-아래의 pixel-level domain transfer network는 (1) Encoder-Decoder로 구성된 domain converter; (2) real-fake discriminator; (3) domain-discriminator의 3개 네트워크로 구성되어 각각이 다음과 같은 역할을 수행합니다 (여기서는 어느 정도의 labeled $$\mathcal{X^T}$$가 필요합니다):<br><br>
+
+[Pixel-level domain transfer network](https://arxiv.org/pdf/1603.07442.pdf)는 (1) Encoder-Decoder로 구성된 domain converter; (2) real-fake discriminator; (3) domain-discriminator의 3개 네트워크로 구성되어 각각이 다음과 같은 역할을 수행합니다 (여기서는 어느 정도의 labeled $$\mathcal{X^T}$$가 필요합니다):<br><br>
 (1) Source data를 입력받아 target data를 합성<br>
 (2) Real 또는 synthesized target data를 입력받아 real/fake binary classification 수행<br>
 (3) (1)의 source와 동일한 class의 labeled target data pair를 입력받아 두 data의 association이 있는지 없는지 binary classification을 수행<br><br>
-(2)의 역할 덕분에 (1)의 네트워크는 _realistic fake target data_ 를 만들게 되고, (3)의 역할 덕분에 _realistic fake target associated to the source_ 를 만들게 되는 것입니다.
+(2)의 역할 덕분에 (1)의 네트워크는 _realistic fake target data_ 를 만들게 되고, (3)의 역할 덕분에 _realistic fake target data associated to the source_ 를 만들게 되는 것입니다.
 
 ![Fig4](https://jiryang.github.io/img/pixel_level_domain_transfer.PNG "Architecture of Pixel-Level Domain Transfer"){: width="80%"}{: .aligncenter}
+
+ 
+하나만 더 예를 들어보죠. [Unsupervised Pixel-Level Domain Adaptation with Generative Adversarial Networks](https://arxiv.org/pdf/1612.05424.pdf) 에서는 labeled data가 충분치 않아 rendering한 (label은 자동으로 붙겠죠?) source data로 모델을 학습시켜서 real source data에도 general하게 사용하려는 목적으로 DA를 수행합니다. Synthetic이 두 종류가 들어가서 헷갈리는데요, 여기선 rendered가 $$\mathcal{X^S}$$이고, unlabeled real이 $$\mathcal{X^T}$$인 셈입니다.
+
+![Fig5](https://jiryang.github.io/img/unsupervised_pixel_level_DA.PNG "Architecture of Unsupervised Pixel-Level DA with GAN"){: width="60%"}{: .aligncenter}
 
 
 _Adversarial-based: Non-generative_<br>
