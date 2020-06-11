@@ -59,12 +59,12 @@ $$\mathcal{D^S} \neq \mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
 
 
 **3. Same domain, different task** <br>
-$$\mathcal{D^S} \neq \mathcal{D^T}$$, $$\mathcal{T^S}=\mathcal{T^T}$$<br>
+$$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
 Source domain의 데이터가 충분하고, target domain의 labeled 데이터가 어느정도 있다면 source domain에서 학습된 모델이 source domain 상에서의 성능을 유지하면서 target domain에서도 동작하도록 학습을 할 수 있습니다. ImageNet pre-trained 모델로 face recognition에 적용하는게 이런 경우의 예라고도 할 수 있겠습니다. _Inductive transfer learning_ 또는 _multi-task learning_ 정도로 구분지을 수 있겠네요. 이 부분도 일단 out of topic입니다.
 
 
 **4. Different domain, same task** <br>
-$$\mathcal{D^S}=\mathcal{D^T}$$, $$\mathcal{T^S} \neq \mathcal{T^T}$$<br>
+$$\mathcal{D^S} \neq \mathcal{D^T}$$, $$\mathcal{T^S}=\mathcal{T^T}$$<br>
 이게 바로 오늘 이야기를 하고자 하는 DA 입니다. 도메인을 다음과 같이 정의하였죠: $$\mathcal{D}=\{\mathcal{X}, P(\mathcal{X})\}$$. DA를 좀 더 세분하자면 data source 자체가 다른, 그러니까 $$\mathcal{X^S} \neq \mathcal{X^T}$$ 때문에 $$\mathcal{D^S} \neq \mathcal{D^T}$$가 되는 경우를 _heterogeneous DA_ 라고 하고, data source 자체는 같지만 ($$\mathcal{X^S} = \mathcal{X^T}$$) 그 분포가 달라서 ($$P(\mathcal{X^S}) \neq P(\mathcal{X^T})$$) $$\mathcal{D^S} \neq \mathcal{D^T}$$가 되는 경우를 _homogeneous DA_ 라고 합니다. Optical vs SAR object recognition는 식별하고자 하는 object는 동일하나, 촬영 기법의 변화로 인해 해당 object를 나타내는 데이터(이미지)의 분포가 달라진 경우이기 때문에 _homogeneous DA_ 로 구분됩니다. 특히 후자에 집중해서 볼 예정인데요, 이러한 종류의 DA가 실제 field에서 가장 빈번하게 요구될 것 같기 때문입니다. 
 
 
