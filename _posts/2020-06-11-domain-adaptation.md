@@ -25,7 +25,7 @@ $$\mathcal{D^S}$$와 $$\mathcal{D^T}$$의 차이 (domain shift)를 줄여주는 
 
 
 **Adversarial-based**<br>
-Generator-discriminator의 minimax game으로 합성 데이터를 만들어내는 GAN이 큰 성공을 거두면서, GAN에서 착안한 DA 방법론들도 등장하게 되었습니다. 아래는 adversarial-based DA를 일반화한 그림입니다. 우선 labeled $$\mathcal{X^S}$$로 classifier를 학습시킵니다. 그 다음 GAN_{source)을 사용해서 synthesized source data를 만들고, 앞의 classifier로 synthesized source data의 class label을 구합니다. 이 GAN과 parallel한  전체적인 구조는 유지한 상태에서 구현의 디테일을 어떻게 가져가느냐, 회색 블럭의 옵션들을 어떻게 선택하느냐에 따라 모델이 달라진다고 할 수 있겠습니다. 특히 첫번째 회색 블럭의 선택지에 따라 합성 데이터를 실제로 만들어내는 부분이 포함된 generative 접근법과, discriminator의 동작 방식을 본뜬 domain discriminator를 '반대로' 학습시켜 domain confusion을 일으키도록 해서 모델을 domain-invariant하게 만드는 non-generative 접근법으로 구분할 수 있습니다.<br>
+Generator-discriminator의 minimax game으로 합성 데이터를 만들어내는 GAN이 큰 성공을 거두면서, GAN에서 착안한 DA 방법론들도 등장하게 되었습니다. 아래는 adversarial-based DA를 일반화한 그림입니다. 우선 labeled $$\mathcal{X^S}$$로 classifier를 학습시킵니다. 그 다음 GAN<sub>source</sub>을 사용해서 synthesized source data를 만들고, 앞의 classifier로 synthesized source data의 class label을 구합니다. 이 GAN과 parallel한  전체적인 구조는 유지한 상태에서 구현의 디테일을 어떻게 가져가느냐, 회색 블럭의 옵션들을 어떻게 선택하느냐에 따라 모델이 달라진다고 할 수 있겠습니다. 특히 첫번째 회색 블럭의 선택지에 따라 합성 데이터를 실제로 만들어내는 부분이 포함된 generative 접근법과, discriminator의 동작 방식을 본뜬 domain discriminator를 '반대로' 학습시켜 domain confusion을 일으키도록 해서 모델을 domain-invariant하게 만드는 non-generative 접근법으로 구분할 수 있습니다.<br>
 
 ![Fig2](https://jiryang.github.io/img/adversarial_DA.PNG "Generalized Architecture of Adversarial DA"){: width="80%"}{: .aligncenter}
 
