@@ -77,7 +77,7 @@ Domain Separation Network ([DSN](https://arxiv.org/pdf/1608.06019.pdf))은 share
 
 Transfer Learning with Deep Autoencoder ([TLDA](https://www.ijcai.org/Proceedings/15/Papers/578.pdf))는 domain 별로 하나씩의 encoder-decoder를 가집니다. Weight는 share되어있습니다. 각각이 두 단계로 작동하니 depth level에 맞춰 numbering을 해서 encoder1-encoder2-decoder2-decoder1 이라고 하는게 낫겠네요. Encoder1은 domain-indistinguishability를 배우기 위해 두 domain 사이의 KL divergence를 계산하기 위한 input의 hidden representation을 출력합니다. Source encoder2는 softmax regression을 통해 source label 정보를 encoding합니다. 양 domain 모두 decoder1의 결과와 input을 비교해서 reconstruction loss를 구하고요. 역시 학습이 완료되면 유사한 hidden representation을 가지고; source task는 잘 수행하면서; source와 target 모두의 특성을 가지는 (reconstruction을 잘 하는) encoder-decoder가 학습됩니다.
 
-![Fig10](https://jiryang.github.io/img/TLDA_framework.PNG "TLDA Framework"){: width="80%"}{: .aligncenter}
+![Fig10](https://jiryang.github.io/img/TLDA_framework.PNG "TLDA Framework"){: width="50%"}{: .aligncenter}
 
 
 _Reconstruction-based: Adversarial_<br>
