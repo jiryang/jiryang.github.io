@@ -1,8 +1,6 @@
 ---
 layout: post
 title:  "FSGAN: Subject Agnostic Face Swapping and Reenactment"
-lang: kr
-lang-ref: fsgan
 date:   2020-05-14 13:59:59
 categories: Deepfake
 tags: deepfake fsgan faceswap 
