@@ -17,7 +17,7 @@ _Discrepancy-based: Architectural_ <br>
 또한, internal layer의 neuron 중 일부는 다양한 domain의 input에 activate되는 것도 있는 반면 일부는 특정 domain에 specific하게 activate 되는 것들이 있다는 점에 착안하여, 하나의 네트워크에 $$\mathcal{X^S}$$와 $$\mathcal{X^T}$$를 모두 입력하면서 domain-specific한 neuron의 activation을 zero로 masking 하면서 domain-general한 feature representation을 더욱 '잘' 학습하도록 하는 domain-guided dropout과 같은 방식도 architectural approach로 분류됩니다.
 
 
-![Fig1](https://jiryang.github.io/img/related_weights.PNG "Two-Stream Architecture with Related Weights"){: width="80%"}{: .aligncenter}
+![Fig1](https://jiryang.github.io/img/related_weights.PNG "Two-Stream Architecture with Related Weights"){: width="50%"}{: .aligncenter}
 
 
 _Discrepancy-based: Geometric_ <br>
