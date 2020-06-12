@@ -89,7 +89,7 @@ Adversarial reconstruction 방식은 대표적인 예가 워낙 유명한 GAN wi
 ![Fig11](https://jiryang.github.io/img/cyclegan.PNG "CycleGAN"){: width="80%"}{: .aligncenter}
 
 
-지금까지 2편에 걸쳐 Transfer Learning의 한 축인 Domain Adaptation, 정확하게는 _Homogeneous Domain Adaptation_ 에 대해 살펴보았습니다. Deep learning에서의 labeled data 문제가 연구자들로 하여금 다양한 방법론을 고민하게 만드는 것 같습니다. Domain-invariant한 representation을 구하면서 source domain-specific한 task 성능을 유지하도록 하는건 trade-off가 명확하게 보이는 일입니다만, unlabeled target data로도 7$\tilde$80% 가량의 성능이 나오는 모델을 구할 수 있다는 점은 충분히 매력적입니다. Real world에 어떤 문제가 존재할 지 모르니깐요.
+지금까지 2편에 걸쳐 Transfer Learning의 한 축인 Domain Adaptation, 정확하게는 _Homogeneous Domain Adaptation_ 에 대해 살펴보았습니다. Deep learning에서의 labeled data 문제가 연구자들로 하여금 다양한 방법론을 고민하게 만드는 것 같습니다. Domain-invariant한 representation을 구하면서 source domain-specific한 task 성능을 유지하도록 하는건 trade-off가 명확하게 보이는 일입니다만, unlabeled target data로도 7&#126;80% 가량의 성능이 나오는 모델을 구할 수 있다는 점은 충분히 매력적입니다. Real world에 어떤 문제가 존재할 지 모르니깐요.
 
 
 포스팅의 양도 적지는 않지만, 그 중요도와 다양한 methodology를 생각하면 이정도로 설명이 끝날 topic이 아닌데 너무 변죽만 두드리다가 마는건 아닌지 걱정이 되네요.
