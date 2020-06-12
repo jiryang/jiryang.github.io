@@ -10,11 +10,9 @@
             {% if posts.size > 1 %}
             <p class="lang-options">
                 <em>Read this page in a different language:</em>
-                <ul>
                 {% for post in posts %}
-                <li><a href="{{ site.base_url }}{{ post.url }}" class="{{ post.lang }}" title="View in {{ post.lang }}">{{ post.lang }}</a></li>
+                <a href="{{ site.base_url }}{{ post.url }}" class="{{ post.lang }}" title="View in {{ post.lang }}">{{ post.lang }}</a>&nbsp;&nbsp;
                 {% endfor %}
-                </ul>            
             </p>
             {% endif %}
         {% endif %}
