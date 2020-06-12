@@ -1,6 +1,8 @@
 ---
 layout: post
 title:  "FSGAN: Subject Agnostic Face Swapping and Reenactment"
+lang: en
+lang-ref: fsgan
 date:   2020-05-14 13:59:59
 categories: Deepfake
 tags: deepfake fsgan faceswap 
@@ -8,7 +10,7 @@ excerpt: FSGAN 논문 리뷰
 mathjax: true
 ---
 
-오늘은 작년 코엑스에서 열렸던 ICCV'19에서 소개된 `face swap` 알고리즘인 FSGAN에 대해 소개해보겠습니다.
+I will review FSGAN, a 'face swap' algorithm introduced at ICCV'19.
 
 
 헷갈리시는 분들을 위해 `face swap`과 `face reenactment`의 차이를 그림으로 보여주면서 SIGGRAPH 스타일로 논문을 시작합니다.
