@@ -11,7 +11,7 @@
             <p class="lang-options">
                 <em>Read this page in a different language:</em>
                 {% for post in posts %}
-                <a href="{{ site.base_url }}{{ post.url }}" class="{{ post.lang }}" title="View in {{ post.lang }}">{{ post.lang }}</a>&nbsp;&nbsp;
+                <span><a href="{{ site.base_url }}{{ post.url }}" class="{{ post.lang }}" title="View in {{ post.lang }}">{{ post.lang }}</a></span>&nbsp;&nbsp;
                 {% endfor %}
             </p>
             {% endif %}
