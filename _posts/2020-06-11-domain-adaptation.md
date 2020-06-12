@@ -62,11 +62,25 @@ Adversarial-based non-generative 방식의 DA는 adversarial training의 discrim
 
 
 **Reconstruction-based**<br>
-Source나 target domain 데이터를 reconstruct하여 intra-domain specificity와 inter-domain indistinguishability를 높이는 방식<br>
+이건 앞서 설명했던 다른 것들과는 달리 source나 target domain 데이터를 reconstruct하여 intra-domain specificity와 inter-domain indistinguishability를 높이는 방식입니다. 방법은 다르지만 다른 approach들과 동일하게, domain-specific한 특성은 ($$\mathcal{X^S}$$를 이용한) task performing module (예: classifier의 FC layer)을 학습함으로써, domain-invariant 특성은 $$\mathcal{X^S}$$와 $$\mathcal{X^T}$$ 모두를 이용한 shared representation을 구함으로써 두 domain 데이터에 대해 task를 수행하는 모델을 만들게 됩니다.<br>
 
 _Reconstruction-based: Encoder-decoder_<br>
-asdfasdfdf
+Deep Reconstruction Classification Network ([DRCN](https://arxiv.org/pdf/1607.03516.pdf))은 $$\mathcal{X^S}$$와 $$\mathcal{X^T}$$를 각각 label prediction과 data reconstruction pipeline에 넣어서 네트워크를 학습시킵니다. $$\mathcal{X^S}$$는 label prediction pipeline을 통해 shared conv layer로 하여금 source domain-specificity인 class 분별력을 학습하게 하고, 이와 동시에 $$\mathcal{X^T}$$는 data reconstruction pipeline을 통해 shared conv layer로 하여금 target domain-specificity인 target의 internal representation을 학습하게 합니다. 그 결과 shared conv layer는 양쪽 특성을 다 배우게 되는거죠. 학습을 마친 후 $$\mathcal{X^T}$$를 입력하고 label prediction pipeline을 태우면 target의 class 정보를 출력하게 됩니다. 금방 감이 오시겠지만 두 가지 task가 공존하기 어려운 경우엔 trade-off가 생기게 되기 때문에 양쪽 pipeline의 loss에 weight coefficient를 적용해서 학습의 balance를 맞춰줍니다. 
+
+![Fig8](https://jiryang.github.io/img/DRCN.PNG "Deep Reconstruction Classification Network"){: width="80%"}{: .aligncenter}
+
+
+Domain Separation Network ([DSN](https://arxiv.org/pdf/1608.06019.pdf))은 shared encoder와 label prediction pipeline을 사용한다는 점이 DRCN과 유사한데요, 여기에 각 domain 별 private encoder와 shared decoder를 추가하여 구성됩니다. 또한 shared encoder가 (shared decoder도 마찬가지) weight를 공유한 parallel한 구조로 되어있다는 차이점도 있습니다. Private encoder들은 각 domain-specific encoding을 학습하고, parallel shared encoder를 통한 각 domain의 encoding과의 차이 ($$\mathcal{L_{difference}}$$)를 계산합니다. Parallel shared encoder에서는 각 domain의 shared encoding 간의 차이 ($$\mathcal{L_{similarity}}$$)를 계산합니다. 그리고 shared decoder에서는 각 domain data의 concat된 encoding (예를 들어 source data의 경우 source private encoder의 output과 parallel shared encoding의 source쪽 output을 concat)을 입력으로 받아 각각을 reconstruct하고 loss ($$\mathcal{L_{recon}}$$)를 계산합니다. Label prediction pipeline에서는 동일하게 task (classification)을 수행해서 loss ($$\mathcal{L_{task}}$$)를 구하고요. 최종적으로 지금까지 계산된 4개의 loss의 weighted sum을 통해 전체 네트워크를 학습합니다: ($$\mathcal{L} = \mathcal{L_{task}} + \alpha\mathcal{L_{recon}} + \beta\mathcal{L_{difference}} + \gamma\mathcal{L_{similarity}}$$)
+
+![Fig9](https://jiryang.github.io/img/DSN.PNG "Domain Separation Network"){: width="80%"}{: .aligncenter}
+
+
+Transfer Learning with Deep Autoencoder ([TLDA](https://www.ijcai.org/Proceedings/15/Papers/578.pdf))
+
+![Fig10](https://jiryang.github.io/img/TLDA_framework.PNG "TLDA Framework"){: width="80%"}{: .aligncenter}
 
 
 _Reconstruction-based: Adversarial_<br>
-asdfasdfdf
+GAN with cycle-consistency loss ([CycleGAN](https://arxiv.org/pdf/1703.10593.pdf))
+
+![Fig11](https://jiryang.github.io/img/cyclegan.PNG "CycleGAN"){: width="80%"}{: .aligncenter}
