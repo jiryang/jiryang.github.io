@@ -2,6 +2,14 @@
 
 
     <div class="wrapper">
+        <p class="lang-options">
+            <em>Read this page in a different language:</em>
+            <ul>
+                {% for post in posts %}
+                <li><a href="{{ site.base_url }}{{ post.url }}" class="{{ post.lang }}" title="View in {{ post.lang }}">{{ post.lang }}</a></li>
+                {% endfor %}
+            </ul>            
+        </p>
 
         <p class="description">
             {% if site.description_footer %} {{site.description_footer}} {% endif %}
