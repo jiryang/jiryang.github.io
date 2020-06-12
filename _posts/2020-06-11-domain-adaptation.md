@@ -47,7 +47,7 @@ Coupled GAN(CoGAN)에서는 $$\mathcal{X^S}$$와 $$\mathcal{X^T}$$를 합성하�
  
 하나만 더 예를 들어보죠. [Unsupervised Pixel-Level Domain Adaptation with Generative Adversarial Networks](https://arxiv.org/pdf/1612.05424.pdf) 에서는 labeled data가 충분치 않아 rendering한 (label은 자동으로 붙겠죠?) source data로 모델을 학습시켜서 real source data에도 general하게 사용하려는 목적으로 DA를 수행합니다. Synthetic이 두 종류가 들어가서 헷갈리는데요, 여기선 rendered가 $$\mathcal{X^S}$$이고, unlabeled real이 $$\mathcal{X^T}$$인 셈입니다. 아래 그림에서 보시면 (여긴 rendered를 synthetic이라 표현) generator G는 noise vector와 rendered source data를 입력으로 받아서 fake source data를 만듭니다. Task-specifc classifier T는 rendered source data와 fake source data를 입력받아 known class label로 분류가 되도록 학습을 하고, discriminator D는 real source data와 fake source data를 입력받아 real/fake를 구분하는 역할을 함으로써 fake를 real에 가깝게 만들어줍니다. 3개 네트워크를 함께 학습시키고 나면 rendered data를 입력받아; real source와 가까우면서도; rendered data의 class로 분류되는 fake data를 생성하게 되는거죠.
 
-![Fig5](https://jiryang.github.io/img/unsupervised_pixel_level_DA.PNG "Architecture of Unsupervised Pixel-Level DA with GAN"){: width="60%"}{: .aligncenter}
+![Fig5](https://jiryang.github.io/img/unsupervised_pixel_level_DA.PNG "Architecture of Unsupervised Pixel-Level DA with GAN"){: width="40%"}{: .aligncenter}
 
 
 _Adversarial-based: Non-generative_<br>
