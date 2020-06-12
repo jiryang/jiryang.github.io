@@ -75,12 +75,21 @@ Domain Separation Network ([DSN](https://arxiv.org/pdf/1608.06019.pdf))은 share
 ![Fig9](https://jiryang.github.io/img/DSN.PNG "Domain Separation Network"){: width="80%"}{: .aligncenter}
 
 
-Transfer Learning with Deep Autoencoder ([TLDA](https://www.ijcai.org/Proceedings/15/Papers/578.pdf))
+Transfer Learning with Deep Autoencoder ([TLDA](https://www.ijcai.org/Proceedings/15/Papers/578.pdf))는 domain 별로 하나씩의 encoder-decoder를 가집니다. Weight는 share되어있습니다. 각각이 두 단계로 작동하니 depth level에 맞춰 numbering을 해서 encoder1-encoder2-decoder2-decoder1 이라고 하는게 낫겠네요. Encoder1은 domain-indistinguishability를 배우기 위해 두 domain 사이의 KL divergence를 계산하기 위한 input의 hidden representation을 출력합니다. Source encoder2는 softmax regression을 통해 source label 정보를 encoding합니다. 양 domain 모두 decoder1의 결과와 input을 비교해서 reconstruction loss를 구하고요. 역시 학습이 완료되면 유사한 hidden representation을 가지고; source task는 잘 수행하면서; source와 target 모두의 특성을 가지는 (reconstruction을 잘 하는) encoder-decoder가 학습됩니다.
 
 ![Fig10](https://jiryang.github.io/img/TLDA_framework.PNG "TLDA Framework"){: width="80%"}{: .aligncenter}
 
 
 _Reconstruction-based: Adversarial_<br>
-GAN with cycle-consistency loss ([CycleGAN](https://arxiv.org/pdf/1703.10593.pdf))
+Adversarial reconstruction 방식은 대표적인 예가 워낙 유명한 GAN with cycle-consistency loss ([CycleGAN](https://arxiv.org/pdf/1703.10593.pdf)) 이어서 굳이 추가로 설명을 해야하나 싶습니다. Paired data 없이 두 domain의 특성을 translate하기 위해 source-to-target, target-to-source 2개의 GAN을 사용했습니다. 그리고 각각의 mapping이 1:1이 되도록 cycle consistency loss를 추가하였습니다. 이게 없으면 source-to-target-to-source의 reconstruction이 잘 된다고 해서 source-to-target translation이 보장되지 않으니까요. CycleGAN에 대해서는 링크 몇 개 달고 넘어가겠습니다.<br>
+[링크1: Paper](https://arxiv.org/pdf/1703.10593.pdf)
+[링크2: Intro](https://medium.com/coding-blocks/introduction-to-cyclegans-1dbdb8fbe781)
+[링크3: Implementation](https://machinelearningmastery.com/cyclegan-tutorial-with-keras/)
 
 ![Fig11](https://jiryang.github.io/img/cyclegan.PNG "CycleGAN"){: width="80%"}{: .aligncenter}
+
+
+지금까지 2편에 걸쳐 Transfer Learning의 한 축인 Domain Adaptation, 정확하게는 _Homogeneous Domain Adaptation_ 에 대해 살펴보았습니다. Deep learning에서의 labeled data 문제가 연구자들로 하여금 다양한 방법론을 고민하게 만드는 것 같습니다. Domain-invariant한 representation을 구하면서 source domain-specific한 task 성능을 유지하도록 하는건 trade-off가 명확하게 보이는 일입니다만, unlabeled target data로도 7$\tilde$80% 가량의 성능이 나오는 모델을 구할 수 있다는 점은 충분히 매력적입니다. Real world에 어떤 문제가 존재할 지 모르니깐요.
+
+
+포스팅의 양도 적지는 않지만, 그 중요도와 다양한 methodology를 생각하면 이정도로 설명이 끝날 topic이 아닌데 너무 변죽만 두드리다가 마는건 아닌지 걱정이 되네요.
