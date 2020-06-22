@@ -29,7 +29,7 @@ GA는 여러 biological evolution theory를 조합해서 만든 머신러닝 알
 3. 각 agent의 task에 대한 fitness 값 계산
 4. 성능 좋은 n개 (n<<N) agent를 breeding 용으로 선택 (survival of the fittest, natural selection, elitism)
 5. 선택된 n개를 mating 시켜 다음 generation의 population을 생성 (crossover & mutation)
-6. Stopping criteria (성능, generation 수 등)에 이를 때까지 2\sim5를 반복
+6. Stopping criteria (성능, generation 수 등)에 이를 때까지 2$$\sim$$5를 반복
 GA는 다음과 같은 process로 동작합니다. Initialization 단계에서 
 
 ![Fig2](https://jiryang.github.io/img/ga_process.png "Process of Genetic Algorithm"){: width="50%"}{: .aligncenter}
