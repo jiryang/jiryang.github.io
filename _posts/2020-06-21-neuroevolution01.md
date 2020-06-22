@@ -30,15 +30,22 @@ GA는 여러 biological evolution theory를 조합해서 만든 머신러닝 알
 4. 성능 좋은 n개 (n<<N) agent를 breeding 용으로 선택 (survival of the fittest, natural selection, elitism)
 5. 선택된 n개를 mating 시켜 다음 generation의 population을 생성 (crossover & mutation)
 6. Stopping criteria (성능, generation 수 등)에 이를 때까지 2$$\sim$$5를 반복
-GA는 다음과 같은 process로 동작합니다. Initialization 단계에서 
 
-![Fig2](https://jiryang.github.io/img/ga_process.png "Process of Genetic Algorithm"){: width="50%"}{: .aligncenter}
+위의 프로세스를 도식화하면 다음 그림과 같습니다:
+
+![Fig2](https://jiryang.github.io/img/ga_process2.png "Process of Genetic Algorithm"){: width="80%"}{: .aligncenter}
 
 
-몇 가지 알아두면 좋은 개념들을 소개합니다:<br>
-* Gene<br>
-* Chromosome<br>
+GA와 Neuroevolution을 이해하는데 알아두면 좋은 용어들을 몇 가지 소개합니다:<br>
+* Chromosome and Gene<br>
+Chromosome(염색체)은 하나의 agent를 표현하며, ANN으로 만들어진 agent인 경우라면 weight의 vector입니다. Given task에 대한 하나의 solution이라고 볼 수도 있습니다.<br>
+Gene은 chromosome을 이루는 각 weight(parameter, variable)를 말합니다.
 * Population<br>
+Population은 pool of agents로 이루어진 solution의 집합입니다. 일반적으로 GA에서는 population의 크기는 유지되면서 generation을 거칠 수록 individual chromosome은 '진화하게' (업데이트) 됩니다.
+
+![Fig3](https://jiryang.github.io/img/population_chromosome_gene.png "Units in GA"){: width="80%"}{: .aligncenter}
+
+
 * Crossover<br>
 * Mutation<br>
 * Fitness<br>
@@ -46,6 +53,7 @@ GA는 다음과 같은 process로 동작합니다. Initialization 단계에서
 * Offspring<br>
 * Genotype<br>
 * Phenotype<br>
+
 
 
 **Deep Neuroevolution**<br><br>
