@@ -69,8 +69,8 @@ Mutation은 offspring에 randomness를 더해 exploration power를 키워주는 
 ![Fig10](https://jiryang.github.io/img/scramble_mutation.jpg "Scramble Mutation"){: width="80%"}{: .aligncenter}
 
 
-* Genotype<br>
-* Phenotype<br>
+* Genotype & Phenotype<br>
+Genotype은 '유전자형'이나 '인자형', phenotype은 '표현형' 또는 '형질형'으로 번역됩니다. GA에서 genotype이란 chrmomosome의 형태를 말하는 것이라고 할 수 있고, phenotype이란 chromosome에 structure를 씌운, 그러니깐 chromosome의 weight로 구성된 ANN 형태를 나타내는 말입니다. 좀 헷갈리실 수 있는데, 이 부분은 NEAT를 설명할 때 좀 더 명확해질테니 일단은 이 정도 설명으로 넘어가도록 하겠습니다.
 
 
 
