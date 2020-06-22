@@ -15,13 +15,13 @@ mathjax: true
 Uber AI에서는 메인 비지니스 영역에 필요한 Computer Vision, 자율주행, 음성인식 등과 같은 주제 외에 조금 색다른 포인트의 연구도 해왔는데요, 바로 neuroevolution입니다. Neuroevolution은 Genetic algorithm (GA)과 같은 진화 알고리즘을 사용하여 agent (agent를 구성하는 neural network의 weight나 topology) 또는 rule 같은걸 학습하는 머신러닝 방법으로, artificial life simulation, game playing, evolutionary robotics와 같은 분야에 사용되던 'old school' 기법이라고도 할 수 있습니다. 요새 유명해진 AutoML과 개념적으로 비슷한 neural network의 topological learning 방법인 NEAT ([Neuroevolution of Augmenting Topologies](https://www.cs.ucf.edu/~kstanley/neat.html))를 개발하였던 UCF의 Kenneth O'Stanley 교수님이 Uber AI의 Neuroevolution 분야를 리딩하셨는데요, NEAT는 2000년대 초반에 간단한 방법으로 네트워크의 topology를 효과적으로 진화시키는 결과를 보여주어서 굉장히 인상깊었던 논문입니다.
 
 
-앞 단락에서 설명드린 neuroevolution의 사용처를 보시면 눈치채셨겠지만 주로 reinforcement learning의 영역이지요? 강화학습 쪽 market requirement도 있고 해서 언젠가 한 번 다루어야겠다 생각을 하고 있었는데요, 이번 기회에 Uber AI에서 진행되었던 neuroevolution 관련 리서치 결과들을 여러 개의 포스팅으로 나누어 훑어보도록 하겠습니다. 중간중간 강화학습 자체에 대한 내용이 적잖이 들어가야 할 것 같은데, 이미 잘 설명된 다른 블로그들이 있는 것 같아서 상당 부분은 인용하도록 하겠습니다.
+앞 단락에서 설명드린 neuroevolution의 사용처를 보시면 눈치채셨겠지만 주로 reinforcement learning의 영역이지요? 강화학습 쪽 market requirement도 있고 해서 언젠가 한 번 다루어야겠다 생각을 하고 있었는데요, 이번 기회에 Uber AI에서 진행되었던 neuroevolution 관련 리서치 결과들을 여러 개의 포스팅으로 나누어 훑어보도록 하겠습니다. GA부터 NEAT를 거쳐 Deep Neuroevolution까지 긴 시리즈가 될 것 같습니다. 중간중간 강화학습 자체에 대한 내용이 적잖이 들어가야 할 것 같은데, 이미 잘 설명된 다른 블로그들이 있는 것 같아서 상당 부분은 인용하도록 하겠습니다.
 
 ![Fig1](https://jiryang.github.io/img/neuroevolution.png "Neuroevolution"){: width="80%"}{: .aligncenter}
 
 
 **Neuroevolution**<br><br>
-Neuroevolution은 이름 그대로 neuron을 evolve하는 방식으로 학습을 한다는 의미입니다. Machine learning context에서 이야기를 하는 것일테니 여기서 neuron이란 Artificial Neural Network (ANN)를 뜻합니다. Evolution이란 진화의 방식을 모방한 학습을 이용했다는 의미로, 대부분 population-based optimization 방식인 GA를 사용합니다.<br><br>
+Neuroevolution은 이름 그대로 neuron을 evolve하는 방식으로 학습을 한다는 의미입니다. Machine learning context에서 이야기를 하는 것일테니 여기서 neuron이란 Artificial Neural Network (ANN)를 뜻합니다. Evolution이란 진화의 방식을 모방한 학습을 이용했다는 의미로, population-based optimization 방식인 GA가 neuroevolution 계열의 가장 대표적인 알고리즘이라 할 수 있습니다.<br><br>
 _Genetic Algorithm_<br>
 GA는 여러 biological evolution theory를 조합해서 만든 머신러닝 알고리즘입니다. Charles Darwin의 'survival of the fittest', Jean-Baptiste Larmark의 'use and disuse inheritance', 그리고 Gregor Mendel의 'crossover & mutation'을 응용하였죠. 동작하는 방식은 다음과 같습니다:
 1. Randomly initialized pool of agents로 (stochastic이라 할 만큼) 충분히 큰 population (size N>>)을 생성 (initial generation)
@@ -70,11 +70,11 @@ Mutation은 offspring에 randomness를 더해 exploration power를 키워주는 
 
 
 * Genotype & Phenotype<br>
-Genotype은 '유전자형'이나 '인자형', phenotype은 '표현형' 또는 '형질형'으로 번역됩니다. GA에서 genotype이란 chrmomosome의 형태를 말하는 것이라고 할 수 있고, phenotype이란 chromosome에 structure를 씌운, 그러니깐 chromosome의 weight로 구성된 ANN 형태를 나타내는 말입니다. 좀 헷갈리실 수 있는데, 이 부분은 NEAT를 설명할 때 좀 더 명확해질테니 일단은 이 정도 설명으로 넘어가도록 하겠습니다.
+Genotype은 '유전자형'이나 '인자형', phenotype은 '표현형' 또는 '형질형'으로 번역됩니다. GA의 context에서는 genetic encoding, 즉 agent(또는 solution)의 representation을 말하는 것입니다. 그러니깐 GA에서 genotype이란 chrmomosome의 형태를 말하는 것이라고 할 수 있고, phenotype이란 chromosome에 structure를 씌운, 그러니깐 chromosome의 weight로 구성된 ANN 형태를 나타내는 말입니다. 일반적인 GA에서는 network structure가 고정된 채로 weight만 학습하는 방식이라 phenotype이 큰 의미가 없지만 (대부분의 딥러닝도 마찬가지로 weight만 업데이트하지요), topological evolution 알고리즘인 NEAT에서는 phenotype이 동시에 학습된다는 특징이 있습니다. 좀 헷갈리실 수 있는데, 이 부분은 NEAT를 설명할 때 좀 더 명확해질테니 일단은 이 정도 설명으로 넘어가도록 하겠습니다.
+
+![Fig11](https://jiryang.github.io/img/genotype_and_phenotype.png "Genotype and Phenotype"){: width="80%"}{: .aligncenter}
 
 
 
-**Deep Neuroevolution**<br><br>
 
-
-
+다음 포스트에서는 Neuroevolution of Augmenting Topologies에 대해 이야기하고, 이후 Uber AI의 neuroevolution research에 대해 계속 다루도록 하겠습니다.
