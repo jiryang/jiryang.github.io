@@ -8,13 +8,12 @@
                 {% assign posts=site.pages | where:"lang-ref", page.lang-ref | sort: 'lang' %}
             {% endif %}
             {% if posts.size > 1 %}
-            <p class="lang-options">
+            <!--<p class="lang-options">
                 {{ site.data.translations['differentLanguage'][page.lang] }}:
                 {% for post in posts %}
-                <!--<span><a href="{{ site.base_url }}{{ post.url }}" class="{{ post.lang }}" title="View in {{ post.lang }}">{{ post.lang }}</a></span>&nbsp;&nbsp;-->
                 <span><a href="{{ site.base_url }}{{ post.url }}" class="{{ site.data.languages[post.lang].label }}" title="View in {{ site.data.languages[post.lang].label }}">{{ site.data.languages[post.lang].icon }} {{ site.data.languages[post.lang].label }}</a></span>&nbsp;&nbsp;
                 {% endfor %}
-            </p>
+            </p>-->
             {% endif %}
         {% endif %}
 
