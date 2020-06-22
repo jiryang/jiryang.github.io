@@ -55,17 +55,17 @@ Elitism은 natural selection을 모방하여 fitness 값이 더 높은 agent들�
 * Crossover<br>
 앞서 언급한 '교배'에 crossover와 mutation을 사용합니다. Crossover는 선택된 elite들 중에서 parent chromosome(s)을 뽑아서 offspring 시키는 방법인데요, one-point, multi-point, uniform, permutation-maintaining crossover 등 종류가 다양합니다. 아래 그림에서 몇가지 대표적인 crossover 방식의 예를 보실 수 있습니다. Crossover는 필요에 따라서 생략할 수도 있는 process 입니다.
 
-![Fig4](https://jiryang.github.io/img/one_point_crossover.jpg "One-Point Crossover"){: width="80%"}{: .aligncenter}
-![Fig5](https://jiryang.github.io/img/multi_point_crossover.jpg "Multi-Point Crossover"){: width="80%"}{: .aligncenter}
-![Fig6](https://jiryang.github.io/img/uniform_crossover.jpg "Uniform Crossover"){: width="80%"}{: .aligncenter}
+![Fig4](https://jiryang.github.io/img/one_point_crossover.jpg "One-Point Crossover"){: width="80%"}{: .aligncenter}<br>
+![Fig5](https://jiryang.github.io/img/multi_point_crossover.jpg "Multi-Point Crossover"){: width="80%"}{: .aligncenter}<br>
+![Fig6](https://jiryang.github.io/img/uniform_crossover.jpg "Uniform Crossover"){: width="80%"}{: .aligncenter}<br>
 ![Fig7](https://jiryang.github.io/img/david_order_crossover.jpg "OX1 (Permutation-Maintaining) Crossover"){: width="80%"}{: .aligncenter}
 
 
 * Mutation<br>
 Mutation은 offspring에 randomness를 더해 exploration power를 키워주는 또 하나의 방법입니다. 딥러닝에서 mini-batch의 backpropagation을 통한 stochastic gradient descent (SGD)를 구해 조금씩 weight를 업데이트했던 것과 비슷하게, GA에서는 mutation을 통해 offspring의 weight를 조금씩 변화시켜 global optimum으로 향하는 솔루션이 나오는지 탐색합니다. Mutation rate는 constant 또는 variable로 설정할 수 있으며, 방식도 bit flip, random resetting, swap, scamble 등 다양합니다.
 
-![Fig8](https://jiryang.github.io/img/bit_flip_mutation.jpg "Bit Flip Mutation"){: width="80%"}{: .aligncenter}
-![Fig9](https://jiryang.github.io/img/swap_mutation.jpg "Swap Mutation"){: width="80%"}{: .aligncenter}
+![Fig8](https://jiryang.github.io/img/bit_flip_mutation.jpg "Bit Flip Mutation"){: width="80%"}{: .aligncenter}<br>
+![Fig9](https://jiryang.github.io/img/swap_mutation.jpg "Swap Mutation"){: width="80%"}{: .aligncenter}<br>
 ![Fig10](https://jiryang.github.io/img/scramble_mutation.jpg "Scramble Mutation"){: width="80%"}{: .aligncenter}
 
 
