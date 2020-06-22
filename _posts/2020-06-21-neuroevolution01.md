@@ -56,22 +56,24 @@ Elitism은 natural selection을 모방하여 fitness 값이 더 높은 agent들�
 앞서 언급한 '교배'에 crossover와 mutation을 사용합니다. Crossover는 선택된 elite들 중에서 parent chromosome(s)을 뽑아서 offspring 시키는 방법인데요, one-point, multi-point, uniform, permutation-maintaining crossover 등 종류가 다양합니다. 아래 그림에서 몇가지 대표적인 crossover 방식의 예를 보실 수 있습니다. Crossover는 필요에 따라서 생략할 수도 있는 process 입니다.
 
 ![Fig4](https://jiryang.github.io/img/one_point_crossover.jpg "One-Point Crossover"){: width="80%"}{: .aligncenter}<br>
-One-Point Crossover<br>
+_One-Point Crossover_<br><br>
 ![Fig5](https://jiryang.github.io/img/multi_point_crossover.jpg "Multi-Point Crossover"){: width="80%"}{: .aligncenter}<br>
-Multi-Point Crossover<br>
+_Multi-Point Crossover_<br><br>
 ![Fig6](https://jiryang.github.io/img/uniform_crossover.jpg "Uniform Crossover"){: width="80%"}{: .aligncenter}<br>
-Uniform Crossover<br>
-![Fig7](https://jiryang.github.io/img/david_order_crossover.jpg "OX1 (Permutation-Maintaining) Crossover"){: width="80%"}{: .aligncenter}
-OX1 (Permutation-maintaining) Crossover<br>
+_Uniform Crossover_<br><br>
+![Fig7](https://jiryang.github.io/img/david_order_crossover.jpg "OX1 (Permutation-Maintaining) Crossover"){: width="80%"}{: .aligncenter}<br>
+_OX1 (Permutation-maintaining) Crossover_<br>
 
 
 * Mutation<br>
 Mutation은 offspring에 randomness를 더해 exploration power를 키워주는 또 하나의 방법입니다. 딥러닝에서 mini-batch의 backpropagation을 통한 stochastic gradient descent (SGD)를 구해 조금씩 weight를 업데이트했던 것과 비슷하게, GA에서는 mutation을 통해 offspring의 weight를 조금씩 변화시켜 global optimum으로 향하는 솔루션이 나오는지 탐색합니다. Mutation rate는 constant 또는 variable로 설정할 수 있으며, 방식도 bit flip, random resetting, swap, scamble 등 다양합니다.
 
 ![Fig8](https://jiryang.github.io/img/bit_flip_mutation.jpg "Bit Flip Mutation"){: width="80%"}{: .aligncenter}<br>
+_Bit Flip Mutation_<br><br>
 ![Fig9](https://jiryang.github.io/img/swap_mutation.jpg "Swap Mutation"){: width="80%"}{: .aligncenter}<br>
-![Fig10](https://jiryang.github.io/img/scramble_mutation.jpg "Scramble Mutation"){: width="80%"}{: .aligncenter}
-
+_Swap Mutation_<br><br>
+![Fig10](https://jiryang.github.io/img/scramble_mutation.jpg "Scramble Mutation"){: width="80%"}{: .aligncenter}<br>
+_Scramble Mutation_<br>
 
 * Genotype & Phenotype<br>
 Genotype은 '유전자형'이나 '인자형', phenotype은 '표현형' 또는 '형질형'으로 번역됩니다. GA의 context에서는 genetic encoding, 즉 agent(또는 solution)의 representation을 말하는 것입니다. 그러니깐 GA에서 genotype이란 chrmomosome의 형태를 말하는 것이라고 할 수 있고, phenotype이란 chromosome에 structure를 씌운, 그러니깐 chromosome의 weight로 구성된 ANN 형태를 나타내는 말입니다. 일반적인 GA에서는 network structure가 고정된 채로 weight만 학습하는 방식이라 phenotype이 큰 의미가 없지만 (대부분의 딥러닝도 마찬가지로 weight만 업데이트하지요), topological evolution 알고리즘인 NEAT에서는 phenotype이 동시에 학습된다는 특징이 있습니다. 좀 헷갈리실 수 있는데, 이 부분은 NEAT를 설명할 때 좀 더 명확해질테니 일단은 이 정도 설명으로 넘어가도록 하겠습니다.
