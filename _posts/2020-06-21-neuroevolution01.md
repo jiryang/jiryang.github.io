@@ -46,11 +46,29 @@ Population은 pool of agents로 이루어진 solution의 집합입니다. 일반
 ![Fig3](https://jiryang.github.io/img/population_chromosome_gene.png "Units in GA"){: width="80%"}{: .aligncenter}
 
 
-* Crossover<br>
-* Mutation<br>
 * Fitness<br>
+Fitness는 agent가 task를 얼마나 잘 수행하는지, solution이 얼마나 잘 들어맞는지(fit)를 측정하는 함수입니다 (딥러닝에서 loss function과 비슷하다 할 수 있을까요?) Population 내의 모든 agent가 task를 수행하고, fitness function으로 측정된 각자의 fitness value를 가지고 다음 generation에 살아남을 지 도태될 지를 정하는 역할을 합니다. Task performance를 정량적으로 나타낼 수 있는 함수여야 하며, 매 generation의 매 agent들에 대해 function 값을 구해야 하기 때문에 지나치게 복잡한 fitness function은 성능 저하의 원인이 될 수도 있으므로 주의해야 합니다.
 * Elitism<br>
+Elitism은 natural selection을 모방하여 fitness 값이 더 높은 agent들이 도태되지 않고 다음 generation으로 살아남아 '진화'가 이루어질 수 있도록 하는 '엘리트들을 뽑는' 프로세스를 말합니다. 특정 proportion을 pre-define 해놓고 쭉 사용할 수도 있고, 학습(진화)에 따라 variable로 가져갈 수도 있습니다. 순서대로 정해진 숫자만큼을 뽑는 deterministic 방식을 사용할 수도 있고, exploration을 높이기 위해 randomness가 가미된 roulette-wheel과 같은 probabilistic한 방식이나 rank selection, tournament selection과 같은 다양한 방식이 있습니다.
 * Offspring<br>
+이제 elitism으로 선택된 일부의 better fitted solution들이 있습니다. Next generation 수행을 위해선 다시 정해진 숫자의 population을 채워야 하는데요, 선택된 elite들을 '교배'시켜서 자손을 만들어내는 방식을 사용하고 이 자손을 offspring이라고 부릅니다.
+* Crossover<br>
+앞서 언급한 '교배'에 crossover와 mutation을 사용합니다. Crossover는 선택된 elite들 중에서 parent chromosome(s)을 뽑아서 offspring 시키는 방법인데요, one-point, multi-point, uniform, permutation-maintaining crossover 등 종류가 다양합니다. 아래 그림에서 몇가지 대표적인 crossover 방식의 예를 보실 수 있습니다. Crossover는 필요에 따라서 생략할 수도 있는 process 입니다.
+
+![Fig4](https://jiryang.github.io/img/one_point_crossover.jpg "One-Point Crossover"){: width="80%"}{: .aligncenter}
+![Fig5](https://jiryang.github.io/img/multi_point_crossover.jpg "Multi-Point Crossover"){: width="80%"}{: .aligncenter}
+![Fig6](https://jiryang.github.io/img/uniform_crossover.jpg "Uniform Crossover"){: width="80%"}{: .aligncenter}
+![Fig7](https://jiryang.github.io/img/david_order_crossover.jpg "OX1 (Permutation-Maintaining) Crossover"){: width="80%"}{: .aligncenter}
+
+
+* Mutation<br>
+Mutation은 offspring에 randomness를 더해 exploration power를 키워주는 또 하나의 방법입니다. 딥러닝에서 mini-batch의 backpropagation을 통한 stochastic gradient descent (SGD)를 구해 조금씩 weight를 업데이트했던 것과 비슷하게, GA에서는 mutation을 통해 offspring의 weight를 조금씩 변화시켜 global optimum으로 향하는 솔루션이 나오는지 탐색합니다. Mutation rate는 constant 또는 variable로 설정할 수 있으며, 방식도 bit flip, random resetting, swap, scamble 등 다양합니다.
+
+![Fig8](https://jiryang.github.io/img/bit_flip_mutation.jpg "Bit Flip Mutation"){: width="80%"}{: .aligncenter}
+![Fig9](https://jiryang.github.io/img/swap_mutation.jpg "Swap Mutation"){: width="80%"}{: .aligncenter}
+![Fig10](https://jiryang.github.io/img/scramble_mutation.jpg "Scramble Mutation"){: width="80%"}{: .aligncenter}
+
+
 * Genotype<br>
 * Phenotype<br>
 
