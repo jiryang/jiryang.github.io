@@ -56,13 +56,13 @@ Elitism은 natural selection을 모방하여 fitness 값이 더 높은 agent들�
 앞서 언급한 '교배'에 crossover와 mutation을 사용합니다. Crossover는 선택된 elite들 중에서 parent chromosome(s)을 뽑아서 offspring 시키는 방법인데요, one-point, multi-point, uniform, permutation-maintaining crossover 등 종류가 다양합니다. 아래 그림에서 몇가지 대표적인 crossover 방식의 예를 보실 수 있습니다. Crossover는 필요에 따라서 생략할 수도 있는 process 입니다.
 
 ![Fig4](https://jiryang.github.io/img/one_point_crossover.jpg "One-Point Crossover"){: width="80%"}{: .aligncenter}<br>
-<One-Point Crossover><br>
+One-Point Crossover<br>
 ![Fig5](https://jiryang.github.io/img/multi_point_crossover.jpg "Multi-Point Crossover"){: width="80%"}{: .aligncenter}<br>
-<Multi-Point Crossover><br>
+Multi-Point Crossover<br>
 ![Fig6](https://jiryang.github.io/img/uniform_crossover.jpg "Uniform Crossover"){: width="80%"}{: .aligncenter}<br>
-<Uniform Crossover><br>
+Uniform Crossover<br>
 ![Fig7](https://jiryang.github.io/img/david_order_crossover.jpg "OX1 (Permutation-Maintaining) Crossover"){: width="80%"}{: .aligncenter}
-<OX1 (Permutation-maintaining) Crossover><br>
+OX1 (Permutation-maintaining) Crossover<br>
 
 
 * Mutation<br>
