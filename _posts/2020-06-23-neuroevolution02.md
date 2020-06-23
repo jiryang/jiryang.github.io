@@ -2,7 +2,7 @@
 layout: post
 title:  "Deep Neuroevolution"
 date:   2020-06-23 00:00:01
-categories: Neuroevolution
+categories: Neuroevolution - 2nd
 tags: neuroevolution neat automl nas
 excerpt: Neuroevolution of Augmenting Topologies (NEAT)
 mathjax: true
@@ -16,7 +16,7 @@ mathjax: true
 
 Gradient Descent              |  Neuroevolution
 :----------------------------:|:-------------------------:
-![Fig1]https://jiryang.github.io/img/gradient_descent_europe.png "Neuroevolution"){: width="40%"}  | ![Fig2]https://jiryang.github.io/img/neuroevolution_europe.png "Neuroevolution"){: width="40%"}
+![Fig1](https://jiryang.github.io/img/gradient_descent_europe.png "Neuroevolution"){: width="40%"}  | ![Fig2](https://jiryang.github.io/img/neuroevolution_europe.png "Neuroevolution"){: width="40%"}
 
 
  search하지 loss로부터 gradient의 값과 방향이 명확히 계산되어 탐색 일반적인 supervised learning과 비교하더라도, loss에 의한 gradient가 명확하게 계산되기 때문에 RL의 경우는 특히 search space가 넓고 local minima가 많은 경우 stochastic gradient descent (SGD)가 속도가 2001년에 NEAT가 발표되기 전 네트워크의 구조를 학습하려는 시도가 전혀 없진 않았지만, 
