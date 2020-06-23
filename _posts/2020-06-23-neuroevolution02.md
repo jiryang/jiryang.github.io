@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Deep Neuroevolution"
+title:  "Deep Neuroevolution - part2"
 date:   2020-06-23 00:00:01
-categories: Neuroevolution - part2
+categories: Neuroevolution
 tags: neuroevolution neat automl nas
 excerpt: Neuroevolution of Augmenting Topologies (NEAT)
 mathjax: true
