@@ -81,6 +81,16 @@ Genotype은 '유전자형'이나 '인자형', phenotype은 '표현형' 또는 '�
 ![Fig11](https://jiryang.github.io/img/genotype_and_phenotype.png "Genotype and Phenotype"){: width="80%"}{: .aligncenter}
 
 
+GA를 사용하면 다양한 문제들을 풀 수 있습니다. Generation을 거듭하면서 elitism, crossover, mutation을 이용한 exploration을 통해 current best solution들의 주변을 탐색하면서 조금씩 optimal에 가까운 쪽으로 접근하게 되는 개념입니다. Magic black box 처럼 생각될 수도 있지만 실은 딥러닝처럼 수렴을 유도하기 위해 retention rate, mutation rate 등 다양한 parameter 조정도 필요하며, 문제에 대해 충분히 이해하고 GA task를 디자인해야 좋은 결과를 얻을 수 있습니다. GA로 해결한 몇몇 재밌는 샘플들을 첨부하고 일단 마무리합니다:
+
+![Fig12](https://jiryang.github.io/img/evolutionary_algorithm-1.gif "GA Sample #1"){: width="80%"}{: .aligncenter}
+
+
+![Fig13](https://jiryang.github.io/img/ga_sample-2.gif "GA Sample #2"){: width="80%"}{: .aligncenter}
+
+
+![Fig14](https://jiryang.github.io/img/ga_sample-3.gif "GA Sample #3"){: width="80%"}{: .aligncenter}
+
 
 
 다음 포스트에서는 Neuroevolution of Augmenting Topologies에 대해 이야기하고, 이후 Uber AI의 neuroevolution research에 대해 계속 다루도록 하겠습니다.
