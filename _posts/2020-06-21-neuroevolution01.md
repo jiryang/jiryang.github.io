@@ -2,7 +2,7 @@
 layout: post
 title:  "Deep Neuroevolution"
 date:   2020-06-21 12:59:59
-categories: Neuroevolution-1st
+categories: Neuroevolution - part1
 tags: neuroevolution genetic_algorithm reinforcement_learning uber_ai
 excerpt: Deep Neuroevolution - Genetic Algorithm 기초 다시보기
 mathjax: true
