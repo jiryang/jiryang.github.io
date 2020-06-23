@@ -1,0 +1,22 @@
+---
+layout: post
+title:  "Deep Neuroevolution"
+date:   2020-06-23 00:00:01
+categories: Neuroevolution
+tags: neuroevolution neat automl nas
+excerpt: Neuroevolution of Augmenting Topologies (NEAT)
+mathjax: true
+---
+
+
+지난 [포스트](https://jiryang.github.io/2020/06/21/neuroevolution01/)에서 예고한대로 오늘은 NEAT ([Neuroevolution of Augmenting Topologies](https://www.cs.ucf.edu/~kstanley/neat.html))에 대해 알아보겠습니다. Neuroevolution (NE)이라는 방법론적인 차이는 있지만 network topology learning은 결국 AutoML과 NAS (Neural Architecture Search)까지 이어지는 개념이기 때문에 흥미로운 주제가 될 것 같습니다. _게다가 개인적으로 NE의 열렬한 팬이기도 합니다._
+
+
+예전에 [다른 포스트](http://localhost:4000/2020/05/14/FSGAN-review/)에서 한 번 언급했듯이 다른 innovation과 마찬가지로 NE도 90년대 말 minor 혁신들을 통해서 지속적인 성능 개선이 이루어져왔습니다 (예를 들면 [ESP](http://www.cs.utexas.edu/users/nn/downloads/papers/gomez.tr02-292.pdf) 같은). NE가 reinforcement learning (RL) task에 좋은 성능을 보인다는건 지난번 포스트에서도 말씀을 드렸습니다. 사실 다른 종류의 학습, 예를 들면 supervised learning에도 NE를 적용하지 못할 이유는 없지만, problem space 또는 optimisation surface가 연속적이고 미분가능하게 'well define'된 경우라면 굳이 population을 만들어서 주변을 탐색하는 일은 낭비가 될 가능성이 크겠죠. 이런 경우라면 gradient descent를 이용한 방식이 훨씬 효과적일 것입니다. 아래 그림은 _Paris에서 출발하여 Berlin에 도착하기_ 라는 가상의 task를 만들어서 gradient descent 방법과 NE의 탐색 방법이 어떻게 다른지 재미있게 그림으로 그린 예시입니다 ([출처](https://towardsdatascience.com/gradient-descent-vs-neuroevolution-f907dace010f)). Gradient descent가 매 iteration마다 일정한 거리를 가면서 Berlin이 어디인지를 물어 방향을 고쳐잡는 방식이라고 한다면, NE는 매 generation마다 주변의 여러 사람들에게 Berlin 방향을 물어 탐색하는 방식이라 할 수 있습니다. 아주 정확한 설명은 아니지만 감을 잡으시는데는 도움이 될 것 같습니다.
+
+Gradient Descent              |  Neuroevolution
+:----------------------------:|:-------------------------:
+![Fig1]https://jiryang.github.io/img/gradient_descent_europe.png "Neuroevolution"){: width="40%"}  | ![Fig2]https://jiryang.github.io/img/neuroevolution_europe.png "Neuroevolution"){: width="40%"}
+
+
+ search하지 loss로부터 gradient의 값과 방향이 명확히 계산되어 탐색 일반적인 supervised learning과 비교하더라도, loss에 의한 gradient가 명확하게 계산되기 때문에 RL의 경우는 특히 search space가 넓고 local minima가 많은 경우 stochastic gradient descent (SGD)가 속도가 2001년에 NEAT가 발표되기 전 네트워크의 구조를 학습하려는 시도가 전혀 없진 않았지만, 
