@@ -67,4 +67,4 @@ $$\delta = \frac{c_1E}{N} + \frac{c_2D}{N} + c_3\cdot\overline{W}$$<br>
 
 이 similarity measure로 population 내 species의 구분이 가능해졌는데요, 이를 이용해 population 내 species의 다양성을 확보해주기 위해 각 individual의 fitness를 다음과 같이 조정해줍니다:<br>
 $$f_i' = \frac{f_i}{\sum_{j=1}^{n}sh(\delta(i, j))}$$<br>
-$$sh(\cdot) = 0 if \delta(i, j) < \delta_{threshold} and sh(\cdot) = 1 otherwise$$
+$$sh(\cdot) = 0$$ if $$\delta(i, j) < \delta_{threshold}$$ and $$sh(\cdot) = 1$$ otherwise
