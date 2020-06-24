@@ -22,7 +22,7 @@ Gradient Descent              |  Neuroevolution
 Search space의 차원이 높은 경우 경험을 바탕으로 가치함수를 업데이트하는 방식으로 학습하는 RL보다 behavior를 직접 학습하는 NE가 성능이 더 좋을 것입니다. 음, 더 잘 이해하려면 RL에 대한 기본 지식이 있으면 좋은데, 일단은 강화학습에 대해 잘 정리된 블로그를 링크하고 넘어가도록 하고, 기회가 되면 다시 한 번 돌아보도록 하겠습니다 ([링크](https://greentec.github.io/tags/#reinforcement-learning), 열심히 공부하시는 분들이 많습니다 ^^). 이러한 NE의 가능성에도 불구하고 기존의 방식은 네트워크의 topology는 고정한 채 weight만 학습하는 경우가 대부분이었습니다. 2001년에 NEAT가 발표되기 전 네트워크의 구조를 학습하려는 시도가 전혀 없진 않았지만 썩 좋은 결과를 내지는 못하고 있었습니다. 'Topology(structure)를 weight와 동시에 학습하는 것이 weight만 학습하는 것과 비교해 성능이 더 좋은가?' 라는 질문에 답하기 위해서는 해결해야 할 문제들이 몇 가지 있습니다:
 
 1. Topology를 효과적으로 나타내고, crossover 및 mutation도 적용시킬 수 있는 genotype이 있는가?
-2. Topological evolution이 최적화될 수 있도록 시간을 벌어 줄 방법이 있는가?
+2. Topological evolution이 최적화될 수 있도록 보호해 줄 방법이 있는가?
 3. Topological evolution으로 인해 네트워크가 과다하게 복잡해지는 것을 효과적으로 조절할 방법이 있는가?
 
 NEAT는 이 세가지 질문에 대한 해답을 (그것도 biological grounding을 가진 해답을) 제시하면서 뜨거운 반응을 불러일으켰고, 이후 업그레이드 된 버전(HyperNEAT)까지 다양한 언어로 개발되어 여러 RL application에 적용되었습니다 ([Stanley 교수님의 NEAT 웹사이트](https://www.cs.ucf.edu/~kstanley/neat.html)로 NEAT의 확장에 대한 더 자세한 설명은 생략합니다). 이제 위의 세 질문에 대한 NEAT의 답변을 살펴보도록 하시죠.
@@ -32,7 +32,7 @@ NEAT는 이 세가지 질문에 대한 해답을 (그것도 biological grounding
 
 ##### Competing Conventions Problem
 
-지난 포스트에서 보셨듯이 gene의 조합인 chromosome으로 이루어진 기존 NE의 genotype으로는 topology를 표현하는 것이 불가능했지요. NEAT에서는 genotype을 네트워크의 node를 나타내는 node gene의 list와 네트워크의 weight를 나타내는 connection gene의 list로 구성하는 direct encoding 방식을 택하였습니다 (살짝 off the topic이지만, indirect encoding은 compact한 representation이 가능하다는 장점이 있지만 구현과 해석이 복잡하다는 단점이 있습니다). Node gene과 connection gene의 list로 phenotype(network)을 바로 만들어낼 수는 있게 되었지만 이런 structure 정보를 가진 genotype으로 crossover를 하려니 문제가 있습니다. _Competing Conventions Problem_ 이라 부르는 문제인데요, 일반적인 non-topological NE에도 존재하던 문제였습니다. 아래의 예를 보시면  _Competing Conventions Problem_ 에 대한 직관적인 이해가 가능할 것 같습니다. Hidden layer의 node들의 순서만 다른, 사실상 거의 동일한 기능을 수행하는 네트워크 2개가 parents로 선택되어 crossover를 수행하게 되면 자칫 학습된 task 수행능력을 잃은 멍청한 offspring을 만들어내게 될 경우가 생기는거죠. Hidden layer A, B, C가 task 수행에 필요하여 학습된 상태인데, [A, B, C]와 [C, B, A] 네트워크를 mating 시켜 [A, B, A]와 [C, B, C]가 만들어지면 next generation의 fitness가 곤두박질 칠 것입니다.
+지난 포스트에서 보셨듯이 gene의 조합인 chromosome으로 이루어진 기존 NE의 genotype으로는 topology를 표현하는 것이 불가능했지요. NEAT에서는 genotype을 네트워크의 node를 나타내는 node gene의 list와 네트워크의 weight를 나타내는 connection gene의 list로 구성하는 direct encoding 방식을 택하였습니다 (살짝 off the topic이지만, indirect encoding은 compact한 representation이 가능하다는 장점이 있지만 구현과 해석이 복잡하다는 단점이 있습니다). Node gene과 connection gene의 list로 phenotype(network)을 바로 만들어낼 수는 있게 되었지만 이런 structure 정보를 가진 genotype으로 crossover를 하려니 문제가 있습니다. _Competing Conventions Problem_ 이라 부르는 문제인데요, 일반적인 non-topological NE에도 존재하던 문제였습니다. 아래의 예를 보시면  _Competing Conventions Problem_ 에 대한 직관적인 이해가 가능할 것 같습니다. Hidden layer의 node들의 순서만 다른, 사실상 거의 동일한 기능을 수행하는 네트워크 2개가 parents로 선택되어 crossover를 수행하게 되면 자칫 학습된 task 수행능력을 잃은 '멍청한' offspring을 만들어내게 될 경우가 생기는거죠. Hidden layer A, B, C가 task 수행에 필요하여 학습된 상태인데, [A, B, C]와 [C, B, A] 네트워크를 mating 시켜 [A, B, A]와 [C, B, C]가 만들어지면 next generation의 fitness가 곤두박질 칠 것입니다.
 
 ![Fig3](https://jiryang.github.io/img/competing_conventions_problem.PNG "Competing Conventions Problem"){: width="50%"}{: .aligncenter}
 
@@ -60,11 +60,24 @@ NEAT는 이 세가지 질문에 대한 해답을 (그것도 biological grounding
 ![Fig6](https://jiryang.github.io/img/NEAT_topological_crossover.PNG "Topological Crossover of NEAT"){: width="80%"}{: .aligncenter}
 
 
-#### Topological evolution이 최적화될 수 있도록 시간을 벌어 줄 방법이 있는가?
+#### Topological evolution이 최적화될 수 있도록 보호해 줄 방법이 있는가?
 
-Crossover나 mutation으로 생겨난 topology가 변한 offspring이 처음부터 앞 generation에서 fitness가 높아 선택된 parent보다 더 성능이 좋을 가능성은 별로 없습니다. 이러한 새로운 sub-structure(_niche_ 라고도 합니다)가 task performance에 도움이 될 지는 추가적인 학습을 통해 해당 부분의 weight를 전체 weight와 같이 학습하고 최적화를 시켜봐야 알겠지요. 하지만 기존 NE 알고리즘으로는 _niche_ 가 생기자마자 다른 개체들과 무제한 경쟁에 들어가게 되어, 생기자마자 도태되는 현상이 반복되는걸 피할 방법이 없었습니다. 자연에서의 speciation(종분화)은 종 안에서 돌연변이 등으로 발생된 새로운 _niche_ 를 가진 개채군이 다른 개체군과 selective pressure를 받으면서 경쟁하다가 genotypic 또는 phenotypic 분기를 겪게 됩니다. 이 점에 착안해 NEAT에서는 chromosome의 similarity measure를 통해 compatible한 종을 구분하고, 이 안에서만 _niche_ 가 경쟁할 수 있도록 함으로써 새로이 발견된 structure가 성능 좋은 다른 종(dissimilar한 네트워크)으로부터 생존의 위협을 받지 않게끔 하였습니다. Similarity는 앞서 보셨던 disjoint gene의 숫자($$D$$), eccess gene의 숫자($$$E$), 그리고 matching gene의 weight값의 차이($$\overline{W}$$)로 계산합니다:<br>
+Crossover나 mutation으로 생겨난 topology가 변한 offspring이 처음부터 앞 generation에서 fitness가 높아 선택된 parent보다 더 성능이 좋을 가능성은 별로 없습니다. 이러한 새로운 sub-structure(_niche_ 라고도 합니다)가 task performance에 도움이 될 지는 추가적인 학습을 통해 해당 부분의 weight를 전체 weight와 같이 학습하고 최적화를 시켜봐야 알겠지요. 하지만 기존 NE 알고리즘으로는 _niche_ 가 생기자마자 다른 개체들과 무제한 경쟁에 들어가게 되어, 생기자마자 도태되는 현상이 반복되는걸 피할 방법이 없었습니다. 자연에서의 speciation(종분화)은 종 안에서 돌연변이 등으로 발생된 새로운 _niche_ 를 가진 개채군이 다른 개체군과 selective pressure를 받으면서 경쟁하다가 genotypic 또는 phenotypic 분기를 겪게 됩니다. 이 점에 착안해 NEAT에서는 chromosome의 similarity measure를 통해 compatible한 종을 구분하고, 이 안에서만 _niche_ 가 경쟁할 수 있도록 함으로써 새로이 발견된 structure가 성능 좋은 다른 종(dissimilar한 네트워크)으로부터 생존의 위협을 받지 않게끔 하였습니다. 여기서도 Innovation Number가 활용됩니다. Similarity는 앞서 보셨던 disjoint gene의 숫자($$D$$), eccess gene의 숫자($$$E$$), 그리고 matching gene의 weight값의 차이($$\overline{W}$$)로 계산합니다:<br>
 $$\delta = \frac{c_1E}{N} + \frac{c_2D}{N} + c_3\cdot\overline{W}$$<br>
 
 이 similarity measure로 population 내 species의 구분이 가능해졌는데요, 이를 이용해 population 내 species의 다양성을 확보해주기 위해 각 individual의 fitness를 다음과 같이 조정해줍니다:<br>
 $$f_i' = \frac{f_i}{\sum_{j=1}^{n}sh(\delta(i, j))}$$<br>
 $$sh(\cdot) = 0$$ if $$\delta(i, j) < \delta_{threshold}$$ and $$sh(\cdot) = 1$$ otherwise
+
+
+#### Topological evolution으로 인해 네트워크가 과다하게 복잡해지는 것을 효과적으로 조절할 방법이 있는가?
+
+NEAT는 uniform minimal structure를 가지는 population에서부터 진화를 시작하여 problem solving에 필요한 만큼만의 구조적 변화를 일으키는 방식으로 이 문제를 간단히 해결합니다. 앞서 mutation에서 historical marker를 사용해 동일한 structure가 다른 innovation number를 가지고 중복적으로 생기는 걸 막았던 것도 minimal topology 증가를 도와주는 부분이라고 할 수 있겠죠.
+
+
+이후 NEAT는 hypercube 기반의 indirect encoding을 적용한 HyperNEAT 등으로 연구가 확장되었고 다양한 강화학습 문제에 경쟁력있는 솔루션임을 보였습니다. Demo 영상 몇 개 보시고 마무리하겠습니다. 다음 포스트부터는 Uber AI의 Neuroevolution research로 넘어가보죠.
+
+
+<div align="center">
+  <a href="https://youtu.be/rU5ID0mcWdU"><img src="https://youtu.be/rU5ID0mcWdU/0.jpg" alt="HyperNEAT - Atari Boxing"></a>
+</div>
