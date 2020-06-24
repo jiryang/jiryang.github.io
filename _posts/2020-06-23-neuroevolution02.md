@@ -83,7 +83,16 @@ NEAT는 uniform minimal structure를 가지는 population에서부터 진화를 
 이후 NEAT는 hypercube 기반의 indirect encoding을 적용한 HyperNEAT 등으로 연구가 확장되었고 다양한 강화학습 문제에 경쟁력있는 솔루션임을 보였습니다. 예전에 읽었던 논문을 리뷰하면서 개인적으로는 즐거운 시간을 보냈네요. Demo 영상 몇 개 보시고 마무리하겠습니다. 다음 포스트부터는 Uber AI의 Neuroevolution research로 넘어가보죠.
 
 
-![Fig8](https://jiryang.github.io/img/NEAT_pacman.gif "Pacman using NEAT"){: width="70%"}{: .aligncenter}
+![Fig8](https://jiryang.github.io/img/NEAT_pacman.gif "Pacman using NEAT"){: width="80%"}{: .aligncenter}
 
 
-![Fig9](https://jiryang.github.io/img/NEAT_flappybird.gif "Flappy Bird using NEAT"){: width="50%"}{: .aligncenter}
+![Fig9](https://jiryang.github.io/img/NEAT_lunarlander.gif "Lunar Lander using NEAT"){: width="80%"}{: .aligncenter}
+
+
+![Fig10](https://jiryang.github.io/img/NEAT_pendulum.gif "Pendulum using NEAT"){: width="80%"}{: .aligncenter}
+
+
+![Fig11](https://jiryang.github.io/img/NEAT_pendulum_best_network.png "Best Pendulum Network Found from NEAT"){: width="60%"}{: .aligncenter}
+
+
+![Fig12](https://jiryang.github.io/img/NEAT_flappybird.gif "Flappy Bird using NEAT"){: width="50%"}{: .aligncenter}
