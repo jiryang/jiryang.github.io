@@ -28,7 +28,7 @@ Search space의 차원이 높은 경우 경험을 바탕으로 가치함수를 �
 NEAT는 이 세가지 질문에 대한 해답을 (그것도 biological grounding을 가진 해답을) 제시하면서 뜨거운 반응을 불러일으켰고, 이후 업그레이드 된 버전(HyperNEAT)까지 다양한 언어로 개발되어 여러 RL application에 적용되었습니다 ([Stanley 교수님의 NEAT 웹사이트](https://www.cs.ucf.edu/~kstanley/neat.html)로 NEAT의 확장에 대한 더 자세한 설명은 생략합니다). 이제 위의 세 질문에 대한 NEAT의 답변을 살펴보도록 하시죠.
 
 
-###Topology를 효과적으로 나타내고, crossover 및 mutation도 적용시킬 수 있는 genotype이 있는가?
+### Topology를 효과적으로 나타내고, crossover 및 mutation도 적용시킬 수 있는 genotype이 있는가?
 
 지난 포스트에서 보셨듯이 gene의 조합인 chromosome으로 이루어진 기존 NE의 genotype으로는 topology를 표현하는 것이 불가능했지요. NEAT에서는 genotype을 네트워크의 node를 나타내는 node gene의 list와 네트워크의 weight를 나타내는 connection gene의 list로 구성하는 direct encoding 방식을 택하였습니다 (살짝 off the topic이지만, indirect encoding은 compact한 representation이 가능하다는 장점이 있지만 구현과 해석이 복잡하다는 단점이 있습니다). Node gene과 connection gene의 list로 phenotype(network)을 바로 만들어낼 수는 있게 되었지만 이런 structure 정보를 가진 genotype으로 crossover를 하려니 문제가 있습니다. _Competing Conventions Problem_ 이라 부르는 문제인데요, 일반적인 non-topological NE에도 존재하던 문제였습니다. 아래의 예를 보시면  _Competing Conventions Problem_ 에 대한 직관적인 이해가 가능할 것 같습니다. Hidden layer의 node들의 순서만 다른, 사실상 거의 동일한 기능을 수행하는 네트워크 2개가 parents로 선택되어 crossover를 수행하게 되면 자칫 학습된 task 수행능력을 잃은 멍청한 offspring을 만들어내게 될 경우가 생기는거죠. Hidden layer A, B, C가 task 수행에 필요하여 학습된 상태인데, [A, B, C]와 [C, B, A] 네트워크를 mating 시켜 [A, B, A]와 [C, B, C]가 만들어지면 next generation의 fitness가 곤두박질 칠 것입니다.
 
