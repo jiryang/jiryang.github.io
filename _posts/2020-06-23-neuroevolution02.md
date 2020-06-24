@@ -16,7 +16,7 @@ mathjax: true
 
 Gradient Descent              |  Neuroevolution
 :----------------------------:|:-------------------------:
-![Fig1](https://jiryang.github.io/img/gradient_descent_europe.png "Neuroevolution"){: width="40%"}  | ![Fig2](https://jiryang.github.io/img/neuroevolution_europe.png "Neuroevolution"){: width="40%"}
+![Fig1](https://jiryang.github.io/img/gradient_descent_europe.png "Neuroevolution"){: width="90%"}  | ![Fig2](https://jiryang.github.io/img/neuroevolution_europe.png "Neuroevolution"){: width="90%"}
 
 
 Search space의 차원이 높은 경우 경험을 바탕으로 가치함수를 업데이트하는 방식으로 학습하는 RL보다 behavior를 직접 학습하는 NE가 성능이 더 좋을 것입니다. 음, 더 잘 이해하려면 RL에 대한 기본 지식이 있으면 좋은데, 일단은 강화학습에 대해 잘 정리된 블로그를 링크하고 넘어가도록 하고, 기회가 되면 다시 한 번 돌아보도록 하겠습니다 ([링크](https://greentec.github.io/tags/#reinforcement-learning), 열심히 공부하시는 분들이 많습니다 ^^). 이러한 NE의 가능성에도 불구하고 기존의 방식은 네트워크의 topology는 고정한 채 weight만 학습하는 경우가 대부분이었습니다. 2001년에 NEAT가 발표되기 전 네트워크의 구조를 학습하려는 시도가 전혀 없진 않았지만 썩 좋은 결과를 내지는 못하고 있었습니다. 'Topology(structure)를 weight와 동시에 학습하는 것이 weight만 학습하는 것과 비교해 성능이 더 좋은가?' 라는 질문에 답하기 위해서는 해결해야 할 문제들이 몇 가지 있습니다:
