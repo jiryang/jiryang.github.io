@@ -75,9 +75,15 @@ $$sh(\cdot) = 0$$ if $$\delta(i, j) < \delta_{threshold}$$ and $$sh(\cdot) = 1$$
 NEAT는 uniform minimal structure를 가지는 population에서부터 진화를 시작하여 problem solving에 필요한 만큼만의 구조적 변화를 일으키는 방식으로 이 문제를 간단히 해결합니다. 앞서 mutation에서 historical marker를 사용해 동일한 structure가 다른 innovation number를 가지고 중복적으로 생기는 걸 막았던 것도 minimal topology 증가를 도와주는 부분이라고 할 수 있겠죠.
 
 
-이후 NEAT는 hypercube 기반의 indirect encoding을 적용한 HyperNEAT 등으로 연구가 확장되었고 다양한 강화학습 문제에 경쟁력있는 솔루션임을 보였습니다. Demo 영상 몇 개 보시고 마무리하겠습니다. 다음 포스트부터는 Uber AI의 Neuroevolution research로 넘어가보죠.
+이상 살펴본 NEAT의 핵심은 Innovation number를 이용한 historical marking입니다. 이를 통해 효과적인 chromosome expression이 가능했고, _Competing Conventions Problem_ , mutation과 crossover의 문제, 그리고 speciation과 minimal topology의 모든 문제들을 해결할 수 있었습니다.
+
+![Fig7](https://jiryang.github.io/img/NEAT_dependencies.png "Component Dependencies in NEAT"){: width="80%"}{: .aligncenter}
 
 
-<div align="center">
-  <a href="https://youtu.be/rU5ID0mcWdU"><img src="https://youtu.be/rU5ID0mcWdU/0.jpg" alt="HyperNEAT - Atari Boxing"></a>
-</div>
+이후 NEAT는 hypercube 기반의 indirect encoding을 적용한 HyperNEAT 등으로 연구가 확장되었고 다양한 강화학습 문제에 경쟁력있는 솔루션임을 보였습니다. 예전에 읽었던 논문을 리뷰하면서 개인적으로는 즐거운 시간을 보냈네요. Demo 영상 몇 개 보시고 마무리하겠습니다. 다음 포스트부터는 Uber AI의 Neuroevolution research로 넘어가보죠.
+
+
+![Fig8](https://jiryang.github.io/img/NEAT_pacman.gif "Pacman using NEAT"){: width="70%"}{: .aligncenter}
+
+
+![Fig9](https://jiryang.github.io/img/NEAT_flappybird.gif "Flappy Bird using NEAT"){: width="50%"}{: .aligncenter}
