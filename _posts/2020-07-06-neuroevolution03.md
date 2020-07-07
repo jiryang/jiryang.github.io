@@ -29,9 +29,9 @@ Current state $$s_t$$로부터 다음 action $$a_t$$를 찾는 $$policy$$ ($$\pi
 $\qquad$ $$V^{\pi}(s_t) \equiv r_t + \gamma r_{t+1} + \gamma^2r_{t+2} + ... \equiv \sum^{\infty}_{i=0}\gamma^ir_{t+i}$$<br><br>
 이제 $$optimal policy \pi^{\ast}$$를 다음과 같이 정의할 수 있습니다:<br>
 $\qquad$ $$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$<br><br>
-위 정의는 '어떤 state에서 $$optimal policy$$란 해당 state로부터의 cumulative reward를 최대화하는 $$policy$$이다'라는 의미로 직관적입니다.
+위 정의는 '어떤 state에서 $$optimal  policy$$란 해당 state로부터의 cumulative reward를 최대화하는 $$policy$$이다'라는 의미로 직관적입니다.
 
 
 **Q Learning**
-위의 정의에 따라 given state $$s$$에서의 $$optimal policy$$를 다음과 같이 표현할 수 있습니다:<br>
+위의 정의에 따라 given state $$s$$에서의 $$optimal  policy$$를 다음과 같이 표현할 수 있습니다:<br>
 $\qquad$ $$\pi^{\ast}(s) = argmax_{a} \left[r(s, a) + \gamma V^{\ast}(\delta(s, a)) \right]$$<br><br>
