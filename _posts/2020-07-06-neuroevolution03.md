@@ -33,5 +33,5 @@ $\qquad$ $$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$<br><br>
 
 
 **Q Learning**
-위의 정의에 따라 given state $$s$$에서의 $$optimal\quadpolicy$$를 다음과 같이 표현할 수 있습니다:<br>
+위의 정의에 따라 given state $$s$$에서의 $$optimal \; policy$$를 다음과 같이 표현할 수 있습니다:<br>
 $\qquad$ $$\pi^{\ast}(s) = argmax_{a} \left[r(s, a) + \gamma V^{\ast}(\delta(s, a)) \right]$$<br><br>
