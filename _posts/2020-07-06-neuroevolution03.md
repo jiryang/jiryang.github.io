@@ -28,4 +28,4 @@ $$Optimal policy$$를 찾기 위해 RL problem을 Markov Decision Process (MDP)�
 Current state $$s_t$$로부터 다음 action $$a_t$$를 찾는 $$policy$$ ($$\pi(s_t)=a_t$$)를 $$\pi : S \rightarrow A$$로 정의합니다. 그리고 이 $$\pi$$에 의해 얻어지는 cumulative reward를 $$V^{\pi}(s_t)$$라고 하면 다음과 같은 식이 성립합니다:<br>
 $$V^{\pi}(s_t) \equiv r_t + \gamma r_{t+1} + \gamma^2r_{t+2} + ... \equiv \sum^{\infty}_{i=0}\gamma^ir_{t+i}$$<br>
 이제 $$optimal policy \pi^{\ast}$$를 다음과 같이 수식화 할 수 있습니다:<br>
-$$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$
+>> $$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$
