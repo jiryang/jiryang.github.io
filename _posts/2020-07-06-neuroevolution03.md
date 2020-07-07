@@ -35,3 +35,4 @@ $\qquad$ $$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$<br><br>
 **Q Learning**
 위의 정의에 따라 given state $$s$$에서의 $$optimal \; policy$$를 다음과 같이 표현할 수 있습니다:<br>
 $\qquad$ $$\pi^{\ast}(s) = argmax_{a} \left[r(s, a) + \gamma V^{\ast}(\delta(s, a)) \right]$$<br><br>
+의미를 다시 보자면, 'state $$s$$에서의 $$optimal \; policy$$란 이 state에서 어떤 action $$a$$를 취했을 때 "immediate reward $$r(s, a)$$와 그 action으로 도달하게 되는 후속 state $$\delta(s, a)$$의 optimal discounted cumulative reward $$\gamma V^{\ast}(\delta(s, a))$$의 합"이 최대가 되도록 하는 $$policy$$를 말한다'는 뜻입니다. 이해가 되시나요?
