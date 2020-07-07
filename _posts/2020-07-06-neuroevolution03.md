@@ -49,16 +49,16 @@ $\qquad$ $$Q(s, a) \equiv r(s, a) + \gamma max_{a'} Q(\delta(s, a), a')$$<br>
 $\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a'))$$<br><br>
 이제 아래의 pseudocode대로 충분히 여러차례 반복수행을 하게되면 Q-estimation이 real Q에 수렴하게 됩니다:<br>
 - - -
-Q learning algorithm
-For each $$s, a$$ initialize the table entry $$\hat{Q}(s, a)$$ to zero.
-Observe the current state $$s$$
-Do forever:
-   Select an action $$a$$ and execute it
-   Receive immediate reward $$r$$
-   Observe the new state $$s'$$
-   Update the table entry for $$\hat{Q}(s, a) as follows:
+Q learning algorithm<br>
+For each $$s, a$$ initialize the table entry $$\hat{Q}(s, a)$$ to zero.<br>
+Observe the current state $$s$$<br>
+Do forever:<br>
+   Select an action $$a$$ and execute it<br>
+   Receive immediate reward $$r$$<br>
+   Observe the new state $$s'$$<br>
+   Update the table entry for $$\hat{Q}(s, a) as follows:<br>
       $\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a'))$$<br>
-   $$s \leftarrow s'$$
+   $$s \leftarrow s'$$<br>
 - - -
 
 
