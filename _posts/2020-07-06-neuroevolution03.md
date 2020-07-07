@@ -40,13 +40,25 @@ $\qquad$ $$\pi^{\ast}(s) = argmax_{a} \left[r(s, a) + \gamma V^{\ast}(\delta(s, 
 $\qquad$ $$Q(s, a) \equiv r(s, a) + \gamma V^{\ast}(\delta(s, a))$$<br><br>
 스포일러를 좀 풀자면, 이 Q-function은 이후 Q-estimate인 $$\hat{Q}$$ term을 이용하여 recursive한 식으로 만듭니다. 그리고 $$\hat{Q}$$가 $$Q$$로 수렴되도록 모든 state의 모든 action의 pair를 무한히 (여러 차례) 반복해서 수행한다는 것이 Q-learning입니다. 이 과정을 식으로 나타내면 다음과 같습니다:<br>
 $\qquad$ $$\pi^{\ast}(s) = argmax_a Q(s, a)$$<br>
-위 식은 $$optimal \; policy$$의 예전 식을 그냥 $$Q$$ term을 넣어서 rewrite한 것에 불과합니다.<br><br>
+위 식은 $$optimal \; policy$$의 예전 식을 그냥 $$Q$$ term을 넣어서 rewrite한 것에 불과합니다.<br>
 $\qquad$ $$V^{\ast}(s) = max_{a'}Q(s, a')$$<br>
-이건 state $$s$$에서의 maximum discounted cumulative reward를 뜻하는 $$V^{\ast}$$를 식으로 쓴 것이고요.<br>
+이건 state $$s$$에서의 maximum discounted cumulative reward를 뜻하는 $$V^{\ast}$$를 식으로 쓴 것이고요.<br><br>
 이제 위의 Q-function을 다음과 같이 다시 쓸 수 있습니다:<br>
-$\qquad$ $$Q(s, a) \equiv r(s, a) + \gamma max_{a'} Q(\delta(s, a), a')$$<br><br>
-이 식을 estimated Q-function인 $$\hat{Q}$$로 바꿔쓰면 (next state는 $$\delta(s, a) = s'$$ 라고 쓰고요),<br>
+$\qquad$ $$Q(s, a) \equiv r(s, a) + \gamma max_{a'} Q(\delta(s, a), a')$$<br>
+이 식을 estimated Q-function인 $$\hat{Q}$$로 바꿔쓰면 (next state는 $$\delta(s, a) = s'$$ 라고 쓰고요), 드디어 최종 식이 나옵니다:<br>
 $\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a'))$$<br><br>
-
+이제 아래의 pseudocode대로 충분히 여러차례 반복수행을 하게되면 Q-estimation이 real Q에 수렴하게 됩니다:
+'''
+Q learning algorithm
+For each $$s, a$$ initialize the table entry $$\hat{Q}(s, a)$$ to zero.
+Observe the current state $$s$$
+Do forever:
+- Select an action $$a$$ and execute it
+- Receive immediate reward $$r$$
+- Observe the new state $$s'$$
+- Update the table entry for $$\hat{Q}(s, a) as follows:
+$\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a'))$$<br>
+- $$s \leftarrow s'$$
+'''
 
 
