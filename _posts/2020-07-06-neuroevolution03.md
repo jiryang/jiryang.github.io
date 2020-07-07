@@ -47,18 +47,18 @@ $\qquad$ $$V^{\ast}(s) = max_{a'}Q(s, a')$$<br>
 $\qquad$ $$Q(s, a) \equiv r(s, a) + \gamma max_{a'} Q(\delta(s, a), a')$$<br>
 이 식을 estimated Q-function인 $$\hat{Q}$$로 바꿔쓰면 (next state는 $$\delta(s, a) = s'$$ 라고 쓰고요), 드디어 최종 식이 나옵니다:<br>
 $\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a'))$$<br><br>
-이제 아래의 pseudocode대로 충분히 여러차례 반복수행을 하게되면 Q-estimation이 real Q에 수렴하게 됩니다:
-```{r, tidy=FALSE}
+이제 아래의 pseudocode대로 충분히 여러차례 반복수행을 하게되면 Q-estimation이 real Q에 수렴하게 됩니다:<br>
+```
 Q learning algorithm
 For each $$s, a$$ initialize the table entry $$\hat{Q}(s, a)$$ to zero.
 Observe the current state $$s$$
 Do forever:
-- Select an action $$a$$ and execute it
-- Receive immediate reward $$r$$
-- Observe the new state $$s'$$
-- Update the table entry for $$\hat{Q}(s, a) as follows:
-$\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a'))$$<br>
-- $$s \leftarrow s'$$
+   Select an action $$a$$ and execute it
+   Receive immediate reward $$r$$
+   Observe the new state $$s'$$
+   Update the table entry for $$\hat{Q}(s, a) as follows:
+      $\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a'))$$<br>
+   $$s \leftarrow s'$$
 ```
 
 
