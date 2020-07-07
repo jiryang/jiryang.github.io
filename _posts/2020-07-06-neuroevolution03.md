@@ -25,7 +25,13 @@ RL에서 풀고자 하는 문제는 이렇게 Environment 안에서 sensing 및 
 $$Optimal policy$$를 찾기 위해 RL problem을 Markov Decision Process (MDP)로 formalize할 수 있습니다 (MDP에 대해 궁금하시면 [여기](https://towardsdatascience.com/introduction-to-reinforcement-learning-markov-decision-process-44c533ebf8da) 참고). MDP는 유한한 environment state space인 $$S$$, 각 state에서 가능한 action의 집합인 $$A$$ (state $$s$$에서 가능한 action들의 집합은 $$A_s$$로 표현), next state $$s_{t+1}$$이 current state $$s_t$$와, 당시의 action $$a_t$$에 의해 결정된다는 state transition function $$s_{t+1}=\delta(s_t, a_t)$$, 그리고 action $$a_t$$에 의해 state $$s_t$$가 $$s_{t+1}$$로 전이될 때 주어지는 reward function $$r(s_t, a_t)$$의 tuple <$$S$$, $$A$$, $$\delta$$, $$r$$>으로 나타낼 수 있고, 여기에 immediate vs delayed (future) reward 사이의 중요도를 구분함으로써 continuous task에서 reward가 무한대에 이르는 것을 막아주기 위한 discount factor $$\gamma$$를 추가한 <$$S$$, $$A$$, $$\delta$$, $$r$$, $$\gamma$$>의 5-tuple로 표현합니다.
 
 
-Current state $$s_t$$로부터 다음 action $$a_t$$를 찾는 $$policy$$ ($$\pi(s_t)=a_t$$)를 $$\pi : S \rightarrow A$$로 정의합니다. 그리고 이 $$\pi$$에 의해 얻어지는 cumulative reward를 $$V^{\pi}(s_t)$$라고 하면 다음과 같은 식이 성립합니다:<br>
-$$V^{\pi}(s_t) \equiv r_t + \gamma r_{t+1} + \gamma^2r_{t+2} + ... \equiv \sum^{\infty}_{i=0}\gamma^ir_{t+i}$$<br>
-이제 $$optimal policy \pi^{\ast}$$를 다음과 같이 수식화 할 수 있습니다:<br>
-$\qquad$ $$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$
+Current state $$s_t$$로부터 다음 action $$a_t$$를 찾는 $$policy$$ ($$\pi(s_t)=a_t$$)를 $$\pi : S \rightarrow A$$로 정의합니다. 그리고 이 $$\pi$$에 의해 얻어지는 cumulative reward를 $$V^{\pi}(s_t)$$라고 하면 다음과 같은 정의가 성립합니다:<br>
+$\qquad$ $$V^{\pi}(s_t) \equiv r_t + \gamma r_{t+1} + \gamma^2r_{t+2} + ... \equiv \sum^{\infty}_{i=0}\gamma^ir_{t+i}$$<br><br>
+이제 $$optimal policy \pi^{\ast}$$를 다음과 같이 정의할 수 있습니다:<br>
+$\qquad$ $$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$<br><br>
+위 정의는 '어떤 state에서 $$optimal policy$$란 해당 state로부터의 cumulative reward를 최대화하는 $$policy$$이다'라는 의미로 직관적입니다.
+
+
+**Q Learning**
+위의 정의에 따라 given state $$s$$에서의 $$optimal policy$$를 다음과 같이 표현할 수 있습니다:<br>
+$\qquad$ $$\pi^{\ast}(s) = argmax_{a} \left r(s, a) + \gamma V^{\ast}(\delta(s, a)) \right$$<br><br>
