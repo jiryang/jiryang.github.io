@@ -58,7 +58,7 @@ Do forever:<br>
 - Observe the new state $$s'$$<br>
 - Update the table entry for $$\hat{Q}(s, a)$$ as follows:<br>
       $\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a')$$
-- $$s \leftarrow s'$$
+- $s \leftarrow s'$
 
 - - -
 
