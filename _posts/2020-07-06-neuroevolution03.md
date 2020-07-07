@@ -53,12 +53,12 @@ Q learning algorithm<br>
 For each $$s, a$$ initialize the table entry $$\hat{Q}(s, a)$$ to zero.<br>
 Observe the current state $$s$$<br>
 Do forever:<br>
-   Select an action $$a$$ and execute it<br>
-   Receive immediate reward $$r$$<br>
-   Observe the new state $$s'$$<br>
-   Update the table entry for $$\hat{Q}(s, a) as follows:<br>
+- Select an action $$a$$ and execute it<br>
+- Receive immediate reward $$r$$<br>
+- Observe the new state $$s'$$<br>
+- Update the table entry for $$\hat{Q}(s, a)$$ as follows:<br>
       $\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a'))$$<br>
-   $$s \leftarrow s'$$<br>
+- $$s \leftarrow s'$$<br>
 - - -
 
 
