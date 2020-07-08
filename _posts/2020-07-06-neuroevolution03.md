@@ -10,7 +10,8 @@ mathjax: true
 
 오랜만에 쓰네요.
 
-엎어진 김에 쉬어간다고 traditional reinforcement learning (RL)에 대해 정리하고 넘어가도록 하겠습니다.
+엎어진 김에 쉬어간다고 traditional reinforcement learning (RL)에 대해 정리하고 넘어가도록 하겠습니다. 
+<!--Deep Q Networks (DQN)를 알기 위한 배경지식을 갖추려고 살펴보는 것이기 때문에 일단은 Q learning만 살펴보도록 하고, 다른 traditional RL 방법들인 합니다. Q learning에 대해 예제를 통해서 설명해 놓은 글들은 많기도 하고, Q learning을 쓰는 것보다는 이 알고리즘이 동작하는 원리에 대해 이해하는 것이 더 필요하기 때문에 이론적으로 알아보도록 하겠습니다.-->
 
 RL에 대해 조금이라도 찾아보신 분들이라면 Agent가 Environment로 Action을 가하고, Environment로부터 State와 Reward를 받아오는 아래 그림이 매우 익숙하실 것입니다. 굳이 한 줄 쓰자면, Environment로부터 time $$t$$의 current state $$S_t$$를 받은 Agent가 이 state에서 가능한 action $$A_t$$를 수행하면 이 action에 따른 reward $$R_{t+1}$$을 받습니다. 이후 Environment에서는 state를 $$S_{t+1}$$로 업데이트하고... 이 과정을 goal state가 발견될 때까지 반복하는 것입니다. 
 
@@ -32,13 +33,13 @@ $\qquad$ $$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$<br><br>
 위 정의는 '어떤 state에서 $$optimal \; policy$$란 해당 state로부터의 cumulative reward를 최대화하는 $$policy$$이다'라는 의미로 직관적입니다.
 
 
-**Q-Learning**
+**Q-Learning (A representative of value-based RL methods)**<br><br>
 위의 정의에 따라 given state $$s$$에서의 $$optimal \; policy$$를 다음과 같이 표현할 수 있습니다:<br>
 $\qquad$ $$\pi^{\ast}(s) = argmax_{a} \left[r(s, a) + \gamma V^{\ast}(\delta(s, a)) \right]$$<br><br>
 의미를 다시 보자면, 'state $$s$$에서의 $$optimal \; policy$$란 이 state에서 어떤 action $$a$$를 취했을 때 "_immediate reward $$r(s, a)$$와 그 action으로 도달하게 되는 후속 state $$\delta(s, a)$$의 maximum discounted cumulative reward $$\gamma V^{\ast}(\delta(s, a))$$의 합_"이 최대가 되도록 하는 $$policy$$를 말한다'는 뜻입니다.<br>
 그런데 이 식은 $$r(\centerdot)$$과 $$\delta(\centerdot)$$에 대한 정보가 없이는 풀 수가 없습니다. 그래서 이 term들을 없애기 위해 고안된 것이 다음의 Q-function입니다:<br>
 $\qquad$ $$Q(s, a) \equiv r(s, a) + \gamma V^{\ast}(\delta(s, a))$$<br><br>
-스포일러를 좀 풀자면, 이 Q-function은 이후 Q-estimate인 $$\hat{Q}$$ term을 이용하여 recursive한 식으로 만듭니다. 그리고 $$\hat{Q}$$가 $$Q$$로 수렴되도록 모든 state의 모든 action의 pair를 무한히 (여러 차례) 반복해서 수행한다는 것이 Q-learning입니다. 이 과정을 식으로 나타내면 다음과 같습니다:<br>
+스포일러를 좀 풀자면, 이 Q-function은 이후 Q-estimate인 $$\hat{Q}$$ term을 이용하여 recursive한 식으로 만듭니다. 그리고 $$\hat{Q}$$가 $$Q$$로 수렴되도록 모든 state의 모든 action의 pair를 stochastically 수행한다는 것이 Q-learning입니다. 이 과정을 식으로 나타내면 다음과 같습니다:<br>
 $\qquad$ $$\pi^{\ast}(s) = argmax_a Q(s, a)$$<br>
 위 식은 $$optimal \; policy$$의 예전 식을 그냥 $$Q$$ term을 넣어서 rewrite한 것에 불과합니다.<br>
 $\qquad$ $$V^{\ast}(s) = max_{a'}Q(s, a')$$<br>
@@ -52,7 +53,7 @@ $\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a'))$$
 Q learning algorithm<br>
 For each $$s, a$$ initialize the table entry $$\hat{Q}(s, a)$$ to zero.<br>
 Observe the current state $$s$$<br>
-Do forever:<br>
+Do forever:
 - Select an action $$a$$ and execute it<br>
 - Receive immediate reward $$r$$<br>
 - Observe the new state $$s'$$<br>
@@ -62,3 +63,16 @@ Do forever:<br>
 
 - - -
 
+
+Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward table을 만들고, Q table을 학습하는 지는 [여기](http://mnemstudio.org/path-finding-q-learning-tutorial.htm)를 참고하시면 될 것 같습니다. 보다 더 일반적인 개념으로 temporal difference learning도 있고, Q learning에 randomness를 가미하는 \epsilon-greedy 등등의 방법들은 나중에 필요하게 되면 그 때 소환하도록 하고 지금은 과감히 생략합니다. 
+
+
+**Deep Q Networks**
+ 
+
+
+**Policy Gradient**
+앞서 살펴본 Q learning은 '$optimal \; policy$란 cumulative reward를 maximize하는 것이므로 모든 state의 모든 action에 대한 quality value를 계산해두면 어느 state에서건 goal에 이르는 optimal (cumulative reward를 maximize하는) action을 구할 수 있다'로 요약할 수 있습니다.
+
+Policy Gradient theorem의 길고 복잡한 증명은 자세한 설명이 있는 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다. 이 theorem에 의해 reward function $J(\theta)$의 derivative가 stochastic policy $\pi_{\theta}(a | s)$의 derivative와 비례하고,
+$$\nabla_{\theta}J(\theta) \varpropto \sum_{s \in S}d^\pi(s) \sum_{a \in A}Q^{\pi}(s, a)\nabla_{\theta}\pi_{\theta}(a | s)$$
