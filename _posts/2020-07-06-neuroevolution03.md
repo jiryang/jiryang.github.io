@@ -77,4 +77,4 @@ Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward tab
 Policy Gradient theorem의 길고 복잡한 증명은 자세한 설명이 있는 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다. 이 theorem에 의해 reward function $J(\theta)$의 derivative가 stochastic policy $\pi_{\theta}(a \mid s)$의 derivative와 비례하고,
 $\qquad$ $$\nabla_{\theta}J(\theta) \varpropto \sum_{s \in S}d^\pi(s) \sum_{a \in \mathcal{A}}Q^{\pi}(s, a)\nabla_{\theta}\pi_{\theta}(a \mid s)$$
 위 식의 우변은 다음과 같이 재정리할 수 있습니다:
-$\qquad$ $$\sum_{a \in \mathcal{A}}Q^{\pi}(s, a)\nabla_{\theta}\pi_{\theta}(a \mid s) = E_{\pi}\left Q^{\pi}(s, a)\nabla_{\theta}ln \pi_{\theta}(a \mid s) \right]$$
+$\qquad$ $$\sum_{a \in \mathcal{A}}Q^{\pi}(s, a)\nabla_{\theta}\pi_{\theta}(a \mid s) = E_{\pi}\left[ Q^{\pi}(s, a)\nabla_{\theta}ln \pi_{\theta}(a \mid s) \right]$$
