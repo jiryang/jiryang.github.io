@@ -33,7 +33,7 @@ $\qquad$ $$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$<br><br>
 위 정의는 '어떤 state에서 $$optimal \; policy$$란 해당 state로부터의 cumulative reward를 최대화하는 $$policy$$이다'라는 의미로 직관적입니다.
 
 
-**Q-Learning (A representative of value-based RL methods)**<br><br>
+**Q-Learning (Value-based)**<br><br>
 위의 정의에 따라 given state $$s$$에서의 $$optimal \; policy$$를 다음과 같이 표현할 수 있습니다:<br>
 $\qquad$ $$\pi^{\ast}(s) = argmax_{a} \left[r(s, a) + \gamma V^{\ast}(\delta(s, a)) \right]$$<br><br>
 의미를 다시 보자면, 'state $$s$$에서의 $$optimal \; policy$$란 이 state에서 어떤 action $$a$$를 취했을 때 "_immediate reward $$r(s, a)$$와 그 action으로 도달하게 되는 후속 state $$\delta(s, a)$$의 maximum discounted cumulative reward $$\gamma V^{\ast}(\delta(s, a))$$의 합_"이 최대가 되도록 하는 $$policy$$를 말한다'는 뜻입니다.<br>
@@ -71,10 +71,78 @@ Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward tab
  
 
 
-**Policy Gradient**
+**REINFORCE (Policy-based)**
 앞서 살펴본 Q learning은 '$optimal \; policy$란 cumulative reward를 maximize하는 것이므로 모든 state의 모든 action에 대한 quality value를 계산해두면 어느 state에서건 goal에 이르는 optimal (cumulative reward를 maximize하는) action을 구할 수 있다'로 요약할 수 있습니다.
 
-Policy Gradient theorem의 길고 복잡한 증명은 자세한 설명이 있는 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다. 이 theorem에 의해 reward function $J(\theta)$의 derivative가 stochastic policy $\pi_{\theta}(a \mid s)$의 derivative와 비례하고,
+Policy Gradient theorem의 길고 복잡한 증명은 자세한 설명이 있는 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다. 이 theorem에 의해 objective reward function $J(\theta)$의 derivative (gradient)가 stochastic policy $\pi_{\theta}(a \mid s)$의 derivative (gradient)와 비례하고,
 $\qquad$ $$\nabla_{\theta}J(\theta) \varpropto \sum_{s \in S}d^\pi(s) \sum_{a \in \mathcal{A}}Q^{\pi}(s, a)\nabla_{\theta}\pi_{\theta}(a \mid s)$$<br><br>
 위 식의 우변은 다음과 같이 재정리할 수 있습니다:
-$\qquad$ $$\sum_{a \in \mathcal{A}}Q^{\pi}(s, a)\nabla_{\theta}\pi_{\theta}(a \mid s) = \mathbb{E}_{\pi}\left[ Q^{\pi}(s, a)\nabla_{\theta}ln \pi_{\theta}(a \mid s) \right]$$<br><br>
+$\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi}\left[ Q^{\pi}(s, a)\nabla_{\theta}ln \pi_{\theta}(a \mid s) \right]$$<br><br>
+
+
+REINFORCE는 위 식의 $\hat{Q}$ term을 Monte-Carlo 방식(반복 시행을 통한 통계값 유추)으로 찾습니다.
+$\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi}\left[ G_t\nabla_{\theta}ln \pi_{\theta}(A_t \mid S_t) \right]$$<br><br>
+여기서 $G_t$는 discounted future reward입니다: $G_t = \sum^{\infty}_{k=0} \gamma^k R_{t+k+1}$<br><br>
+Pseudocode를 보면 이해하기 쉽습니다:<br>
+- - -
+REINFORCE algorithm<br>
+Initialize the policy parameter $\theta$ at random.<br>
+Generate one<br>
+Do forever:
+- Generate an episode $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$ following policy $\pi(\cdot \mid \cdot, \theta)$<br>
+- Loop for each step of the episode $t = 0, 1, ..., T-1$:<br>
+-- $G_t \leftarrow \sum^T_{k=t+1} \gamma^{k-t-1}R_k$<br>
+-- $\theta \leftarrow \theta + \alpha \gamma^t G\nabla ln \pi(A_t \mid S_t, \theta)$
+
+- - -
+asdf
+
+discounted feature return with reference to the opening
+direction in the policy space will maximize the change to repeat the action A_t
+>> multiplication of these two will increase the probability of taking actions with high expected feature returns
+>> agent learns over time in this way
+
+each episode flashes what has been learnt --> not sample efficient
+
+value-based
+too complex
+non-deterministic, if optimal policy is deterministic, even epsilon-greedy is wasteful
+DQN does not work with large or continuous action spaces
+
+policy-based
+stochastic but approaching deterministic solution (policy) over time
+PG deal directly with choosing actions
+no need to compute precise values for each state
+returns a matrix of probabilities for taking each possible action
+choose greedy action, or weighted softmax action (when explitation is important in training)
+1. Start out with an arbitrary random policy
+2. Sample some actions in the environment
+3. If rewards are better than expected, increase probability of taking those actions
+4. If rewards are worse, decrease probability
+Policy Functions
+outputs raw numbers called logits, which are inputs to softmax function
+softmax squeezes numbers into probability 0-1
+prob used to select action
+
+L = -Q_s,a log(pi(a|s))
+negative sign is for gradient ascent
+
+
+value function을 배운다는건 lookahead를 가지는 것과 비슷하다고도 할 수 있다.
+현재 state에서 이 action을 취하면 어떤 값이 나올 지를 알 수 있다
+small changes in the environment에 resilient하다고도 볼 수 있다 
+
+
+RL: hyper-parameter tuning에 very high sensitive
+
+
+Links mentioned in the video:
+⦁ PPO paper:   https://arxiv.org/abs/1707.06347
+⦁ TRPO paper: https://arxiv.org/abs/1502.05477
+⦁ OpenAI PPO blogpost: https://blog.openai.com/openai-baseli...
+⦁ Aurelien Geron: KL divergence and entropy in ML: https://youtu.be/ErfnhcEV1O8
+⦁ Deep RL Bootcamp - Lecture 5: https://youtu.be/xvRrgxcpaHY
+⦁ RL-adventure PyTorch implementation: https://github.com/higgsfield/RL-Adve...
+⦁ OpenAI Baselines TensorFlow implementation: https://github.com/openai/baselines
+
+Single episode of the game을 policy의 rollout이라고 부름
