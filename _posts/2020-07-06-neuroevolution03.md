@@ -76,13 +76,14 @@ Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward tab
 
 Policy Gradient theorem의 길고 복잡한 증명은 자세한 설명이 있는 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다. 이 theorem에 의해 objective reward function $J(\theta)$의 derivative (gradient)가 stochastic policy $\pi_{\theta}(a \mid s)$의 derivative (gradient)와 비례하고,
 $\qquad$ $$\nabla_{\theta}J(\theta) \varpropto \sum_{s \in S}d^\pi(s) \sum_{a \in \mathcal{A}}Q^{\pi}(s, a)\nabla_{\theta}\pi_{\theta}(a \mid s)$$<br><br>
-위 식의 우변은 다음과 같이 재정리할 수 있습니다:
+위 식의 우변은 다음과 같이 재정리할 수 있습니다:<br>
 $\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi}\left[ Q^{\pi}(s, a)\nabla_{\theta}ln \pi_{\theta}(a \mid s) \right]$$<br><br>
 
 
 REINFORCE는 위 식의 $\hat{Q}$ term을 Monte-Carlo 방식(반복 시행을 통한 통계값 유추)으로 찾습니다.
 $\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi}\left[ G_t\nabla_{\theta}ln \pi_{\theta}(A_t \mid S_t) \right]$$<br><br>
-여기서 $G_t$는 discounted future reward입니다: $G_t = \sum^{\infty}_{k=0} \gamma^k R_{t+k+1}$<br><br>
+여기서 $G_t$는 discounted future reward입니다:<br>
+$$G_t = \sum^{\infty}_{k=0} \gamma^k R_{t+k+1}$$<br><br>
 Pseudocode를 보면 이해하기 쉽습니다:<br>
 - - -
 REINFORCE algorithm<br>
