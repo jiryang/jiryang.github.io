@@ -91,8 +91,8 @@ Generate one<br>
 Do forever:
 - Generate an episode $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$ following policy $\pi(\cdot \mid \cdot, \theta)$<br>
 - Loop for each step of the episode $t = 0, 1, ..., T-1$:<br>
-- - $G_t \leftarrow \sum^T_{k=t+1} \gamma^{k-t-1}R_k$<br>
-- - $\theta \leftarrow \theta + \alpha \gamma^t G\nabla ln \pi(A_t \mid S_t, \theta)$
+  - $G_t \leftarrow \sum^T_{k=t+1} \gamma^{k-t-1}R_k$<br>
+  - $\theta \leftarrow \theta + \alpha \gamma^t G\nabla ln \pi(A_t \mid S_t, \theta)$
 
 - - -
 asdf
