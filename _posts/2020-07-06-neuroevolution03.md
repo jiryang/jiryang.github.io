@@ -50,7 +50,7 @@ $\qquad$ $$Q(s, a) \equiv r(s, a) + \gamma max_{a'} Q(\delta(s, a), a')$$<br>
 $\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a'))$$<br><br>
 이제 아래의 pseudocode대로 충분히 여러차례 반복수행을 하게되면 Q-estimation이 real Q에 수렴하게 됩니다:<br>
 - - -
-Q learning algorithm<br>
+<<Q learning algorithm>><br>
 For each $$s, a$$ initialize the table entry $$\hat{Q}(s, a)$$ to zero.<br>
 Observe the current state $$s$$<br>
 Do forever:
@@ -79,21 +79,20 @@ $\qquad$ $$\nabla_{\theta}J(\theta) \varpropto \sum_{s \in S}d^\pi(s) \sum_{a \i
 위 식의 우변은 다음과 같이 재정리할 수 있습니다:<br>
 $\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi}\left[ Q^{\pi}(s, a)\nabla_{\theta}ln \pi_{\theta}(a \mid s) \right]$$<br><br>
 
-
-REINFORCE는 위 식의 $\hat{Q}$ term을 Monte-Carlo 방식(반복 시행을 통한 통계값 유추)으로 찾습니다.
+REINFORCE는 위 식의 $\hat{Q}$ term을 Monte-Carlo 방식(반복 시행을 통한 통계값 유추)으로 찾습니다.<br>
 $\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi}\left[ G_t\nabla_{\theta}ln \pi_{\theta}(A_t \mid S_t) \right]$$<br><br>
 여기서 $G_t$는 discounted future reward입니다:<br>
 $\qquad$ $$G_t = \sum^{\infty}_{k=0} \gamma^k R_{t+k+1}$$<br><br>
 Pseudocode를 보면 이해하기 쉽습니다:<br>
 - - -
-REINFORCE algorithm<br>
+<<REINFORCE algorithm>><br>
 Initialize the policy parameter $\theta$ at random.<br>
-Generate one<br>
 Do forever:
 - Generate an episode $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$ following policy $\pi(\cdot \mid \cdot, \theta)$<br>
 - Loop for each step of the episode $t = 0, 1, ..., T-1$:<br>
   - $G_t \leftarrow \sum^T_{k=t+1} \gamma^{k-t-1}R_k$<br>
-  - $\theta \leftarrow \theta + \alpha \gamma^t G\nabla ln \pi(A_t \mid S_t, \theta)$
+  - $\theta \leftarrow \theta + \alpha \nabla_{\theta}J(\theta)$
+<!--  - $\theta \leftarrow \theta + \alpha \gamma^t G\nabla ln \pi(A_t \mid S_t, \theta)$-->
 
 - - -
 asdf
