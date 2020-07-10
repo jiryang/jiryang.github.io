@@ -37,7 +37,7 @@ $\qquad$ $$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$<br><br>
 위의 정의에 따라 given state $$s$$에서의 $$optimal \; policy$$를 다음과 같이 표현할 수 있습니다:<br>
 $\qquad$ $$\pi^{\ast}(s) = argmax_{a} \left[r(s, a) + \gamma V^{\ast}(\delta(s, a)) \right]$$<br><br>
 의미를 다시 보자면, 'state $$s$$에서의 $$optimal \; policy$$란 이 state에서 어떤 action $$a$$를 취했을 때 "_immediate reward $$r(s, a)$$와 그 action으로 도달하게 되는 후속 state $$\delta(s, a)$$의 maximum discounted cumulative reward $$\gamma V^{\ast}(\delta(s, a))$$의 합_"이 최대가 되도록 하는 $$policy$$를 말한다'는 뜻입니다.<br>
-그런데 이 식은 $$r(\centerdot)$$과 $$\delta(\centerdot)$$에 대한 정보가 없이는 풀 수가 없습니다. 그래서 이 term들을 없애기 위해 고안된 것이 다음의 Q-function입니다:<br>
+그런데 이 식은 $$r(\cdot)$$과 $$\delta(\cdot)$$에 대한 정보가 없이는 풀 수가 없습니다. 그래서 이 term들을 없애기 위해 고안된 것이 다음의 Q-function입니다:<br>
 $\qquad$ $$Q(s, a) \equiv r(s, a) + \gamma V^{\ast}(\delta(s, a))$$<br><br>
 스포일러를 좀 풀자면, 이 Q-function은 이후 Q-estimate인 $$\hat{Q}$$ term을 이용하여 recursive한 식으로 만듭니다. 그리고 $$\hat{Q}$$가 $$Q$$로 수렴되도록 모든 state의 모든 action의 pair를 stochastically 수행한다는 것이 Q-learning입니다. 이 과정을 식으로 나타내면 다음과 같습니다:<br>
 $\qquad$ $$\pi^{\ast}(s) = argmax_a Q(s, a)$$<br>
