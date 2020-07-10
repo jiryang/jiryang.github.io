@@ -67,7 +67,7 @@ Do forever:
 Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward table을 만들고, Q table을 학습하는 지는 [여기](http://mnemstudio.org/path-finding-q-learning-tutorial.htm)를 참고하시면 될 것 같습니다. 보다 더 일반적인 개념으로 temporal difference learning도 있고, Q learning에 randomness를 가미하는 $\epsilon$-greedy 등등의 방법들에 대해서는 뒤에 필요한 순간에 설명하도록 하고 지금은 생략합니다. 
 
 
-**Deep Q Networks**
+**Deep Q Networks**<br><br>
 간단하지만 powerful한 Q learning이 여러 toy problem에서 좋은 성능을 보였음에도 많이 사용될 수 없었던건 state와 action의 dimension이 커질수록 (특히 state) Q table의 dimension이 너무 커진다는 문제 때문입니다. 예를 들어 조악한 해상도를 가진 Atari 게임만 해도 Q table의 dimension이 7000x4(상하좌우로 움직이는 경우)나 되는데, camera 입력을 받는 자율주행 자동차 같은건 테이블 크기가 엄청나겠지요. Reward는 상대적으로 매우 sparse 해 질 것이고, 이걸 다 채우도록 학습을 하려면 엄청나게 많은 episode가 필요할 것입니다. 한 마디로 불가능합니다.
 
 
@@ -100,7 +100,7 @@ $\epsilon$-greedy는 DQN에만 해당하는 것은 아니고 traditional Q learn
 
 
 _Soft Update (Target Network)_<br>
-이건 Q table이 네트워크에 녹아있는 DQN pseudocode가 아니라 Q update가 explicit하게 표현된 Q learning을 가지고 설명하는게 더 이해가 쉽겠습니다. 저 위에 Q learning pseudocode를 보시면 estimated Q를 추정하여 업데이트시켜주는 부분이 $\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a')$ 으로 표현되어 있습니다. 우변의 estimation을 가지고 좌변의 target을 update하는 방식인데 $\hat{Q}$ term이 양변에 동일하게 들어가 있기 때문에, 매번 target이 update 될때마다 estimate의 값이 oscillate하게 되어서 $\hat{Q}$가 수렴하기 어려운 문제가 생깁니다. 그래서 별도의 target Q table (DQN의 경우에는 별도의 target Q network이 되겠죠)을 두고 간헐적으로 (원래 Q network보다 드문드문) 업데이트를 함으로써 Q network 수렴을 돕는다는 개념입니다. Target Q network의 update frequency가 아니라 update magnitude를 조절하여 유사한 효과를 노린 경우도 있었습니다 ([링크](https://arxiv.org/pdf/1509.02971.pdf)). 여기선 $target Q = \tau{estimated Q} + (1-\tau){target Q}, \tau = 0.001$ 와 같이 target Q의 update량을 미세하게 만들었습니다.
+이건 Q table이 네트워크에 녹아있는 DQN pseudocode가 아니라 Q update가 explicit하게 표현된 Q learning을 가지고 설명하는게 더 이해가 쉽겠습니다. 저 위에 Q learning pseudocode를 보시면 estimated Q를 추정하여 업데이트시켜주는 부분이 $\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a')$ 으로 표현되어 있습니다. 우변의 estimation을 가지고 좌변의 target을 update하는 방식인데 $\hat{Q}$ term이 양변에 동일하게 들어가 있기 때문에, 매번 target이 update 될때마다 estimate의 값이 oscillate하게 되어서 $\hat{Q}$가 수렴하기 어려운 문제가 생깁니다. 그래서 별도의 target Q table (DQN의 경우에는 별도의 target Q network이 되겠죠)을 두고 간헐적으로 (원래 Q network보다 드문드문) 업데이트를 함으로써 Q network 수렴을 돕는다는 개념입니다. Target Q network의 update frequency가 아니라 update magnitude를 조절하여 유사한 효과를 노린 경우도 있었습니다 ([링크](https://arxiv.org/pdf/1509.02971.pdf)). 여기선 $\hat{Q} = \tau Q + (1-\tau)\hat{Q}, \tau = 0.001$ 와 같이 target Q의 update량을 미세하게 만들었습니다.
 
 
 
