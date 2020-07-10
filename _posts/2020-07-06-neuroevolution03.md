@@ -79,7 +79,7 @@ Q learning이 current episode의 연속적인 state-action pair에 대해 매번
 
 
 _$\epsilon$-Greedy_<br>
-$\epsilon$-greedy는 DQN에만 해당하는 것은 아니고 traditional Q learning에 적용되는 방법으로, Q learning이 greedy한 방식으로 exploitation에만 집중하는 것을 막기 위해 $\epsilon$ 만큼의 확률로 action을 random하게 선택하도록 하는 방법입니다. 알고리즘 수렴을 위해 $\epsilon$은 iteration을 더해가면서 줄여나가기도 합니다.<br><br>
+$\epsilon$-greedy는 DQN에만 해당하는 것은 아니고 traditional Q learning에 적용되는 방법으로, Q learning이 greedy한 방식으로 exploitation에만 집중하는 것을 막기 위해 $\epsilon$ 만큼의 확률로 action을 random하게 선택하도록 하는 방법입니다. 알고리즘 수렴을 위해 $\epsilon$은 iteration을 더해가면서 줄여나가게끔 디자인합니다.<br><br>
 
 - - -
 <<Deep Q learning algorithm (w/ Experience Replay)>><br>
@@ -125,7 +125,11 @@ _Soft Update (Target Network)_<br>
 
 
 **REINFORCE (Policy-based)**<br><br>
-앞서 살펴본 Q learning의 $optimal \; policy$란 cumulative reward를 maximize하는 것이므로 모든 state의 모든 action에 대한 quality value를 계산해두면 어느 state에서건 goal에 이르는 optimal (cumulative reward를 maximize하는) action을 구할 수 있다'로 요약할 수 있습니다.
+앞서 살펴본 Q learning의 $optimal \; policy$란 cumulative reward를 maximize하는 것이므로 모든 state의 모든 action에 대한 quality value를 계산해두면 어느 state에서건 goal에 이르는 optimal (cumulative reward를 maximize하는) action을 구할 수 있다'로 요약할 수 있습니다. 하지만 real-world task에 적용하기에는 여러가지 문제가 있습니다. 우선 앞서 traditional Q learning의 단점으로 지적되었던 state-action space dimension 문제입니다. DQN으로 state space가 Atari game 정도로 확장된 task들에도 적용이 가능해지긴 했지만, 여전히 higher dimensional continuous state space에는 적용이 어렵고, 특히 Atari game과 달리 action space가 continuous한 경우는, discretization과 같은 트릭을 쓴다해도 scaling에 큰 제약이 있습니다. Q network 자체 뿐만 아니라 성능 개선을 위해 추가했던 replay memory의 사이즈도 폭발적으로 증가하게 될 것이기 때문입니다. 또한, exploration을 강화해서 학습을 '넓게'하기 위한 목적으로 추가한 $\epsilon$-greedy도 문제가 될 수 있는데요, optimal policy가 deterministic한 경우 작긴 하지만 계속해서 $\epsilon$만큼의 확률로 random action selection을 하게 되면 수렴 및 performance에 악영향이 있을 수 있습니다. 이러한 이유로 낭비스럽게 모든 state-action pair에 대한 Q value를 학습한 다음 거기서 optimal policy를 구해서 쓰는 간접적인 방법 대신, input state-action pair에 대한 policy를 바로 학습하는 policy gradient method가 고안되었습니다.
+
+
+Policy gradient의 장점은 optimal policy가 deterministic한 경우라면 ($\epsilon$-greedy와 달리) stochastically deterministic하게 수렴하게 되며, optimal policy가 arbitrary한 경우에도 probability-based로 동작하기 때문에 대응이 가능하다는 점을 들 수 있습니다. 두 번째 경우를 좀 더 설명하자면, 예를들어 포커 게임을 학습한 경우 Q learning과 같은 value-based 방법은 낮은 패를 쥐어서 optimal policy가 fold로 나오는 경우에도 policy gradient 방법은 낮은 확률로 블러핑을 할 수도 있습니다. 또한 앞서 설명한대로 모든 state-action space를 탐색하지 않고, probabilistically greedy하게 필요한 action을 선택하는 solution (policy) space만을 탐색하기 때문에 학습이 효과적입니다 (faster with fewer parameters).
+
 
 Policy Gradient theorem의 길고 복잡한 증명은 자세한 설명이 있는 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다. 이 theorem에 의해 objective reward function $J(\theta)$의 derivative (gradient)가 stochastic policy $\pi_{\theta}(a \mid s)$의 derivative (gradient)와 비례하고,<br>
 $\qquad$ $$J(\theta) = \sum_{s \in S}d^{\pi}(s)V^{\pi}(s) = \sum_{s \in S}d^{\pi}(s)\sum_{a \in \mathcal{A}}\pi_{\theta}(a \mid s)Q^{\pi}(s, a)$$<br>
