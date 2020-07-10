@@ -100,6 +100,12 @@ $\qquad$ $\qquad$ Perform a gradient descent step on ${(y_j - Q(\phi_j, a_j; \th
 $\qquad$ **endfor**<br>
 **endfor**
 - - -
+맨 뒷부분의 gradient descent step은 결국 target (current) Q와 estimated Q 사이의 mean-squared error를 구한 것이라고 보셔도 무방합니다.
+~~~
+...
+loss = self.MSE_loss(curr_Q, expected_Q.detach())
+...
+~~~
 
 
 성능 향상을 위해 사용된 혹은 사용 가능한 추가적인 기법들을 몇 개 소개하고 DQN을 마무리할까 합니다.<br>
