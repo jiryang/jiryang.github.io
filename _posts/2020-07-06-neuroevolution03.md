@@ -47,7 +47,7 @@ $\qquad$ $$V^{\ast}(s) = max_{a'}Q(s, a')$$<br>
 이제 위의 Q-function을 다음과 같이 다시 쓸 수 있습니다:<br>
 $\qquad$ $$Q(s, a) \equiv r(s, a) + \gamma max_{a'} Q(\delta(s, a), a')$$<br>
 이 식을 estimated Q-function인 $$\hat{Q}$$로 바꿔쓰면 (next state는 $$\delta(s, a) = s'$$ 라고 쓰고요), 드디어 최종 식이 나옵니다:<br>
-$\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a'))$$<br><br>
+$\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a')$$<br><br>
 이제 아래의 pseudocode대로 충분히 여러차례 반복수행을 하게되면 Q-estimation이 real Q에 수렴하게 됩니다:<br>
 - - -
 <<Q learning algorithm>><br>
@@ -68,7 +68,46 @@ Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward tab
 
 
 **Deep Q Networks**
- 
+간단하지만 powerful한 Q learning이 여러 toy problem에서 좋은 성능을 보였음에도 많이 사용될 수 없었던건 state와 action의 dimension이 커질수록 (특히 state) Q table의 dimension이 너무 커진다는 문제 때문입니다. 예를 들어 조악한 해상도를 가진 Atari 게임만 해도 Q table의 dimension이 7000x4(상하좌우로 움직이는 경우)나 되는데, camera 입력을 받는 자율주행 자동차 같은건 테이블 크기가 엄청나겠지요. Reward는 상대적으로 매우 sparse 해 질 것이고, 이걸 다 채우도록 학습을 하려면 엄청나게 많은 episode가 필요할 것입니다. 한 마디로 불가능합니다.
+
+
+이후 DNN이 high-dimensional real-world problem들을 성공적으로 해결하게 되고, Q learning에도 DNN 방법론을 접목하게 된 것이 Deep Q Networks (DQN) 입니다. DQN은 <$state$, $action$> pair를 입력하면 Q value가 출력되는 DNN을 학습하여 기존의 Q table을 대체하였습니다. 
+
+
+_Experience Replay_<br>
+Q learning이 current episode의 연속적인 state-action pair에 대해 매번 Q table을 업데이트하는 방식이다보니 DQN도 episode가 진행되는 동안 계속해서 weight update를 하게 되는데, 이러면 매 episode의 sequence에 대해 DQN이 overfit되는 문제가 발생합니다. 이러한 consecutive sample 사이의 correlation을 없애기 위해 _Experience Replay_ 라는 기법이 사용됩니다. _Experience Replay_ 는 DQN을 on-policy로 업데이트하는 대신, 매번 consecutive하게 발생하는 experience를 별도의 replay memory에 저장해 두었다가 나중에 off-policy 방식으로 random하게 추출하면서 DQN을 업데이트하는 기법입니다. 이를 이용하면 consecutive expericne의 correlation도 줄일 수 있을 뿐더러, 한 experience가 DQN을 한 번 업데이트하고 사라져버리는 것이 아니라 재활용될 수 있고, mini-batch를 사용한 학습 속도 개선에도 기여할 수 있다는 부가적인 장점도 가지고 있습니다.
+
+
+- - -
+<<Q learning algorithm (w/ Experience Replay)>><br>
+Initialize replay memory<br>
+Observe the current state $$s$$<br>
+Do forever:
+- Select an action $$a$$ and execute it<br>
+- Receive immediate reward $$r$$<br>
+- Observe the new state $$s'$$<br>
+- Update the table entry for $$\hat{Q}(s, a)$$ as follows:<br>
+      $\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a')$$
+- $s \leftarrow s'$
+
+- - -
+
+
+성능 향상을 위해 사용된 혹은 사용 가능한 추가적인 기법들을 몇 개 소개하고 DQN을 마무리할까 합니다.
+
+_$\epsilon$-Greedy_<br>
+$\epsilon$-greedy는 DQN에만 해당하는 것은 아니고 traditional Q learning에 적용되는 방법으로, Q learning이 greedy한 방식으로 exploitation에만 집중하는 것을 막기 위해 $\epsilon$ 만큼의 확률로 action을 random하게 선택하도록 하는 방법입니다. 알고리즘 수렴을 위해 $\epsilon$은 iteration을 더해가면서 줄여나가기도 합니다.
+
+
+_Soft Update (Target Network)_<br>
+이건 Q table이 네트워크에 녹아있는 DQN pseudocode가 아니라 Q update가 explicit하게 표현된 Q learning을 가지고 설명하는게 더 이해가 쉽겠습니다. 저 위에 Q learning pseudocode를 보시면 estimated Q를 추정하여 업데이트시켜주는 부분이 $\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a')$ 으로 표현되어 있습니다. 우변의 estimation을 가지고 좌변의 target을 update하는 방식인데 $\hat{Q}$ term이 양변에 동일하게 들어가 있기 때문에, 매번 target이 update 될때마다 estimate의 값이 oscillate하게 되어서 $\hat{Q}$가 수렴하기 어려운 문제가 생깁니다. 그래서 별도의 target Q table (DQN의 경우에는 별도의 target Q network이 되겠죠)을 두고 간헐적으로 (원래 Q network보다 드문드문) 업데이트를 함으로써 Q network 수렴을 돕는다는 개념입니다. Target Q network의 update frequency가 아니라 update magnitude를 조절하여 유사한 효과를 노린 경우도 있었습니다 ([링크](https://arxiv.org/pdf/1509.02971.pdf)). 여기선 $target Q = \tau{estimated Q} + (1-\tau){target Q}, \tau = 0.001$ 와 같이 target Q의 update량을 미세하게 만들었습니다.
+
+
+
+
+이 외에도 여러 task를 동일한 parameter (learning rate)로 학습하고 성능을 높이기 위해 각 task의 reward를 scale해주는 _Clipping Rewards_ 나 computational cost을 낮추어 더 많은 experience를 확보하기 위한 _Frame Skipping_ 와 같은 트릭들이 사용되었습니다.
+
+
 
 
 **REINFORCE (Policy-based)**<br><br>
