@@ -79,10 +79,10 @@ Q learning이 current episode의 연속적인 state-action pair에 대해 매번
 
 - - -
 <<Deep Q learning algorithm (w/ Experience Replay)>><br>
-Initialize replay memory $\mathcal{D}$ to capacity $\mathcal{N}$<br>
-Initialize action-value function $\mathcal{Q}$ with random weights<br>
-**for** episode = 1, $\mathcal{M}$ **do**<br>
-$\qquad$ Initialize<br>
+Initialize replay memory $\mathcal{D}$ to capacity $N$<br>
+Initialize action-value function $Q$ with random weights<br>
+**for** episode = 1, $M$ **do**<br>
+$\qquad$ Initialize sequence $s_1 = \lbrace x_1 \rbrace and preprocessed sequenced \phi_1 = \phi(s_1)<br>
 **endfor**
 - - -
 
