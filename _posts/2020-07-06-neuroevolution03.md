@@ -75,7 +75,11 @@ Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward tab
 
 
 _Experience Replay_<br>
-Q learning이 current episode의 연속적인 state-action pair에 대해 매번 Q table을 업데이트하는 방식이다보니 DQN도 episode가 진행되는 동안 계속해서 weight update를 하게 되는데, 이러면 매 episode의 sequence에 대해 DQN이 overfit되는 문제가 발생합니다. 이러한 consecutive sample 사이의 correlation을 없애기 위해 _Experience Replay_ 라는 기법이 사용됩니다. _Experience Replay_ 는 DQN을 on-policy로 업데이트하는 대신, 매번 consecutive하게 발생하는 experience를 별도의 replay memory에 저장해 두었다가 나중에 off-policy 방식으로 random하게 추출하면서 DQN을 업데이트하는 기법입니다. 이를 이용하면 consecutive expericne의 correlation도 줄일 수 있을 뿐더러, 한 experience가 DQN을 한 번 업데이트하고 사라져버리는 것이 아니라 재활용될 수 있고, mini-batch를 사용한 학습 속도 개선에도 기여할 수 있다는 부가적인 장점도 가지고 있습니다.
+Q learning이 current episode의 연속적인 state-action pair에 대해 매번 Q table을 업데이트하는 방식이다보니 DQN도 episode가 진행되는 동안 계속해서 weight update를 하게 되는데, 이러면 매 episode의 sequence에 대해 DQN이 overfit되는 문제가 발생합니다. 이러한 consecutive sample 사이의 correlation을 없애기 위해 _Experience Replay_ 라는 기법이 사용됩니다. _Experience Replay_ 는 DQN을 on-policy로 업데이트하는 대신, 매번 consecutive하게 발생하는 experience를 별도의 replay memory에 저장해 두었다가 나중에 off-policy 방식으로 random하게 추출하면서 DQN을 업데이트하는 기법입니다. 이를 이용하면 consecutive expericne의 correlation도 줄일 수 있을 뿐더러, 한 experience가 DQN을 한 번 업데이트하고 사라져버리는 것이 아니라 재활용될 수 있고, mini-batch를 사용한 학습 속도 개선에도 기여할 수 있다는 부가적인 장점도 가지고 있습니다.<br><br>
+
+
+_$\epsilon$-Greedy_<br>
+$\epsilon$-greedy는 DQN에만 해당하는 것은 아니고 traditional Q learning에 적용되는 방법으로, Q learning이 greedy한 방식으로 exploitation에만 집중하는 것을 막기 위해 $\epsilon$ 만큼의 확률로 action을 random하게 선택하도록 하는 방법입니다. 알고리즘 수렴을 위해 $\epsilon$은 iteration을 더해가면서 줄여나가기도 합니다.<br><br>
 
 - - -
 <<Deep Q learning algorithm (w/ Experience Replay)>><br>
@@ -83,15 +87,22 @@ Initialize replay memory $\mathcal{D}$ to capacity $N$<br>
 Initialize action-value function $Q$ with random weights<br>
 **for** episode = 1, $M$ **do**<br>
 $\qquad$ Initialize sequence $s_1 = \lbrace x_1 \rbrace$ and preprocessed sequenced $\phi_1 = \phi(s_1)$<br>
+$\qquad$ **for** $t=1, T$ **do**<br>
+$\qquad$ $\qquad$ With probability $\epsilon$ select a random action $a_t$<br>
+$\qquad$ $\qquad$ otherwise select $a_t = max_a Q^{\ast}(\phi(s_t), a; \theta)$<br>
+$\qquad$ $\qquad$ Execute action $a_t$ in emulator and observe reward $r_t$ and image $x_{t+1}$<br>
+$\qquad$ $\qquad$ Set $s_{t+1} = s_t, a_t, x_{t+1}$ and preprocess $\phi_{t+1} = \phi(s_{t+1})$<br>
+$\qquad$ $\qquad$ Store transition ($\phi_t, a_t, r_t, \phi_{t+1}$) in $\mathcal{D}$<br>
+$\qquad$ $\qquad$ Sample random minibatch of transitions ($\phi_j, a_j, r_j, \phi_{j+1}$)<br>
+$\qquad$ $\qquad$ Set $y_j = r_j$ for terminal $\phi_{j+1}$<br>
+$\qquad$ $\qquad$ Set $y_j = r_j + \gamma max_{a'} Q(\phi_{j+1}, a'; \theta)$ for non-terminal $\phi_{j+1}$<br>
+$\qquad$ $\qquad$ Perform a gradient descent step on ${(y_j - Q(\phi_j, a_j; \theta))}^2$<br>
+$\qquad$ **endfor**<br>
 **endfor**
 - - -
 
 
 성능 향상을 위해 사용된 혹은 사용 가능한 추가적인 기법들을 몇 개 소개하고 DQN을 마무리할까 합니다.<br>
-
-
-_$\epsilon$-Greedy_<br>
-$\epsilon$-greedy는 DQN에만 해당하는 것은 아니고 traditional Q learning에 적용되는 방법으로, Q learning이 greedy한 방식으로 exploitation에만 집중하는 것을 막기 위해 $\epsilon$ 만큼의 확률로 action을 random하게 선택하도록 하는 방법입니다. 알고리즘 수렴을 위해 $\epsilon$은 iteration을 더해가면서 줄여나가기도 합니다.<br><br>
 
 
 _Soft Update (Target Network)_<br>
