@@ -118,6 +118,7 @@ _Soft Update (Target Network)_<br>
 이 외에도 여러 task를 동일한 parameter (learning rate)로 학습하고 성능을 높이기 위해 각 task의 reward를 scale해주는 _Clipping Rewards_ 나 computational cost을 낮추어 더 많은 experience를 확보하기 위한 _Frame Skipping_ 와 같은 트릭들이 사용되었습니다.<br><br>
 
 
+[Fig2](https://jiryang.github.io/img/dqn_atari_master.gif "DQN on Atari Breakout"){: width="50%"}
 
 
 **REINFORCE (Policy-based)**<br><br>
