@@ -165,10 +165,10 @@ _* Policy Gradient theorem의 증명은 굉장히 여러 방식으로 가능한�
 이렇게 policy gradient에 $ln$을 취한 값은 product($\prod$)로 표현되던 episode 내 policy를 sum으로 바꿔주고, $\theta$와 무관한 initial state의 probability 및 state transition probability term을 제거시켜주어 derivative of _expected_ reward를 policy의 probability로 간소화 시켜주는 효과를 낳습니다:<br>
 $\qquad$ $$\pi(\tau) = \mathcal{P}(s_0) \prod^T_{t=1} \pi_{\theta}(a_t \mid s_t)p(s_{t+1}, r_{t+1} \mid s_t, a_t)$$
 
-$\qquad$ $$ln \;\pi(\tau) = ln\mathcal{P}(s_0) + \sum^T_{t=1} ln \; \pi_{\theta}(a_t \mid s_t) + \sum^T_{t=1} ln \; p(s_{t+1}, r_{t+1} \mid s_t, a_t)$$
+$\qquad$ $$ln \;\pi(\tau) = ln \; \mathcal{P}(s_0) + \sum^T_{t=1} ln \; \pi_{\theta}(a_t \mid s_t) + \sum^T_{t=1} ln \; p(s_{t+1}, r_{t+1} \mid s_t, a_t)$$
 
 이 과정 이후 남은 derivative of _expected_ reward의 식은 다음과 같습니다:<br>
-$\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_{\pi_{\theta}} \lbrack r(\tau) \left( \sum^T_{t=1} \nabla ln \quad \pi_{\theta} (a_t \mid s_t) \right) \rbrack$$
+$\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_{\pi_{\theta}} \lbrack r(\tau) \left( \sum^T_{t=1} \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack$$
 
 
 
