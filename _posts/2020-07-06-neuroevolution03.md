@@ -154,7 +154,7 @@ $\qquad$ $$\nabla J(\theta) = \nabla  \mathbb{E}_{\pi}\left[ r(\tau) \right] = \
 
 $\qquad$ $$= \int \nabla \pi(\tau)r(\tau)d\tau$$
 
-$\qquad$ $$= \int \pi(\tau) \nabla ln \pi(\tau) r(\tau)d\tau (\because ln(\pi(\tau)) = 1/\pi(\tau))$$
+$\qquad$ $$= \int \pi(\tau) \nabla ln \pi(\tau) r(\tau)d\tau$$ $$(\because ln \pi(\tau) = 1/\pi(\tau))$$
 
 $\qquad$ $$= \mathbb{E}_{\pi}\left[ r(\tau) \nabla ln \pi(\tau) \right]$$
 
