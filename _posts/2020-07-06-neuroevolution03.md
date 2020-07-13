@@ -154,7 +154,7 @@ $\qquad$ $$\nabla J(\theta) = \nabla  \mathbb{E}_{\pi}\left[ r(\tau) \right] = \
 
 $\qquad$ $$= \int \nabla \pi(\tau)r(\tau)d\tau$$
 
-$\qquad$ $$= \int \pi(\tau) \nabla ln \pi(\tau) r(\tau)d\tau \; (\because ln \pi(\tau) = 1/\pi(\tau))$$
+$\qquad$ $$= \int \pi(\tau) \nabla ln \pi(\tau) r(\tau)d\tau \quad (\because ln \pi(\tau) = 1/\pi(\tau))$$
 
 $\qquad$ $$= \mathbb{E}_{\pi}\left[ r(\tau) \nabla ln \pi(\tau) \right]$$
 
@@ -162,7 +162,12 @@ $\qquad$ $$= \mathbb{E}_{\pi}\left[ r(\tau) \nabla ln \pi(\tau) \right]$$
 
 _* Policy Gradient theorem의 증명은 굉장히 여러 방식으로 가능한데요, 또다른 증명 한 가지를 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다._<br>
 
-이렇게 policy gradient에 ln
+이렇게 policy gradient에 $ln$을 취한 값은 product($\prod$)로 표현되던 episode 내 policy를 sum으로 바꿔주고, $\theta$와 무관한 initial state의 probability 및 state transition probability term을 제거시켜주어 derivative of _expected_ reward를 policy의 probability로 간소화 시켜주는 효과를 낳습니다:<br>
+$\qquad$ $$\pi(\tau) = \mathcal{P}(s_0) \prod^T_{t=1} \pi_{\theta}(a_t \mid s_t)p(s_{t+1}, r_{t+1} \mid s_t, a_t)$$
+
+$\qquad$ $$ln \pi(\tau) = ln\mathcal{P}(s_0) + \sum^T_{t=1} ln \pi_{\theta}(a_t \mid s_t) + \sum^T_{t=1} ln p(s_{t+1}, r_{t+1} \mid s_t, a_t)$$
+
+
 
 <!--이 theorem에 의해 objective reward function $J(\theta)$의 derivative (gradient)가 stochastic policy $\pi_{\theta}(a \mid s)$의 derivative (gradient)와 비례하고,<br>
 $\qquad$ $$J(\theta) = \sum_{s \in S}d^{\pi}(s)V^{\pi}(s) = \sum_{s \in S}d^{\pi}(s)\sum_{a \in \mathcal{A}}\pi_{\theta}(a \mid s)Q^{\pi}(s, a)$$<br>-->
