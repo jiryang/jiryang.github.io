@@ -168,7 +168,7 @@ $\qquad$ $$\pi(\tau) = \mathcal{P}(s_0) \prod^T_{t=1} \pi_{\theta}(a_t \mid s_t)
 $\qquad$ $$ln \;\pi(\tau) = ln\mathcal{P}(s_0) + \sum^T_{t=1} ln \; \pi_{\theta}(a_t \mid s_t) + \sum^T_{t=1} ln \; p(s_{t+1}, r_{t+1} \mid s_t, a_t)$$
 
 이 과정 이후 남은 derivative of _expected_ reward의 식은 다음과 같습니다:<br>
-$\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_{\pi_{\theta}} \lbrack r(\tau) \lbrace \sum^T_{t=1} \nabla ln \quad \pi_{\theta} (a_t \mid s_t) \rbrace \rbrack]$$
+$\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_{\pi_{\theta}} \lbrack r(\tau) (\sum^T_{t=1} \nabla ln \quad \pi_{\theta} (a_t \mid s_t) ) \rbrack]$$
 
 
 
@@ -205,7 +205,7 @@ DNN을 사용한 policy gradient method는 다음의 순서로 동작합니다:
 
 
 위에서 보시다시피 policy gradient method는 일반적인 gradient descent와 반대로 reward를 maximize하는 학습을 진행합니다. 그렇기 때문에 policy gradient loss는 policy function ($\pi(a \mid s)$)으로부터 나온 output vector를 softmax function에 넣어서 나온 0$\sim$1 사이의 probability vector를 가지고 다음과 같이 - sign을 붙여서 계산합니다 (maximize해야 하는 값의 부호를 바꿨으니 이제 minimize를 하면 되는거죠. 그래서 _loss_ 라고 부를 수도 있는거고요):<br>
-$\qquad$ $$L = -Q_{s, a}ln($\pi(a \mid s))$$
+$\qquad$ $$L = -Q_{s, a}ln(\pi(a \mid s))$$
 
 
 이제 DNN을 사용한 policy gradient method의 pseudocode를 보시겠습니다:<br>
