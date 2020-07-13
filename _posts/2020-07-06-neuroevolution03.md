@@ -139,7 +139,7 @@ Value based 대비 policy gradient 방식의 단점은 environment의 작은 변
 여타 RL과 마찬가지로 policy gradient에서도 _expected_ reward를 maximize하는 것이 그 목표입니다.<br>
 $\qquad$ $$J(\theta) = \mathbb{E}_{\pi}\left[ r(\tau) \right]$$
 
-$\qquad$ $\pi$ or $\pi_{\theta}$: policy
+$\qquad$ $\pi$ or $\pi_{\theta}$: policy (parameterized by $\theta$)
 
 $\qquad$ $r(\tau)$: total reward for a given trajectory $\tau$
 
@@ -151,6 +151,12 @@ $\pi$가 policy의 probability로 표현되는 policy-based에서는 (특히 con
 $\qquad$ $$J(\theta) = \mathbb{E}_{\pi}\left[ r(\tau) \right] = \int \pi(\tau)r(\tau)$$
 
 $\qquad$ $$\nabla J(\theta) = \nabla  \mathbb{E}_{\pi}\left[ r(\tau) \right] = \nabla \int \pi(\tau)r(\tau)d\tau$$
+
+$\qquad$ $$= \int \nabla \pi(\tau)r(\tau)d\tau$$
+
+$\qquad$ $$= \int \pi(\tau) \nabla ln \pi(\tau) r(\tau)d\tau$$
+
+$\qquad$ $$= \int \mathbb{E}_{\pi}\left[ r(\tau) \nabla ln \pi(\tau) \right]$$
 
 _* Policy Gradient theorem의 길고 복잡한 증명은 자세한 설명이 있는 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다._<br>
 
