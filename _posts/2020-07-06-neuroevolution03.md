@@ -33,6 +33,8 @@ $\qquad$ $$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$<br><br>
 위 정의는 '어떤 state에서 $$optimal \; policy$$란 해당 state로부터의 cumulative reward를 최대화하는 $$policy$$이다'라는 의미로 직관적입니다.
 
 
+RL task는 두 가지 종류로 나눌 수 있습니다. 하나는 학습을 통해 정확한 expected reward를 계산해내는 value-based method이고, 다른 하나는 취해야 하는 action을 학습하는 policy-based method 입니다. 각각의 경우를 대표적인 알고리즘으로 설명하겠습니다.
+
 **Q-Learning (Value-based)**<br><br>
 위의 정의에 따라 given state $$s$$에서의 $$optimal \; policy$$를 다음과 같이 표현할 수 있습니다:<br>
 $\qquad$ $$\pi^{\ast}(s) = argmax_{a} \left[r(s, a) + \gamma V^{\ast}(\delta(s, a)) \right]$$<br><br>
@@ -128,20 +130,30 @@ _Soft Update (Target Network)_<br>
 앞서 살펴본 Q learning의 $optimal \; policy$란 cumulative reward를 maximize하는 것이므로 모든 state의 모든 action에 대한 quality value를 계산해두면 어느 state에서건 goal에 이르는 optimal (cumulative reward를 maximize하는) action을 구할 수 있다'로 요약할 수 있습니다. 하지만 real-world task에 적용하기에는 여러가지 문제가 있습니다. 우선 앞서 traditional Q learning의 단점으로 지적되었던 state-action space dimension 문제입니다. DQN으로 state space가 Atari game 정도로 확장된 task들에도 적용이 가능해지긴 했지만, 여전히 higher dimensional continuous state space에는 적용이 어렵고, 특히 Atari game과 달리 action space가 continuous한 경우는, discretization과 같은 트릭을 쓴다해도 scaling에 큰 제약이 있습니다. Q network 자체 뿐만 아니라 성능 개선을 위해 추가했던 replay memory의 사이즈도 폭발적으로 증가하게 될 것이기 때문입니다. 또한, exploration을 강화해서 학습을 '넓게'하기 위한 목적으로 추가한 $\epsilon$-greedy도 문제가 될 수 있는데요, optimal policy가 deterministic한 경우 작긴 하지만 계속해서 $\epsilon$만큼의 확률로 random action selection을 하게 되면 수렴 및 performance에 악영향이 있을 수 있습니다. 이러한 이유로 낭비스럽게 모든 state-action pair에 대한 Q value를 학습한 다음 거기서 optimal policy를 구해서 쓰는 간접적인 방법 대신, input state-action pair에 대한 policy를 바로 학습하는 policy gradient method가 고안되었습니다.
 
 
-Policy gradient의 장점은 optimal policy가 deterministic한 경우라면 ($\epsilon$-greedy와 달리) stochastically deterministic하게 수렴하게 되며, optimal policy가 arbitrary한 경우에도 probability-based로 동작하기 때문에 대응이 가능하다는 점을 들 수 있습니다. 두 번째 경우를 좀 더 설명하자면, 예를들어 포커 게임을 학습한 경우 Q learning과 같은 value-based 방법은 낮은 패를 쥐어서 optimal policy가 fold로 나오는 경우에도 policy gradient 방법은 낮은 확률로 블러핑을 할 수도 있습니다. 또한 앞서 설명한대로 모든 state-action space를 탐색하지 않고, probabilistically greedy하게 필요한 action을 선택하는 solution (policy) space만을 탐색하기 때문에 학습이 효과적입니다 (faster with fewer parameters).
+Policy gradient의 장점은 optimal policy가 deterministic한 경우라면 ($\epsilon$-greedy와 달리) stochastically deterministic하게 수렴하게 되며, optimal policy가 arbitrary한 경우에도 probability-based로 동작하기 때문에 대응이 가능하다는 점을 들 수 있습니다. 두 번째 경우를 좀 더 설명하자면, 예를들어 포커 게임을 학습한 경우 Q learning과 같은 value-based 방법은 낮은 패를 쥐어서 optimal policy가 fold로 나오는 경우에도 policy gradient 방법은 낮은 확률로 블러핑을 할 수도 있습니다. 또한 앞서 설명한대로 모든 state-action space를 탐색하지 않고, probabilistically greedy하게 필요한 action을 선택하는 policy space만을 탐색하기 때문에 학습이 효과적입니다 (faster with fewer parameters).
 
 
-Policy Gradient theorem의 길고 복잡한 증명은 자세한 설명이 있는 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다. 이 theorem에 의해 objective reward function $J(\theta)$의 derivative (gradient)가 stochastic policy $\pi_{\theta}(a \mid s)$의 derivative (gradient)와 비례하고,<br>
-$\qquad$ $$J(\theta) = \sum_{s \in S}d^{\pi}(s)V^{\pi}(s) = \sum_{s \in S}d^{\pi}(s)\sum_{a \in \mathcal{A}}\pi_{\theta}(a \mid s)Q^{\pi}(s, a)$$<br>
-_* Policy-based RL에서도 objective function이 expected reward이기 때문에 minimize하는 것이 아니라 maximize를 해야합니다._<br><br>
-$\qquad$ $$\nabla_{\theta}J(\theta) \varpropto \sum_{s \in S}d^\pi(s) \sum_{a \in \mathcal{A}}Q^{\pi}(s, a)\nabla_{\theta}\pi_{\theta}(a \mid s)$$<br><br>
+Value based 대비 policy gradient 방식의 단점은 environment의 작은 변화에도 성능이 영향을 받는다는 것을 들 수 있습니다. Value table을 학습한다는건 당장 optimal policy를 구하는 데는 쓰이지 않더라도 모든 state-action space의 lookahead table을 만들어둔다는 것이라 생각할 수 있는데요, 그렇기 때문에 environmental change에 어느정도 resilience를 가집니다. Current environment에서 optimal한 policy를 찾는데 최적화된 policy network는 작은 environmental change에도 학습을 새로 해야 합니다.
+
+
+여타 RL과 마찬가지로 policy gradient에서도 _expected_ reward를 maximize하는 것이 그 목표입니다.<br><br>
+$\qquad$ $J(\theta) = \mathbb{E}_{\pi}\left[ r(\tau) \right]$
+
+asdf
+
+_* Policy Gradient theorem의 길고 복잡한 증명은 자세한 설명이 있는 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다._<br>
+
+<!--이 theorem에 의해 objective reward function $J(\theta)$의 derivative (gradient)가 stochastic policy $\pi_{\theta}(a \mid s)$의 derivative (gradient)와 비례하고,<br>
+$\qquad$ $$J(\theta) = \sum_{s \in S}d^{\pi}(s)V^{\pi}(s) = \sum_{s \in S}d^{\pi}(s)\sum_{a \in \mathcal{A}}\pi_{\theta}(a \mid s)Q^{\pi}(s, a)$$<br>-->
+_** Policy-based RL에서는 objective function이 expected reward이기 때문에 minimize하는 것이 아니라 maximize를 해야합니다._<br><br>
+<!--$\qquad$ $$\nabla_{\theta}J(\theta) \varpropto \sum_{s \in S}d^\pi(s) \sum_{a \in \mathcal{A}}Q^{\pi}(s, a)\nabla_{\theta}\pi_{\theta}(a \mid s)$$<br><br>
 위 식의 우변은 다음과 같이 재정리할 수 있습니다:<br>
 $\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi}\left[ Q^{\pi}(s, a)\nabla_{\theta}ln \pi_{\theta}(a \mid s) \right]$$<br><br>
 
 REINFORCE는 위 식의 $\hat{Q}$ term을 Monte-Carlo 방식(반복 시행을 통한 통계값 유추)으로 찾습니다.<br>
 $\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi}\left[ G_t\nabla_{\theta}ln \pi_{\theta}(A_t \mid S_t) \right]$$<br><br>
 여기서 $G_t$는 discounted future reward입니다:<br>
-$\qquad$ $$G_t = \sum^{\infty}_{k=0} \gamma^k R_{t+k+1}$$<br><br>
+$\qquad$ $$G_t = \sum^{\infty}_{k=0} \gamma^k R_{t+k+1}$$<br><br>-->
 Pseudocode를 보시지요:<br>
 - - -
 <<REINFORCE algorithm>><br>
@@ -153,8 +165,32 @@ Do forever:
   - $\theta \leftarrow \theta + \alpha \nabla_{\theta}J(\theta)$
 <!--  - $\theta \leftarrow \theta + \alpha \gamma^t G\nabla ln \pi(A_t \mid S_t, \theta)$-->
 
+Update rule의 derivation 과정을 보면 
+
+
+DNN을 사용한 policy gradient method는 다음의 순서로 동작합니다:
+1. Start out with an arbitrary random policy
+2. Sample some actions in the environment
+3. If rewards are better than expected, increase probability of taking those actions
+4. If rewards are worse, decrease probability
+
+
+위에서 보시다시피 policy gradient method는 일반적인 gradient descent와 반대로 reward를 maximize하는 학습을 진행합니다. 그렇기 때문에 policy gradient loss는 policy function ($\pi(a \mid s)$)으로부터 나온 output vector를 softmax function에 넣어서 나온 0$\sim$1 사이의 probability vector를 가지고 다음과 같이 - sign을 붙여서 계산합니다 (maximize해야 하는 값의 부호를 바꿨으니 이제 minimize를 하면 되는거죠. 그래서 _loss_ 라고 부를 수도 있는거고요):<br>
+$\qquad$ $$L = -Q_{s, a}ln($\pi(a \mid s))$$
+
+
+이제 DNN을 사용한 policy gradient method의 pseudocode를 보시겠습니다:<br>
 - - -
-asdf
+Initialize network with random weights<br>
+**for** an episode until termination:<br>
+$\qquad$ Record all $(s, a, r)$ transitions: $Q_{k, t}$<br>
+$\qquad$ **for** step = 1, $T$ **do**
+
+$\qquad$ Record all $(s, a, r, s')$ transitions<br>
+$\qquad$ **endfor**<br>
+**endfor**<br>
+
+- - -
 
 discounted feature return with reference to the opening
 direction in the policy space will maximize the change to repeat the action A_t
