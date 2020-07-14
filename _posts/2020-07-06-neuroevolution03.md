@@ -185,7 +185,7 @@ $\qquad$ $$b = \mathbb{E} \lbrack R(\tau) \rbrack \approx \frac{1}{m} \sum^m_{i=
 $\qquad$ $$b = \frac{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}; \theta)^2)R(\tau^{(i)})}{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}); \theta)^2}$$<br>
 - Time-dependent baseline: Episode 기준으로 reward를 계산하여 averaging을 하는 것이 아니라, 각 episode 내의 모든 state-action pair에 대해 reward를 구해 평균을 낸 것으로, 특정 시간 이후의 state-pair action만을 고려할 수도 있음 (수식에서는 episode마다 $t$ 시점 이후부터의 reward를 계산)<br>
 $\qquad$ $$b_t = \frac{1}{m} \sum^m_{i=1} \sum^{H-1}_{k=t} R(s^{(i)}_k, u^{(i)}_k)$$
-- State-dependent expected return: Episode나 time이 아니라 특정 state에 dependent한 reward ('"'현재 policy에 의하면 state $t$에서는 평균 얼마만큼의 reward를 주는가'"')를 계산<br>
+- State-dependent expected return: Episode나 time이 아니라 특정 state에 dependent한 reward (현재 policy에 의하면 state $t$에서는 평균 얼마만큼의 reward를 주는가)를 계산<br>
 $\qquad$ $$b(s_t) = \mathbb{E} \lbrack r_t + r_{t+1} + r_{t+2} + ... + r_{H-1} \rbrack = V^{\pi}(s_t)$$
 
 _ * Baseline을 state value function값인 $V(s) = \mathbb{E}_{\pi_{\theta}} \lbrack G_t \mid S_t = s \rbrack$로 잡을 수도 있는데요, 이렇게 $V(s)$를 예측하는 별도의 네트워크를 두고 baseline으로 적용한 것이 **Actor-Critic method**입니다. _
