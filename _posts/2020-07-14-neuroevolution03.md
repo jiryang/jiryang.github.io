@@ -73,7 +73,9 @@ Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward tab
 간단하지만 powerful한 Q learning이 여러 toy problem에서 좋은 성능을 보였음에도 많이 사용될 수 없었던건 state와 action의 dimension이 커질수록 (특히 state) Q table의 dimension이 너무 커진다는 문제 때문입니다. 예를 들어 조악한 해상도를 가진 Atari 게임만 해도 Q table의 dimension이 7000x4(상하좌우로 움직이는 경우)나 되는데, camera 입력을 받는 자율주행 자동차 같은건 테이블 크기가 엄청나겠지요. Reward는 상대적으로 매우 sparse 해 질 것이고, 이걸 다 채우도록 학습을 하려면 엄청나게 많은 episode (또는 trajectory이나 rollout이라고 부름)가 필요할 것입니다. 한 마디로 불가능합니다.
 
 
-이후 DNN이 high-dimensional real-world problem들을 성공적으로 해결하게 되고, Q learning에도 DNN 방법론을 접목하게 된 것이 Deep Q Networks (DQN) 입니다. DQN은 <$state$, $action$> pair를 입력하면 Q value가 출력되는 DNN을 학습하여 기존의 Q table을 대체하였습니다.<br>
+이후 DNN이 high-dimensional real-world problem들을 성공적으로 해결하게 되고, Q learning에도 DNN 방법론을 접목하게 된 것이 Deep Q Networks (DQN) 입니다. DQN은 $state$를 입력하면 각 possible $action$에 대한 Q value들이 출력되는 DNN을 학습하여 기존의 Q table을 대체하였습니다.<br>
+
+![Fig2](https://jiryang.github.io/img/dqn.jpg "Deep Q Network"){: width="80%"}{: .aligncenter}
 
 
 _Experience Replay_<br>
@@ -110,17 +112,34 @@ loss = self.MSE_loss(curr_Q, expected_Q.detach())
 ~~~
 
 
-성능 향상을 위해 사용된 혹은 사용 가능한 추가적인 기법들을 몇 개 소개하고 DQN을 마무리할까 합니다.<br>
+성능 향상을 위해 사용된 혹은 사용 가능한 추가적인 기법들 및 DQN variant들을 몇 개 소개하고 DQN을 마무리할까 합니다.<br>
 
 
 _Soft Update (Target Network)_<br>
 이건 Q table이 네트워크에 녹아있는 DQN pseudocode가 아니라 Q update가 explicit하게 표현된 Q learning을 가지고 설명하는게 더 이해가 쉽겠습니다. 저 위에 Q learning pseudocode를 보시면 estimated Q를 추정하여 업데이트시켜주는 부분이 $\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a')$ 으로 표현되어 있습니다. 우변의 estimation을 가지고 좌변의 target을 update하는 방식인데 $\hat{Q}$ term이 양변에 동일하게 들어가 있기 때문에, 매번 target이 update 될때마다 estimate의 값이 oscillate하게 되어서 $\hat{Q}$가 수렴하기 어려운 문제가 생깁니다. 그래서 별도의 target Q table (DQN의 경우에는 별도의 target Q network이 되겠죠)을 두고 간헐적으로 (원래 Q network보다 드문드문) 업데이트를 함으로써 Q network 수렴을 돕는다는 개념입니다. Target Q network의 update frequency가 아니라 update magnitude를 조절하여 유사한 효과를 노린 경우도 있었습니다 ([링크](https://arxiv.org/pdf/1509.02971.pdf)). 여기선 $\hat{Q} = \tau Q + (1-\tau)\hat{Q}, \tau = 0.001$ 와 같이 target Q의 update량을 미세하게 만들었습니다.<br><br>
 
 
-이 외에도 DQN으로 Atari game들을 수행하면서 여러 task를 동일한 parameter (learning rate)로 학습하고 성능을 높이기 위해 각 task의 reward를 scale해주는 _Clipping Rewards_ 나 computational cost을 낮추어 더 많은 experience를 확보하기 위한 _Frame Skipping_ 와 같은 트릭들이 사용되었습니다.<br><br>
+이 외에도 DQN으로 Atari game들을 수행하면서 여러 task를 동일한 parameter (learning rate)로 학습하고 성능을 높이기 위해 각 task의 reward를 scale해주는 _Clipping Rewards_ 나 computational cost을 낮추어 더 많은 experience를 확보하기 위한 _Frame Skipping_ 와 같은 트릭들이 사용되었습니다.<br>
 
 
-[Fig2](https://jiryang.github.io/img/dqn_atari_result.png "DQN vs Human on Atari Games"){: width="100%"}
+**Double DQN (DDQN)**<br>
+Q learning은 current state에 대해 Q table의 current estimation ($\hat{Q})에서 reward를 maximize하는 action을 선택하고, 그 max reward를 decay시켜 next Q를 update했습니다:<br>
+$\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a')$$<br>
+
+DQN도 마찬가지였죠:<br>
+$\qquad$ Select $$a_t = max_a Q^{\ast}(\phi(s_t), a; \theta)$$<br>
+$\qquad$ $$...$$<br>
+$\qquad$ Perform a gradient descent step on $${(y_j - Q(\phi_j, a_j; \theta))}^2$$<br>
+
+'모든 state가 관찰 가능하고, 모든 state에 대한 모든 action이 수행 가능한' perfect environment에서라면 그다지 문제가 되지 않을 수도 있으나, 실제 학습 상황에서는 sensory값이 누락된다거나 environment에 변화가 생긴다거나 $\epsilon$-greedy처럼 non-deterministic하게 action을 수행하게 되는 noisy한 environment일 가능성이 높습니다. Perfect environment라면 stochastic하게 optimal Q value로 수렴이 될 가능성이 높지만, 그렇지 않은 경우 Q table의 값이 몇몇 경우의 잘못 계산된 $max \hat{Q}$ 값에 의해 suboptimal하게 수렴되거나 oscillate하는 경우가 발생할 수 있습니다. 이를 방지하기 위해 기존 Q network의 delayed copy를 별도로 두고, action selection은 원래의 Q network에서 하되, 그 action으로 인한 reward는 이 delayed copy에서 가져오는 방식이 고안되었고, 이 delayed copy때문에 Double Deep Q Network (DDQN) 이라는 이름이 붙게 되었습니다.<br>
+
+이 두 번째 network를 delayed copy라고 부르는 이유는, primary Q network이 매 state마다 update되는 반면에 두 번째 network은 episode가 끝난 뒤 primary network와 자기 자신의 차이를 줄이는 방향으로 학습하기 때문입니다.
 
 
-[Fig3](https://jiryang.github.io/img/dqn_atari_master.gif "DQN on Atari Breakout"){: width="50%"}
+
+[Fig3](https://jiryang.github.io/img/dqn_atari_result.png "DQN vs Human on Atari Games"){: width="100%"}
+
+
+[Fig4](https://jiryang.github.io/img/dqn_atari_master.gif "DQN on Atari Breakout"){: width="50%"}
+
+
