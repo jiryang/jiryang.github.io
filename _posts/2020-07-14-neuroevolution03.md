@@ -67,9 +67,10 @@ Do forever:
 
 
 Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward table을 만들고, Q table을 학습하는 지는 [여기](http://mnemstudio.org/path-finding-q-learning-tutorial.htm)를 참고하시면 될 것 같습니다. 보다 더 일반적인 개념으로 temporal difference learning도 있고, Q learning에 randomness를 가미하는 $\epsilon$-greedy 등등의 방법들에 대해서는 뒤에 필요한 순간에 설명하도록 하고 지금은 생략합니다. 
+<br>
 
 
-**Deep Q Networks**<br><br>
+**Deep Q Networks**<br>
 간단하지만 powerful한 Q learning이 여러 toy problem에서 좋은 성능을 보였음에도 많이 사용될 수 없었던건 state와 action의 dimension이 커질수록 (특히 state) Q table의 dimension이 너무 커진다는 문제 때문입니다. 예를 들어 조악한 해상도를 가진 Atari 게임만 해도 Q table의 dimension이 7000x4(상하좌우로 움직이는 경우)나 되는데, camera 입력을 받는 자율주행 자동차 같은건 테이블 크기가 엄청나겠지요. Reward는 상대적으로 매우 sparse 해 질 것이고, 이걸 다 채우도록 학습을 하려면 엄청나게 많은 episode (또는 trajectory이나 rollout이라고 부름)가 필요할 것입니다. 한 마디로 불가능합니다.
 
 
@@ -139,18 +140,29 @@ _Target Network_
 
 이 방식은 '모든 state가 관찰 가능하고, 모든 state에 대한 모든 action이 수행 가능한' perfect environment에서라면 그다지 문제가 되지 않을 수도 있으나, 실제 학습 상황에서는 sensory값이 누락된다거나 environment에 변화가 생긴다거나 $\epsilon$-greedy처럼 non-deterministic하게 action을 수행하게 되는 noisy한 environment일 경우가 많습니다. Perfect environment라면 stochastic하게 optimal Q value로 수렴이 될 가능성이 높지만, 그렇지 않은 경우 Q table의 값이 몇몇 경우의 잘못 계산된 $max \hat{Q}$ 값에 의해 suboptimal하게 수렴되는 경우가 발생할 수 있습니다. 특히 overestimation의 우려가 크다고 밝혀졌는데, 이를 방지하기 위해 primary Q network에서 하되, 그 action으로 인한 reward는 target Q network에서 가져오는 DDQN 방식이 고안되었습니다.
 
-[Fig3](https://jiryang.github.io/img/ddqn.png "Double DQN"){: width="100%"}
+[Fig4](https://jiryang.github.io/img/ddqn.png "Double DQN"){: width="100%"}
 
 
 **Dueling DQN**<br>
+Dueling DQN은 network가 $Q(s, a)$를 $V(s)$와 $A(s, a)$라는 intermediate result (value)를 뽑아내게끔 분리하고, 이 값을 다시 합쳐서 $Q(s, a)$를 획득하는 방법입니다. $V(s)$는 앞서 보았던대로 state $s$의 value function이고, 새로 도입된 $A(s, a)$는 state $s$에서 action $a$를 취했을 때의 advantage를 나타내는 term입니다. 기존의 $Q(s, a)$가 이미 state $s$에서 action $a$를 취할 때의 value를 나타내는데 이걸 굳이 두 term으로 나누어 뽑아낸 까닭은, 어떤 task는 모든 state에서 action을 choice할 필요가 없기 때문에 state 정보와 action selection을 하나로 묶은 $Q$ term을 한꺼번에 학습하는 것이 불필요하게 느리고 복잡할 수가 있기 때문입니다. 또한 state와 action과의 tight correlation을 분리해서 action 자체의 general한 학습이 가능하다는 점도 장점이라 할 수 있습니다.<br>
+
+[Fig5](https://jiryang.github.io/img/duel_dqn.png "Dueling DQN"){: width="100%"}
 
 
-[Fig4](https://jiryang.github.io/img/duel_dqn.png "Dueling DQN"){: width="100%"}
+아래 그림은 다른 차량들을 추월해서 goal에 도달해야 하는 Enduro라는 Atari 게임인데요, 윗쪽 그림의 경우 network의 value stream은 action과 크게 관계없는 long-term goal인 road ahead 부분과 현재 score display 부분에 heatmap이 highlight된 반면, 다른 자동차가 주위에 없는 현재 상태에서 별다른 action이 필요없기 때문에 network의 action stream은 highlight된 부분이 없습니다. 하지만 state가 변해 주위에 차량이 접근하게 되어 개개의 action이 중요해진 아래쪽 그림의 경우에는 action stream이 가까운 차량에 highlight를 하는 것을 알 수 있습니다.
 
 
-[Fig5](https://jiryang.github.io/img/dqn_atari_result.png "DQN vs Human on Atari Games"){: width="100%"}
+Combine된 $Q$ 값으로 $V$와 $A$ stream을 학습시키기 위해서는 $Q$ 값에 대한 각 stream의 contribution을 구분해야 하는 문제가 생기는데요 (problem of identifiability), average advantage를 사용하여 이 문제를 해결하였습니다. $Q$와 $V$, $A$의 관계식은 다음과 같습니다:<br>
+
+$\qquad$ $$Q(s, a) = V(s) + \left( A(s, a) - \frac{1}{\mid A \mid}\sum_a A(s, a) \right)$$
 
 
-[Fig6](https://jiryang.github.io/img/dqn_atari_master.gif "DQN on Atari Breakout"){: width="50%"}
+[Fig6](https://jiryang.github.io/img/duel_dqn_examples.png "Dueling DQN"){: width="100%"}
+
+
+[Fig7](https://jiryang.github.io/img/dqn_atari_result.png "DQN vs Human on Atari Games"){: width="100%"}
+
+
+[Fig8](https://jiryang.github.io/img/dqn_atari_master.gif "DQN on Atari Breakout"){: width="50%"}
 
 
