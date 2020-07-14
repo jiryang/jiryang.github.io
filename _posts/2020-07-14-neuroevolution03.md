@@ -76,7 +76,7 @@ Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward tab
 
 이후 DNN이 high-dimensional real-world problem들을 성공적으로 해결하게 되고, Q learning에도 DNN 방법론을 접목하게 된 것이 Deep Q Networks (DQN) 입니다. DQN은 $state$를 입력하면 각 possible $action$에 대한 Q value들이 출력되는 DNN을 학습하여 기존의 Q table을 대체하였습니다.<br>
 
-![Fig2](https://jiryang.github.io/img/dqn.jpg "Deep Q Network"){: width="80%"}{: .aligncenter}
+![Fig2](https://jiryang.github.io/img/dqn.png "Deep Q Network"){: width="80%"}{: .aligncenter}
 
 
 _Experience Replay_<br>
