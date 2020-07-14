@@ -123,7 +123,7 @@ _Soft Update (Target Network)_<br>
 
 
 **Double DQN (DDQN)**<br>
-Q learning은 current state에 대해 Q table의 current estimation ($\hat{Q})에서 reward를 maximize하는 action을 선택하고, 그 max reward를 decay시켜 next Q를 update했습니다:<br>
+Q learning은 current state에 대해 Q table의 current estimation ($\hat{Q}$)에서 reward를 maximize하는 action을 선택하고, 그 max reward를 decay시켜 next Q를 update했습니다:<br>
 $\qquad$ $$\hat{Q}(s, a) \leftarrow r(s, a) + \gamma max_{a'} \hat{Q}(s', a')$$<br>
 
 DQN도 마찬가지였죠:<br>
@@ -131,7 +131,7 @@ $\qquad$ Select $$a_t = max_a Q^{\ast}(\phi(s_t), a; \theta)$$<br>
 $\qquad$ $$...$$<br>
 $\qquad$ Perform a gradient descent step on $${(y_j - Q(\phi_j, a_j; \theta))}^2$$<br>
 
-'모든 state가 관찰 가능하고, 모든 state에 대한 모든 action이 수행 가능한' perfect environment에서라면 그다지 문제가 되지 않을 수도 있으나, 실제 학습 상황에서는 sensory값이 누락된다거나 environment에 변화가 생긴다거나 $\epsilon$-greedy처럼 non-deterministic하게 action을 수행하게 되는 noisy한 environment일 가능성이 높습니다. Perfect environment라면 stochastic하게 optimal Q value로 수렴이 될 가능성이 높지만, 그렇지 않은 경우 Q table의 값이 몇몇 경우의 잘못 계산된 $max \hat{Q}$ 값에 의해 suboptimal하게 수렴되거나 oscillate하는 경우가 발생할 수 있습니다. 이를 방지하기 위해 기존 Q network의 delayed copy를 별도로 두고, action selection은 원래의 Q network에서 하되, 그 action으로 인한 reward는 이 delayed copy에서 가져오는 방식이 고안되었고, 이 delayed copy때문에 Double Deep Q Network (DDQN) 이라는 이름이 붙게 되었습니다.<br>
+'모든 state가 관찰 가능하고, 모든 state에 대한 모든 action이 수행 가능한' perfect environment에서라면 그다지 문제가 되지 않을 수도 있으나, 실제 학습 상황에서는 sensory값이 누락된다거나 environment에 변화가 생긴다거나 $\epsilon$-greedy처럼 non-deterministic하게 action을 수행하게 되는 noisy한 environment일 경우가 많습니다. Perfect environment라면 stochastic하게 optimal Q value로 수렴이 될 가능성이 높지만, 그렇지 않은 경우 Q table의 값이 몇몇 경우의 잘못 계산된 $max \hat{Q}$ 값에 의해 suboptimal하게 수렴되거나 oscillate하는 경우가 발생할 수 있습니다. 이를 방지하기 위해 기존 Q network의 delayed copy를 별도로 두고, action selection은 원래의 Q network에서 하되, 그 action으로 인한 reward는 이 delayed copy에서 가져오는 방식이 고안되었고, 이 delayed copy때문에 Double Deep Q Network (DDQN) 이라는 이름이 붙게 되었습니다.<br>
 
 이 두 번째 network를 delayed copy라고 부르는 이유는, primary Q network이 매 state마다 update되는 반면에 두 번째 network은 episode가 끝난 뒤 primary network와 자기 자신의 차이를 줄이는 방향으로 학습하기 때문입니다.
 
