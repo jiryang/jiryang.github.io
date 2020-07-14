@@ -179,10 +179,10 @@ $\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_
 
 
 Baseline을 정하는 몇 가지 대표적인 예는 다음과 같습니다:
-- Constant baseline:<br>
+- Constant baseline: 모든 episode $\tau$의 final reward의 평균을 baseline으로 차감<br>
 $$b = \mathbb{E} \lbrack R(\tau) \rbrack \approx \frac{1}{m} \sum^m_{i=1} R(\tau^{(i)})$$
-- Optimal Constant baseline:<br>
-$$b = \frac{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}; \theta)^2)R(\tau^{(i)})}{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}); \theta)^2}$$
+- Optimal Constant baseline: 수학적으로 variance ($$Var \lbrack x \rbrack = E \lbrack x^2 \rbrack - E {\lbrack x \rbrack}^2 $$를 최소화하는 값을 계산한 optimal 값이지만 성능 개선 정도에 비해 computational burden이 심해서 자주 사용되지는 않음<br>
+$$b = \frac{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}; \theta)^2)R(\tau^{(i)})}{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}); \theta)^2}$$<br>
 - Time-dependent baseline:<br>
 $$b_t = \frac{1}{m} \sum^m_{i=1} \sum^{H-1}_{k=t} R(s^{(i)}_k, u^{(i)}_k)$$
 - State-dependent expected return:<br>
