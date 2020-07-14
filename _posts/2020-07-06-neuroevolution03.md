@@ -179,10 +179,14 @@ $\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_
 
 
 Baseline을 정하는 몇 가지 대표적인 예는 다음과 같습니다:
-- Constant baseline: $$b = \mathbb{E} \lbrack R(\tau) \rbrack \approx \frac{1}{m} \sum^m_{i=1} R(\tau^{(i)})$$
-- Optimal Constant baseline: $$b = \frac{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}; \theta)^2)R(\tau^{(i)})}{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}); \theta)^2}$$
-- Time-dependent baseline: $$b_t = \frac{1}{m} \sum^m_{i=1} \sum^{H-1}_{k=t} R(s^{(i)}_k, u^{(i)}_k)$$
-
+- Constant baseline:<br>
+$$b = \mathbb{E} \lbrack R(\tau) \rbrack \approx \frac{1}{m} \sum^m_{i=1} R(\tau^{(i)})$$
+- Optimal Constant baseline:<br>
+$$b = \frac{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}; \theta)^2)R(\tau^{(i)})}{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}); \theta)^2}$$
+- Time-dependent baseline:<br>
+$$b_t = \frac{1}{m} \sum^m_{i=1} \sum^{H-1}_{k=t} R(s^{(i)}_k, u^{(i)}_k)$$
+- State-dependent expected return:<br>
+$$b(s_t) = \mathbb{E} \lbrack r_t + r_{t+1} + r_{t+2} + ... + r_{H-1} \rbrack = V^{\pi}(s_t)$$
 
 _ * Baseline을 state value function값인 $V(s) = \mathbb{E}_{\pi_{\theta}} \lbrack G_t \mid S_t = s \rbrack$로 잡을 수도 있는데요, 이렇게 $V(s)$를 예측하는 별도의 네트워크를 두고 baseline으로 적용한 것이 **Actor-Critic method**입니다. _
 
