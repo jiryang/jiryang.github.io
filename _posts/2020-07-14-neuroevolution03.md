@@ -112,7 +112,7 @@ loss = self.MSE_loss(curr_Q, expected_Q.detach())
 ~~~
 
 
-성능 향상을 위해 사용된 혹은 사용 가능한 추가적인 기법들 및 DQN variant들을 몇 개 소개하고 DQN을 마무리할까 합니다.<br>
+DQN variant들을 몇 개 소개하고 DQN을 마무리할까 합니다.<br>
 
 
 _Soft Update (Target Network)_<br>
@@ -131,15 +131,26 @@ $\qquad$ Select $$a_t = max_a Q^{\ast}(\phi(s_t), a; \theta)$$<br>
 $\qquad$ $$...$$<br>
 $\qquad$ Perform a gradient descent step on $${(y_j - Q(\phi_j, a_j; \theta))}^2$$<br>
 
-'모든 state가 관찰 가능하고, 모든 state에 대한 모든 action이 수행 가능한' perfect environment에서라면 그다지 문제가 되지 않을 수도 있으나, 실제 학습 상황에서는 sensory값이 누락된다거나 environment에 변화가 생긴다거나 $\epsilon$-greedy처럼 non-deterministic하게 action을 수행하게 되는 noisy한 environment일 경우가 많습니다. Perfect environment라면 stochastic하게 optimal Q value로 수렴이 될 가능성이 높지만, 그렇지 않은 경우 Q table의 값이 몇몇 경우의 잘못 계산된 $max \hat{Q}$ 값에 의해 suboptimal하게 수렴되거나 oscillate하는 경우가 발생할 수 있습니다. 이를 방지하기 위해 기존 Q network의 delayed copy를 별도로 두고, action selection은 원래의 Q network에서 하되, 그 action으로 인한 reward는 이 delayed copy에서 가져오는 방식이 고안되었고, 이 delayed copy때문에 Double Deep Q Network (DDQN) 이라는 이름이 붙게 되었습니다.<br>
+_Target Network_
+우변의 estimation을 가지고 좌변의 target을 update하는 방식인데 $\hat{Q}$ term이 양변에 동일하게 들어가 있기 때문에, 매번 target이 update 될때마다 estimate의 값이 oscillate하게 되어서 $\hat{Q}$가 수렴하기 어려운 문제가 생깁니다. 그래서 별도의 target Q table (DQN의 경우에는 별도의 target Q network이 되겠죠)을 두고 여기서 next action과 reward를 뽑아내며, target network는 간헐적으로 (원래 Q network보다 드물게) 업데이트를 함으로써 Q network 수렴을 돕는다는 개념입니다. 간헐적으로 target Q network를 primary Q network로 reset시켜주는 방식도 있고, Polyak averaging ($\theta' \leftarrow \tau \theta + (1-\tau)\theta'$, $\tau$: averaging rate)을 써서 미세하게 primary network와 target network의 차이를 줄이는 방향으로 target을 학습시키는 방식도 있습니다 (_Soft Update_).<br><br>
 
-이 두 번째 network를 delayed copy라고 부르는 이유는, primary Q network이 매 state마다 update되는 반면에 두 번째 network은 episode가 끝난 뒤 primary network와 자기 자신의 차이를 줄이는 방향으로 학습하기 때문입니다.
-
-
-
-[Fig3](https://jiryang.github.io/img/dqn_atari_result.png "DQN vs Human on Atari Games"){: width="100%"}
+[Fig3](https://jiryang.github.io/img/soft_update.png "Soft Update Target Network in DQN"){: width="100%"}
 
 
-[Fig4](https://jiryang.github.io/img/dqn_atari_master.gif "DQN on Atari Breakout"){: width="50%"}
+이 방식은 '모든 state가 관찰 가능하고, 모든 state에 대한 모든 action이 수행 가능한' perfect environment에서라면 그다지 문제가 되지 않을 수도 있으나, 실제 학습 상황에서는 sensory값이 누락된다거나 environment에 변화가 생긴다거나 $\epsilon$-greedy처럼 non-deterministic하게 action을 수행하게 되는 noisy한 environment일 경우가 많습니다. Perfect environment라면 stochastic하게 optimal Q value로 수렴이 될 가능성이 높지만, 그렇지 않은 경우 Q table의 값이 몇몇 경우의 잘못 계산된 $max \hat{Q}$ 값에 의해 suboptimal하게 수렴되는 경우가 발생할 수 있습니다. 특히 overestimation의 우려가 크다고 밝혀졌는데, 이를 방지하기 위해 primary Q network에서 하되, 그 action으로 인한 reward는 target Q network에서 가져오는 DDQN 방식이 고안되었습니다.
+
+[Fig3](https://jiryang.github.io/img/ddqn.png "Double DQN"){: width="100%"}
+
+
+**Dueling DQN**<br>
+
+
+[Fig4](https://jiryang.github.io/img/duel_dqn.png "Dueling DQN"){: width="100%"}
+
+
+[Fig5](https://jiryang.github.io/img/dqn_atari_result.png "DQN vs Human on Atari Games"){: width="100%"}
+
+
+[Fig6](https://jiryang.github.io/img/dqn_atari_master.gif "DQN on Atari Breakout"){: width="50%"}
 
 
