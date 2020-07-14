@@ -157,7 +157,11 @@ Combine된 $Q$ 값으로 $V$와 $A$ stream을 학습시키기 위해서는 $Q$ �
 $\qquad$ $$Q(s, a) = V(s) + \left( A(s, a) - \frac{1}{\mid A \mid}\sum_a A(s, a) \right)$$
 
 
-[Fig6](https://jiryang.github.io/img/duel_dqn_examples.png "Dueling DQN"){: width="100%"}
+[Fig6](https://jiryang.github.io/img/duel_dqn_examples.png "Dueling DQN"){: width="50%"}
+
+
+이 외에도 Noisy DQN, DQN with Prioritized Replay 등의 다양한 variant들이 있습니다만 모두 다룰 수는 없어서 여기까지로 DQN에 대한 소개를 마무리합니다. Traditional Q learning이 DNN과 결합하여 많은 task에서 superhuman performance를 보이면서 RL의 가능성을 다시금 열어주었으나, replay memory requirement 때문에 state dimension이 제한적인 경우에만 적용이 가능하다는 등 아직 보편적인 real-world problem에 적용하기에는 문제점도 가지고 있습니다. 다음 포스트에서는 이런 문제들을 해결해준 policy-based method에 대해 다루도록 하겠습니다.
+
 
 
 [Fig7](https://jiryang.github.io/img/dqn_atari_result.png "DQN vs Human on Atari Games"){: width="100%"}
