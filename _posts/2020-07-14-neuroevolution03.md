@@ -135,18 +135,18 @@ $\qquad$ Perform a gradient descent step on $${(y_j - Q(\phi_j, a_j; \theta))}^2
 _Target Network_
 우변의 estimation을 가지고 좌변의 target을 update하는 방식인데 $\hat{Q}$ term이 양변에 동일하게 들어가 있기 때문에, 매번 target이 update 될때마다 estimate의 값이 oscillate하게 되어서 $\hat{Q}$가 수렴하기 어려운 문제가 생깁니다. 그래서 별도의 target Q table (DQN의 경우에는 별도의 target Q network이 되겠죠)을 두고 여기서 next action과 reward를 뽑아내며, target network는 간헐적으로 (원래 Q network보다 드물게) 업데이트를 함으로써 Q network 수렴을 돕는다는 개념입니다. 간헐적으로 target Q network를 primary Q network로 reset시켜주는 방식도 있고, Polyak averaging ($\theta' \leftarrow \tau \theta + (1-\tau)\theta'$, $\tau$: averaging rate)을 써서 미세하게 primary network와 target network의 차이를 줄이는 방향으로 target을 학습시키는 방식도 있습니다 (_Soft Update_).<br><br>
 
-[Fig3](https://jiryang.github.io/img/soft_update.png "Soft Update Target Network in DQN"){: width="100%"}
+![Fig3](https://jiryang.github.io/img/soft_update.png "Soft Update Target Network in DQN"){: width="100%"}
 
 
 이 방식은 '모든 state가 관찰 가능하고, 모든 state에 대한 모든 action이 수행 가능한' perfect environment에서라면 그다지 문제가 되지 않을 수도 있으나, 실제 학습 상황에서는 sensory값이 누락된다거나 environment에 변화가 생긴다거나 $\epsilon$-greedy처럼 non-deterministic하게 action을 수행하게 되는 noisy한 environment일 경우가 많습니다. Perfect environment라면 stochastic하게 optimal Q value로 수렴이 될 가능성이 높지만, 그렇지 않은 경우 Q table의 값이 몇몇 경우의 잘못 계산된 $max \hat{Q}$ 값에 의해 suboptimal하게 수렴되는 경우가 발생할 수 있습니다. 특히 overestimation의 우려가 크다고 밝혀졌는데, 이를 방지하기 위해 primary Q network에서 하되, 그 action으로 인한 reward는 target Q network에서 가져오는 DDQN 방식이 고안되었습니다.
 
-[Fig4](https://jiryang.github.io/img/ddqn.png "Double DQN"){: width="100%"}
+![Fig4](https://jiryang.github.io/img/ddqn.png "Double DQN"){: width="100%"}
 
 
 **Dueling DQN**<br>
 Dueling DQN은 network가 $Q(s, a)$를 $V(s)$와 $A(s, a)$라는 intermediate result (value)를 뽑아내게끔 분리하고, 이 값을 다시 합쳐서 $Q(s, a)$를 획득하는 방법입니다. $V(s)$는 앞서 보았던대로 state $s$의 value function이고, 새로 도입된 $A(s, a)$는 state $s$에서 action $a$를 취했을 때의 advantage를 나타내는 term입니다. 기존의 $Q(s, a)$가 이미 state $s$에서 action $a$를 취할 때의 value를 나타내는데 이걸 굳이 두 term으로 나누어 뽑아낸 까닭은, 어떤 task는 모든 state에서 action을 choice할 필요가 없기 때문에 state 정보와 action selection을 하나로 묶은 $Q$ term을 한꺼번에 학습하는 것이 불필요하게 느리고 복잡할 수가 있기 때문입니다. 또한 state와 action과의 tight correlation을 분리해서 action 자체의 general한 학습이 가능하다는 점도 장점이라 할 수 있습니다.<br>
 
-[Fig5](https://jiryang.github.io/img/duel_dqn.png "Dueling DQN"){: width="100%"}
+![Fig5](https://jiryang.github.io/img/duel_dqn.png "Dueling DQN"){: width="100%"}
 
 
 아래 그림은 다른 차량들을 추월해서 goal에 도달해야 하는 Enduro라는 Atari 게임인데요, 윗쪽 그림의 경우 network의 value stream은 action과 크게 관계없는 long-term goal인 road ahead 부분과 현재 score display 부분에 heatmap이 highlight된 반면, 다른 자동차가 주위에 없는 현재 상태에서 별다른 action이 필요없기 때문에 network의 action stream은 highlight된 부분이 없습니다. 하지만 state가 변해 주위에 차량이 접근하게 되어 개개의 action이 중요해진 아래쪽 그림의 경우에는 action stream이 가까운 차량에 highlight를 하는 것을 알 수 있습니다.
@@ -157,16 +157,16 @@ Combine된 $Q$ 값으로 $V$와 $A$ stream을 학습시키기 위해서는 $Q$ �
 $\qquad$ $$Q(s, a) = V(s) + \left( A(s, a) - \frac{1}{\mid A \mid}\sum_a A(s, a) \right)$$
 
 
-[Fig6](https://jiryang.github.io/img/duel_dqn_examples.png "Dueling DQN"){: width="50%"}
+![Fig6](https://jiryang.github.io/img/duel_dqn_examples.png "Dueling DQN"){: width="50%"}
 
 
 이 외에도 Noisy DQN, DQN with Prioritized Replay 등의 다양한 variant들이 있습니다만 모두 다룰 수는 없어서 여기까지로 DQN에 대한 소개를 마무리합니다. Traditional Q learning이 DNN과 결합하여 많은 task에서 superhuman performance를 보이면서 RL의 가능성을 다시금 열어주었으나, replay memory requirement 때문에 state dimension이 제한적인 경우에만 적용이 가능하다는 등 아직 보편적인 real-world problem에 적용하기에는 문제점도 가지고 있습니다. 다음 포스트에서는 이런 문제들을 해결해준 policy-based method에 대해 다루도록 하겠습니다.
 
 
 
-[Fig7](https://jiryang.github.io/img/dqn_atari_result.png "DQN vs Human on Atari Games"){: width="100%"}
+![Fig7](https://jiryang.github.io/img/dqn_atari_result.png "DQN vs Human on Atari Games"){: width="100%"}
 
 
-[Fig8](https://jiryang.github.io/img/dqn_atari_master.gif "DQN on Atari Breakout"){: width="50%"}
+![Fig8](https://jiryang.github.io/img/dqn_atari_master.gif "DQN on Atari Breakout"){: width="50%"}
 
 
