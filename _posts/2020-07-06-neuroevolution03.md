@@ -70,7 +70,7 @@ Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward tab
 
 
 **Deep Q Networks**<br><br>
-간단하지만 powerful한 Q learning이 여러 toy problem에서 좋은 성능을 보였음에도 많이 사용될 수 없었던건 state와 action의 dimension이 커질수록 (특히 state) Q table의 dimension이 너무 커진다는 문제 때문입니다. 예를 들어 조악한 해상도를 가진 Atari 게임만 해도 Q table의 dimension이 7000x4(상하좌우로 움직이는 경우)나 되는데, camera 입력을 받는 자율주행 자동차 같은건 테이블 크기가 엄청나겠지요. Reward는 상대적으로 매우 sparse 해 질 것이고, 이걸 다 채우도록 학습을 하려면 엄청나게 많은 episode가 필요할 것입니다. 한 마디로 불가능합니다.
+간단하지만 powerful한 Q learning이 여러 toy problem에서 좋은 성능을 보였음에도 많이 사용될 수 없었던건 state와 action의 dimension이 커질수록 (특히 state) Q table의 dimension이 너무 커진다는 문제 때문입니다. 예를 들어 조악한 해상도를 가진 Atari 게임만 해도 Q table의 dimension이 7000x4(상하좌우로 움직이는 경우)나 되는데, camera 입력을 받는 자율주행 자동차 같은건 테이블 크기가 엄청나겠지요. Reward는 상대적으로 매우 sparse 해 질 것이고, 이걸 다 채우도록 학습을 하려면 엄청나게 많은 episode (또는 trajectory이나 rollout이라고 부름)가 필요할 것입니다. 한 마디로 불가능합니다.
 
 
 이후 DNN이 high-dimensional real-world problem들을 성공적으로 해결하게 되고, Q learning에도 DNN 방법론을 접목하게 된 것이 Deep Q Networks (DQN) 입니다. DQN은 <$state$, $action$> pair를 입력하면 Q value가 출력되는 DNN을 학습하여 기존의 Q table을 대체하였습니다.<br>
@@ -154,7 +154,7 @@ $\qquad$ $$\nabla J(\theta) = \nabla  \mathbb{E}_{\pi}\left[ r(\tau) \right] = \
 
 $\qquad$ $$= \int \nabla \pi(\tau)r(\tau)d\tau$$
 
-$\qquad$ $$= \int \pi(\tau) \nabla ln \; \pi(\tau) r(\tau)d\tau \quad (\because ln \; \pi(\tau) = 1/\pi(\tau))$$
+$\qquad$ $$= \int \pi(\tau) \nabla ln \; \pi(\tau) r(\tau)d\tau \quad (\because ln \; \pi(\tau) = \frac{1}{\pi(\tau)})$$
 
 $\qquad$ $$= \mathbb{E}_{\pi}\left[ r(\tau) \nabla ln \; \pi(\tau) \right]$$
 
@@ -180,7 +180,9 @@ $\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_
 
 Baseline을 정하는 몇 가지 대표적인 예는 다음과 같습니다:
 - Constant baseline: $$b = \mathbb{E} \lbrack R(\tau) \rbrack \approx \frac{1}{m} \sum^m_{i=1} R(\tau^{(i)})$$
-- Optimal Constant baseline: $$b = \frac{sum_i (\nabla_{\theta} log \; P(\tau^{(i)}; \theta)^2)R(\tau^{(i)})}{sum_i (\nabla_{\theta} log \; P(\tau^{(i)}); \theta)^2}$$
+- Optimal Constant baseline: $$b = \frac{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}; \theta)^2)R(\tau^{(i)})}{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}); \theta)^2}$$
+- Time-dependent baseline: $$b_t = \frac{1}{m} \sum^m_{i=1} \sum^{H-1}_{k=t} R(s^{(i)}_k, u^{(i)}_k)$$
+
 
 _ * Baseline을 state value function값인 $V(s) = \mathbb{E}_{\pi_{\theta}} \lbrack G_t \mid S_t = s \rbrack$로 잡을 수도 있는데요, 이렇게 $V(s)$를 예측하는 별도의 네트워크를 두고 baseline으로 적용한 것이 **Actor-Critic method**입니다. _
 
