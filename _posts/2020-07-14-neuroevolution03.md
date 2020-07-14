@@ -126,7 +126,7 @@ $\qquad$ Select $$a_t = max_a Q^{\ast}(\phi(s_t), a; \theta)$$<br>
 $\qquad$ $$...$$<br>
 $\qquad$ Perform a gradient descent step on $${(y_j - Q(\phi_j, a_j; \theta))}^2$$<br>
 
-_Target Network_
+_Target Network_<br>
 우변의 estimation을 가지고 좌변의 target을 update하는 방식인데 $\hat{Q}$ term이 양변에 동일하게 들어가 있기 때문에, 매번 target이 update 될때마다 estimate의 값이 oscillate하게 되어서 $\hat{Q}$가 수렴하기 어려운 문제가 생깁니다. 그래서 별도의 target Q table (DQN의 경우에는 별도의 target Q network이 되겠죠)을 두고 여기서 next action과 reward를 뽑아내며, target network는 간헐적으로 (원래 Q network보다 드물게) 업데이트를 함으로써 Q network 수렴을 돕는다는 개념입니다. 간헐적으로 target Q network를 primary Q network로 reset시켜주는 방식도 있고, Polyak averaging ($\theta' \leftarrow \tau \theta + (1-\tau)\theta'$, $\tau$: averaging rate)을 써서 미세하게 primary network와 target network의 차이를 줄이는 방향으로 target을 학습시키는 방식도 있습니다 (_Soft Update_).<br><br>
 
 ![Fig3](https://jiryang.github.io/img/soft_update.png "Soft Update Target Network in DQN"){: width="100%"}
