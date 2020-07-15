@@ -54,7 +54,7 @@ $\qquad$ $\qquad$ $$= \mathbb{E}_{\pi}\left[ r(\tau) \nabla ln \; \pi(\tau) \rig
 
 <br>
 
-마지막 식을 글로 풀어쓰면 '_expected_ reward의 미분값은 reward와 policy($\pi_{\theta}$)에 로그를 취한 값의 gradient와의 곱과 같다' 인데요, 이것이 바로 **_Policy Gradient Theorem_** 입니다.
+마지막 식을 글로 풀어쓰면 '_expected_ reward의 미분값은 reward $\times$ policy($\pi_{\theta}$)에 로그를 취한 값의 gradient와 같다' 인데요, 이것이 바로 **_Policy Gradient Theorem_** 입니다.
 
 _* Policy Gradient theorem의 증명은 여러 방식으로 가능한데요, 또다른 증명 한 가지를 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다._<br>
 
