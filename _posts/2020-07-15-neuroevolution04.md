@@ -33,11 +33,12 @@ Value based 대비 policy gradient 방식의 단점은 environment의 작은 변
 $\qquad$ $$J(\theta) = \mathbb{E}_{\pi}\left[ r(\tau) \right]$$
 
 $\qquad$ $\qquad$ $\pi$ or $\pi_{\theta}$: policy (parameterized by $\theta$)
+
 $\qquad$ $\qquad$ $r(\tau)$: total reward for a given episode $\tau$
 <br>
 
 
-우리의 목표는 위의 $J$를 최대화하는 parameter $\theta$를 찾는 것이겠지요. 네트워크로 구현된 경우라면 저 $\theta$는 weights가 될 것입니다. Target $Q$와 estimated $Q$ 사이의 $MSE$를 loss로 놓고 gradient descent search를 했던 Q learning과 달리, policy-based RL의 objective function은 expected reward이기 때문에 minimize하는 것이 아니라 maximize를 해야합니다. Update rule이 다음과 같이 되겠죠:<br><br>
+우리의 목표는 위의 $J$를 최대화하는 parameter $\theta$를 찾는 것이겠지요. 네트워크로 구현된 경우라면 저 $\theta$는 weights가 될 것입니다. Target $Q$와 estimated $Q$ 사이의 squared error를 loss로 놓고 gradient descent search를 했던 Q learning과 달리, policy-based RL의 objective function은 expected reward이기 때문에 minimize하는 것이 아니라 maximize를 해야합니다. Update rule이 다음과 같이 되겠죠:<br><br>
 $\qquad$ $$\theta_{t+1} = \theta_t + \alpha \nabla J(\theta_t)$$
 
 $\pi$가 policy의 probability로 표현되는 policy-based에서는 (특히 continous라면 더욱) _expected_ reward를 다음과 같이 integral로 표현할 수 있습니다:<br><br>
@@ -45,11 +46,11 @@ $\qquad$ $$J(\theta) = \mathbb{E}_{\pi}\left[ r(\tau) \right] = \int \pi(\tau)r(
 
 $\qquad$ $$\nabla J(\theta) = \nabla  \mathbb{E}_{\pi}\left[ r(\tau) \right] = \nabla \int \pi(\tau)r(\tau)d\tau$$
 
-$\qquad$ $$= \int \nabla \pi(\tau)r(\tau)d\tau$$
+$\qquad$ $\qquad$ $$= \int \nabla \pi(\tau)r(\tau)d\tau$$
 
-$\qquad$ $$= \int \pi(\tau) \nabla ln \; \pi(\tau) r(\tau)d\tau \quad (\because ln \; \pi(\tau) = \frac{1}{\pi(\tau)})$$
+$\qquad$ $\qquad$ $$= \int \pi(\tau) \nabla ln \; \pi(\tau) r(\tau)d\tau \quad (\because ln \; \pi(\tau) = \frac{1}{\pi(\tau)})$$
 
-$\qquad$ $$= \mathbb{E}_{\pi}\left[ r(\tau) \nabla ln \; \pi(\tau) \right]$$
+$\qquad$ $\qquad$ $$= \mathbb{E}_{\pi}\left[ r(\tau) \nabla ln \; \pi(\tau) \right]$$
 
 <br>
 
