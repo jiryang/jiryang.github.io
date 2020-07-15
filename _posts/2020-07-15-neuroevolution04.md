@@ -33,7 +33,6 @@ Value based 대비 policy gradient 방식의 단점은 environment의 작은 변
 $\qquad$ $$J(\theta) = \mathbb{E}_{\pi}\left[ r(\tau) \right]$$
 
 $\qquad$ $\qquad$ $\pi$ or $\pi_{\theta}$: policy (parameterized by $\theta$)
-
 $\qquad$ $\qquad$ $r(\tau)$: total reward for a given episode $\tau$
 <br>
 
