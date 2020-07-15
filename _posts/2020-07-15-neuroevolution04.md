@@ -18,7 +18,7 @@ mathjax: true
 
 ![Fig2](https://jiryang.github.io/img/pg_6s191.PNG "PG at a glance"){: width="100%"}{: .aligncenter}
 
-_* 이미지는 MIT 박사과정 학생인 Alexander Amini의 6.S191 lecture slide에서 가져왔습니다. 대신 [유튜브 링크](https://www.youtube.com/watch?v=nZfaHIxDD5w&t=1937s) 공유합니다. 잘 준비된 intro 강의라서 이해가 쉬우니 꼭 보시길 권합니다._
+_* 이미지는 MIT 6.S191 lecture slide에서 가져왔습니다. 대신 [유튜브 링크](https://www.youtube.com/watch?v=nZfaHIxDD5w&t=1937s) 공유합니다. 잘 준비된 intro 강의라서 이해가 쉬우니 꼭 보시길 권합니다._
 
 
 Policy gradient의 장점은 그 결과가 current state에 대한 각 action의 확률로 나오기 때문에 optimal policy가 deterministic한 경우라면 낮은 확률으로라도 randomness를 강제했던 value-based method의 $\epsilon$-greedy와 달리 stochastically deterministic하게 수렴하게 되며, optimal policy가 arbitrary한 경우에도 probability-based로 동작하기 때문에 대응이 가능하다는 점을 들 수 있습니다. 두 번째 경우를 좀 더 설명하자면, 예를들어 포커 게임을 학습한 경우 낮은 패를 쥐었을 때 Q learning과 같은 value-based 방법은 $argmax$로 도출한 optimal policy가 100% fold로 나오게 되는 반면 policy gradient는 가끔씩 블러핑을 할 수도 있습니다. 또한 앞서 설명한대로 모든 state-action space를 탐색하지 않고 probabilistically greedy하게 필요한 action을 선택하는 policy space만을 탐색하기 때문에 학습이 효과적입니다 (faster with fewer parameters). 또한 continuous action space에도 적용이 가능해지고, policy의 distribution이 Gaussian이라 가정하면 action space를 mean과 variance로 modeling할 수도 있게 됩니다. 즉, policy gradient를 DNN으로 구현했다면 이 output이 action들의 probability vector가 될 필요가 없고 action space를 나타내는 mean(zero-mean이라 가정하고 mean의 shift 값을 출력하면 되겠죠)과 variance만 출력해도 된다는 뜻입니다.
@@ -29,12 +29,12 @@ Policy gradient의 장점은 그 결과가 current state에 대한 각 action의
 Value based 대비 policy gradient 방식의 단점은 environment의 작은 변화에도 성능이 영향을 받는다는 것을 들 수 있습니다. Value table을 학습한다는건 당장 optimal policy를 구하는 데는 쓰이지 않더라도 모든 state-action space의 lookahead table을 만들어둔다는 것이라고 생각할 수도 있는데요, 그렇기 때문에 environmental change에 어느정도 resilience를 가집니다. 하지만 current environment에서 optimal한 policy를 찾는데 최적화된 policy network는 작은 environmental change에도 학습을 새로 해야 합니다.
 
 
-여타 RL과 마찬가지로 policy gradient에서도 _expected_ reward를 maximize하는 것이 그 목표입니다.<br><br>
+여타 RL과 마찬가지로 policy gradient에서도 _expected_ reward를 maximize하는 것이 그 목표입니다.<br>
 $\qquad$ $$J(\theta) = \mathbb{E}_{\pi}\left[ r(\tau) \right]$$
 
-$\qquad$ $\pi$ or $\pi_{\theta}$: policy (parameterized by $\theta$)
+$\qquad$ $\qquad$ $\pi$ or $\pi_{\theta}$: policy (parameterized by $\theta$)
 
-$\qquad$ $r(\tau)$: total reward for a given episode $\tau$
+$\qquad$ $\qquad$ $r(\tau)$: total reward for a given episode $\tau$
 <br>
 
 
