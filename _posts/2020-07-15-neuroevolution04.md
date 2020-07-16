@@ -167,7 +167,7 @@ $V^{\pi}(s_t)$는 여러 다양한 function approximator를 사용해서 구현�
 - Initialize $V^{\pi}_{\phi_0}$ ($\phi$: regressor parameter)
 - Collect episodes $\tau_1, \tau_2, ..., \tau_N$
 - Regress against reward from each episode:
-  - $$\phi_{i+1} \leftarrow argmin_{\phi} frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t=0} \left( V^{\pi}_{\phi}(s_{i, t}) - (\sum^{T_i - 1}_{t'=t} r(s_{i, t'}, a_{i, t'})) \right)^2$$
+  - $\phi_{i+1} \leftarrow argmin_{\phi} \frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t=0} \left( V^{\pi}_{\phi}(s_{i, t}) - (\sum^{T_i - 1}_{t'=t} r(s_{i, t'}, a_{i, t'})) \right)^2$
 
 _Causality_ 와 _Discount rate_ 까지 적용된 expected reward 식의 $G_t$ 부분을 보면 앞서 Q learning에서 보았던 $V^{\pi}(s_t)$의 수식과 동일하다는 것을 알 수 있습니다 ($$\sum^{T_i - 1}_{t'=t} \gamma^{t'-t} r(s_{i, t'}, a_{i, t'})$$ , baseline은 편의상 생략). 교체한 수식으로 나타내면 다음과 같습니다:<br>
 $\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack Q_w(s_t, a_t) \quad \left( Q_w(s, a) \approx Q^{\pi_{\theta}}(s, a) \right)$$<br>
