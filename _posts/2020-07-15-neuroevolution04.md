@@ -118,7 +118,7 @@ $\qquad$ $$b = \mathbb{E} \lbrack R(\tau) \rbrack \approx \frac{1}{N} \sum^N_{i=
 - Optimal Constant baseline: 수학적으로 variance ($$Var \lbrack x \rbrack = E \lbrack x^2 \rbrack - E {\lbrack x \rbrack}^2 $$)를 최소화하는 값을 계산한 optimal 값이지만 성능 개선 정도에 비해 computational burden이 심해서 자주 사용되지는 않음<br>
 $\qquad$ $$b = \frac{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}; \theta)^2)R(\tau^{(i)})}{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}); \theta)^2}$$<br>
 - Time-dependent baseline: episode 기준으로 reward를 계산하여 averaging을 하는 것이 아니라, 각 episode 내의 모든 step(state-action pair)들에 대해 reward를 구해 평균을 낸 것으로, 특정 시간 이후의 step만을 고려할 수도 있음 (수식에서는 episode마다 $t$ 시점 이후부터의 reward를 계산)<br>
-$\qquad$ $$b_t = \frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t'=t} r(s_{i, t'}}, a_{i, t'})$$
+$\qquad$ $$b_t = \frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t'=t} r(s_{i, t'}, a_{i, t'})$$
 - State-dependent expected return: episode나 time이 아니라 특정 state에 dependent한 reward (현재 policy에 의하면 state $t$에서는 평균 얼마만큼의 reward를 주는가)를 계산<br>
 $\qquad$ $$b(s_t) = \mathbb{E} \lbrack r_t + r_{t+1} + r_{t+2} + ... + r_{T-1} \rbrack = V^{\pi}(s_t)$$
 <br>
