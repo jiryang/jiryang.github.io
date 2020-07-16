@@ -160,12 +160,30 @@ $\qquad$ $$b(s_t) = \mathbb{E} \lbrack r_t + r_{t+1} + r_{t+2} + ... + r_{T-1} \
 <br><br>
 
 
+이 중 'current state $s_t$에서 current policy $\pi_{\theta}$로 취할 수 있는 평균 future reward'를 말하는 state-dependent expected return은 그 값의 증감에 따라서 특정 action이 선택될 확률을 높이거나 낮출 수 있는 기준이 될 수 있기 때문에 arbitrary function을 baseline으로 삼는 것에 비해 보다 효과적이라 할 수 있습니다.<br>
+
+
+$V^{\pi}(s_t)$는 여러 다양한 function approximator를 사용해서 구현할 수 있습니다. 예를 들면 다음과 같이 regression을 통해서 구하는 것도 한 가지 방법이 될 수 있겠습니다:<br>
+- Initialize $V^{\pi}_{\phi_0}$ ($\phi$: regressor parameter)
+- Collect episodes $\tau_1, \tau_2, ..., \tau_N$
+- Regress against reward from each episode:
+  - $$\phi_{i+1} \leftarrow argmin_{\phi} frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t=0} \left( V^{\pi}_{\phi}(s_{i, t}) - (\sum^{T_i - 1}_{t'=t} r(s_{i, t'}, a_{i, t'})) \right)^2$$
+
+_Causality_ 와 _Discount rate_ 까지 적용된 expected reward 식의 $G_t$ 부분을 보면 앞서 Q learning에서 보았던 $V^{\pi}(s_t)$의 수식과 동일하다는 것을 알 수 있습니다 ($$\sum^{T_i - 1}_{t'=t} \gamma^{t'-t} r(s_{i, t'}, a_{i, t'})$$ , baseline은 편의상 생략). 교체한 수식으로 나타내면 다음과 같습니다:<br>
+$\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack Q_w(s_t, a_t) \quad \left( Q_w(s, a) \approx Q^{\pi_{\theta}}(s, a) \right)$$<br>
+
 Policy-gradient도 variant들을 몇 개 소개합니다.<br>
 
 **Actor-Critic Method**<br>
-_Causality_ 와 _Discount rate_ 까지 적용된 expected reward 식의 $G_t$ 부분을 보면 앞서 Q learning에서 보았던 Q value 수식과 동일하다는 것을 알 수 있습니다 ($$\sum^{T_i - 1}_{t'=t} \gamma^{t'-t} r(s_{i, t'}, a_{i, t'})$$ , baseline은 편의상 생략). 이 Q table은 앞서 DQN을 이용하여 학습할 수 있다는 것을 보았었죠. 수식으로 나타내면 다음과 같습니다:<br>
-$\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack Q_w(s_t, a_t) \quad \left( Q_w(s, a) \approx Q^{\pi_{\theta}}(s, a) \right)$$<br>
-Q 네트워크는 policy-gradient와 별개의 네트워크이므로 parameter를 $w$로 표현합니다.  Action value function$V(s)$를 학습하여
+
+Q 네트워크는 policy-gradient와 별개의 네트워크이므로 parameter를 $w$로 표현합니다. Discounted cumulative reward의 estimation을 $Q_w$을 output하는 "Critic" network로 교체하게 되면, true policy gradient가 아닌 "Critic"에 의해 계산된 approximate policy gradient로 policy network ("Actor")을 update하게 됩니다. 즉, "Actor"는 given state의 policy distribution을 출력하는 역할을 하고, "Critic"은 "Actor"로 하여금 보다 정확한 policy distribution 계산을 위한 Q 값(reward from now on)을 제공하는 역할을 하게 되는거죠. 이러한 역할 분담 때문에 이를 Actor-Cricit method라고 부릅니다.<br>
+
+
+여기서 Q value approximator인 "Critic"은 앞서 DQN을 이용하여 학습할 수 있다는 것을 보았는데요, 사실 neural network든 linear function approximator든 temporal difference function approximator든, 어떠한 형태의 function approximator라도 무관합니다. Linear function approximator Actor를 가진 Action-Value Actor-Critic의 pseudocode를 보겠습니다:<br>
+
+- - -
+
+- - -
 <!--위의 다양한 baseline 기법들 중 마지막에 언급된 state-dependent expected return을 Actor-Critic Method라고 합니다. -->
 
 **Trust Region Policy Optimization (TRPO)**<br>
