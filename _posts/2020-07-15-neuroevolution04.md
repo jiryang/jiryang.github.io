@@ -21,7 +21,7 @@ mathjax: true
 _* 이미지는 MIT 6.S191 lecture slide에서 가져왔습니다. 대신 [유튜브 링크](https://www.youtube.com/watch?v=nZfaHIxDD5w&t=1937s) 공유합니다. 잘 준비된 intro 강의라서 이해가 쉬우니 꼭 보시길 권합니다._
 
 
-Policy gradient의 장점은 그 결과가 current state에 대한 각 action의 확률로 나오기 때문에 optimal policy가 deterministic한 경우라면 낮은 확률으로라도 randomness를 강제했던 value-based method의 $\epsilon$-greedy와 달리 stochastically deterministic하게 수렴하게 되며, optimal policy가 arbitrary한 경우에도 probability-based로 동작하기 때문에 대응이 가능하다는 점을 들 수 있습니다. 두 번째 경우를 좀 더 설명하자면, 예를들어 포커 게임을 학습한 경우 낮은 패를 쥐었을 때 Q learning과 같은 value-based 방법은 $argmax$로 도출한 optimal policy가 100% fold로 나오게 되는 반면 policy gradient는 가끔씩 블러핑을 할 수도 있습니다. 또한 앞서 설명한대로 모든 state-action space를 탐색하지 않고 probabilistically greedy하게 필요한 action을 선택하는 policy space만을 탐색하기 때문에 학습이 효과적입니다 (faster with fewer parameters). 또한 continuous action space에도 적용이 가능해지고, policy의 distribution이 Gaussian이라 가정하면 action space를 mean과 variance로 modeling할 수도 있게 됩니다. 즉, policy gradient를 DNN으로 구현했다면 이 output이 action들의 probability vector가 될 필요가 없고 action space를 나타내는 mean(zero-mean이라 가정하고 mean의 shift 값을 출력하면 되겠죠)과 variance만 출력해도 된다는 뜻입니다.
+Policy gradient의 장점은 그 결과가 current state에 대한 각 action의 확률로 나오기 때문에 optimal policy가 deterministic한 경우라면 낮은 확률으로라도 randomness를 강제했던 value-based method의 $\epsilon$-greedy와 달리 stochastically deterministic하게 수렴하게 되며, optimal policy가 arbitrary한 경우에도 probability-based로 동작하기 때문에 대응이 가능하다는 점을 들 수 있습니다. 두 번째 경우를 좀 더 설명하자면, 예를들어 포커 게임을 학습한 경우 낮은 패를 쥐었을 때 Q learning과 같은 value-based 방법은 $argmax$로 도출한 optimal policy가 100% fold로 나오게 되는 반면 policy gradient는 가끔씩 블러핑을 할 수도 있습니다. 또한 앞서 설명한대로 모든 state-action space를 탐색하지 않고 probabilistically greedy하게 필요한 action을 선택하는 policy space만을 탐색하기 때문에 학습이 효과적입니다 (faster with fewer parameters). 또한 policy의 distribution이 Gaussian이라 가정하면 action space를 mean과 variance로 modeling할 수도 있게 됩니다. 즉, policy gradient를 DNN으로 구현했다면 이 output이 action들의 probability vector가 될 필요가 없고 action space를 나타내는 mean(zero-mean이라 가정하고 mean의 shift 값을 출력하면 되겠죠)과 variance만 출력해도 된다는 뜻입니다. 이렇게 되면 action space가 continuous하게 방대한 경우에도 modeling이 가능해집니다.
 
 ![Fig3](https://jiryang.github.io/img/model_continuous_action_space.PNG "PG Modeling Continuous Action Space"){: width="100%"}{: .aligncenter}
 
@@ -38,7 +38,7 @@ $\qquad$ $\qquad$ $r(\tau)$: total reward for a given episode $\tau$
 <br>
 
 
-우리의 목표는 위의 $J$를 최대화하는 parameter $\theta$를 찾는 것이겠지요. 네트워크로 구현된 경우라면 저 $\theta$는 weights가 될 것입니다. Target $Q$와 estimated $Q$ 사이의 squared error를 loss로 놓고 gradient descent search를 했던 Q learning과 달리, policy-based RL의 objective function은 expected reward이기 때문에 minimize하는 것이 아니라 maximize를 해야합니다. Update rule이 다음과 같이 되겠죠:<br><br>
+우리의 목표는 위의 $J$를 최대화하는 parameter $\theta$를 찾는 것이겠지요. 네트워크로 구현된 경우라면 저 $\theta$는 weights가 될 것입니다. Target $Q$와 estimated $Q$ 사이의 mean-quared error를 loss로 놓고 gradient descent search를 했던 Q learning과 달리, policy-based RL의 objective function은 expected reward이기 때문에 minimize하는 것이 아니라 maximize를 해야합니다. Update rule이 다음과 같이 되겠죠:<br><br>
 $\qquad$ $$\theta_{t+1} = \theta_t + \alpha \nabla J(\theta_t)$$
 
 $\pi$가 policy의 probability로 표현되는 policy-based에서는 (특히 continous라면 더욱) _expected_ reward를 다음과 같이 integral로 표현할 수 있습니다:<br><br>
@@ -54,26 +54,30 @@ $\qquad$ $\qquad$ $$= \mathbb{E}_{\pi}\left[ r(\tau) \nabla ln \; \pi(\tau) \rig
 
 <br>
 
-마지막 식을 글로 풀어쓰면 '_expected_ reward의 미분값은 reward $\times$ policy($\pi_{\theta}$)에 로그를 취한 값의 gradient와 같다' 인데요, 이것이 바로 **_Policy Gradient Theorem_** 입니다.
+마지막 식을 글로 풀어쓰면 '_expected_ reward의 미분값은 reward $\times$ (policy($\pi_{\theta}$)에 로그를 취한 값의 gradient)와 같다' 인데요, 이것이 바로 **_Policy Gradient Theorem_** 입니다.
 
 _* Policy Gradient theorem의 증명은 여러 방식으로 가능한데요, 또다른 증명 한 가지를 [링크](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)로 대신합니다._<br>
 
-이렇게 policy gradient에 $ln$을 취한 값은 product($\prod$)로 표현되던 episode 내 policy를 sum으로 바꿔주고, $\theta$와 무관한 initial state의 probability 및 state transition probability term을 제거시켜주어 derivative of _expected_ reward를 episode 내의 각 step의 policy probability만으로 간소화 시켜주는 효과를 낳아, 드디어 policy의 미분값만으로 backpropagation을 이용해서 (그리고 reward 값과 곱해야죠) gradient의 contribution을 구할 수 있게 됩니다:<br><br>
+이렇게 policy gradient에 $ln$을 취한 값은 product($\prod$)로 표현되던 episode 내 policy를 sum으로 바꿔주고, $\theta$와 무관한 initial state의 probability 및 state transition probability term을 제거시켜 주어 derivative of _expected_ reward를 episode 내의 각 step의 policy probability만으로 간소화 시켜주는 효과를 낳아, 드디어 policy의 미분값만으로 backpropagation을 이용해서 (그리고 reward 값과 곱해야죠) gradient의 contribution을 구할 수 있게 됩니다:<br><br>
 $\qquad$ $$\pi_{\theta}(\tau) = \mathcal{P}(s_0) \prod^T_{t=1} \pi_{\theta}(a_t \mid s_t)p(s_{t+1}, r_{t+1} \mid s_t, a_t)$$
 
 $\qquad$ $$ln \;\pi_{\theta}(\tau) = ln \; \mathcal{P}(s_0) + \sum^T_{t=1} ln \; \pi_{\theta}(a_t \mid s_t) + \sum^T_{t=1} ln \; p(s_{t+1}, r_{t+1} \mid s_t, a_t)$$
+<br>
 
-이 과정 이후 남은 식은 다음과 같습니다:<br><br>
+이 과정 이후 남은 식은 다음과 같습니다:<br>
 $\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_{\pi_{\theta}} \lbrack r(\tau) \left( \sum^T_{t=1} \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack$$
+<br>
 
-이제 $r(\tau)$를 $\sum$ 안에 넣으면 해당 step부터의 discounted cumulative reward인 $G_t$로 바꾸어 표기할 수 있으며, REINFORCE 알고리즘의 최종 update rule이 완성됩니다:<br><br>
+이제 $r(\tau)$를 $\sum$ 안에 넣으면 해당 step부터의 discounted cumulative reward인 $G_t$로 바꾸어 표기할 수 있으며, REINFORCE 알고리즘의 최종 update rule이 완성됩니다:<br>
 $\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} G_t \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack \quad (\because G_t = \sum^T_{t=1} \gamma R_t)$$
 <br>
 
 
-위와 같은 update rule을 가지는 vanilla REINFORCE는 policy가 probabilistic하게 결정되기 때문에 특정 episode의 특정 state에서 서로 다른 action을 선택할 가능성이 늘 있습니다. 그런데 optimal vs suboptimal policy에 대한 $G_t$값의 차이가 지나치게 들쭉날쭉하다면 (variance가 크다면), $G_t$가 update rule의 매 gradient에 곱해지는 값이기 때문에 학습이 수렴되는 것을 어렵게 만듭니다. 그래서 **_baseline_**이 도입됩니다. 이 baseline은 action($\theta$)에 dependent하지만 않으면 gradient update rule에서 상수로 취급되어 소거가 가능하기 때문에 이 조건을 만족하면서 variance를 줄여줄 수 있습니다. 대표적인 예로 average performance를 baseline으로 잡아 reward에서 차감시키게 되면 variance를 줄일 수 있게되어 "좋은" policy는 선택될 확률를 (여전히) 증가시키면서도 "나쁜" policy는 선택될 확률을 감소시키는 효과를 발생시켜 모든 policy가 $>0$ 값을 가지는 경우에 비해 수렴이 쉽습니다. Baseline을 적용한 update rule은 다음과 같습니다:<br><br>
+**REINFORCE (Monte-Carlo Policy Gradient)**<br>
+
+위와 같은 update rule을 가지는 vanilla REINFORCE는 policy가 probabilistic하게 결정되기 때문에 특정 episode의 특정 state에서 서로 다른 action을 선택할 가능성이 늘 있습니다. 그런데 optimal vs suboptimal policy에 대한 $G_t$값의 차이가 지나치게 들쭉날쭉하다면 (variance가 크다면), $G_t$가 update rule의 매 gradient에 곱해지는 값이기 때문에 학습이 수렴되는 것을 어렵게 만듭니다. 그래서 **_baseline_**이 도입됩니다. 이 baseline은 action($\theta$)에 dependent하지만 않으면 gradient update rule에서 상수로 취급되어 소거가 가능하기 때문에 이 조건을 만족하면서 variance를 줄여줄 수 있습니다. 대표적인 예로 average performance를 baseline으로 잡아 reward에서 차감시키게 되면 variance를 줄일 수 있게되어 "좋은" policy는 선택될 확률를 (여전히) 증가시키면서도 "나쁜" policy는 선택될 확률을 감소시키는 효과를 발생시켜 모든 policy가 $>0$ 값을 가지는 경우에 비해 수렴이 쉽습니다. Baseline을 적용한 update rule은 다음과 같습니다:<br>
 $\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} (G_t - b) \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack$$
-<br>
+<br><br>
 
 
 Baseline을 정하는 몇 가지 대표적인 예는 다음과 같습니다:
