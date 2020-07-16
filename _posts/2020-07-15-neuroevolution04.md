@@ -70,10 +70,25 @@ $\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_
 
 이제 $r(\tau)$를 $\sum$ 안에 넣으면 해당 step부터의 discounted cumulative reward인 $G_t$로 바꾸어 표기할 수 있으며, REINFORCE 알고리즘의 최종 update rule이 완성됩니다:<br>
 $\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} G_t \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack \quad (\because G_t = \sum^T_{t=1} \gamma R_t)$$
-<br>
+<br><br>
 
 
 **REINFORCE (Monte-Carlo Policy Gradient)**<br>
+
+Pseudocode부터 보겠습니다:<br>
+- - -
+<<REINFORCE algorithm>><br>
+Initialize the policy parameter $\theta$ at random.<br>
+Do forever:
+- Generate an episode $S_0, A_0, R_1, ..., S_{T-1}, A_{T-1}, R_T$ following policy $\pi(\cdot \mid \cdot, \theta)$<br>
+- Loop for each step of the episode $t = 0, 1, ..., T-1$:<br>
+  - Evaluate the gradient using these samples:<br>
+$\qquad$ $\qquad$ $$\nabla_{\theta}J(\theta) \approx \frac{1}{N} \sum^N_{i=1} \left( \sum^T_{t=1} G_t \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \quad (\because G_t = \sum^T_{t=1} \gamma R_t)$$
+  - $G_t \leftarrow \sum^T_{k=t+1} \gamma^{k-t-1}R_k$<br>
+  - $\theta \leftarrow \theta + \alpha \nabla_{\theta}J(\theta)$
+
+- - -
+
 
 위와 같은 update rule을 가지는 vanilla REINFORCE는 policy가 probabilistic하게 결정되기 때문에 특정 episode의 특정 state에서 서로 다른 action을 선택할 가능성이 늘 있습니다. 그런데 optimal vs suboptimal policy에 대한 $G_t$값의 차이가 지나치게 들쭉날쭉하다면 (variance가 크다면), $G_t$가 update rule의 매 gradient에 곱해지는 값이기 때문에 학습이 수렴되는 것을 어렵게 만듭니다. 그래서 **_baseline_**이 도입됩니다. 이 baseline은 action($\theta$)에 dependent하지만 않으면 gradient update rule에서 상수로 취급되어 소거가 가능하기 때문에 이 조건을 만족하면서 variance를 줄여줄 수 있습니다. 대표적인 예로 average performance를 baseline으로 잡아 reward에서 차감시키게 되면 variance를 줄일 수 있게되어 "좋은" policy는 선택될 확률를 (여전히) 증가시키면서도 "나쁜" policy는 선택될 확률을 감소시키는 효과를 발생시켜 모든 policy가 $>0$ 값을 가지는 경우에 비해 수렴이 쉽습니다. Baseline을 적용한 update rule은 다음과 같습니다:<br>
 $\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} (G_t - b) \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack$$
