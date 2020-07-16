@@ -163,7 +163,7 @@ $\qquad$ $$b(s_t) = \mathbb{E} \lbrack r_t + r_{t+1} + r_{t+2} + ... + r_{T-1} \
 Policy-gradient도 variant들을 몇 개 소개합니다.<br>
 
 **Actor-Critic Method**<br>
-_Causality_ 와 _Discount rate_ 까지 적용된 expected reward 식의 $G_t$ 부분을 보면 앞서 Q learning에서 보았던 Q value 수식과 동일하다는 것을 알 수 있습니다 ( $\sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'})$ , baseline은 편의상 생략). 이 Q table은 앞서 DQN을 이용하여 학습할 수 있다는 것을 보았었죠. 수식으로 나타내면 다음과 같습니다:<br>
+_Causality_ 와 _Discount rate_ 까지 적용된 expected reward 식의 $G_t$ 부분을 보면 앞서 Q learning에서 보았던 Q value 수식과 동일하다는 것을 알 수 있습니다 $\sum^{T_i - 1}_{t'=t} \gamma^{t'-t} r(s_{i, t'}, a_{i, t'})$ , baseline은 편의상 생략. 이 Q table은 앞서 DQN을 이용하여 학습할 수 있다는 것을 보았었죠. 수식으로 나타내면 다음과 같습니다:<br>
 $\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack Q_w(s_t, a_t)$$<br>
 Q 네트워크는 policy-gradient와 별개의 네트워크이므로 parameter를 $w$로 표현합니다.  Action value function$V(s)$를 학습하여
 <!--위의 다양한 baseline 기법들 중 마지막에 언급된 state-dependent expected return을 Actor-Critic Method라고 합니다. -->
