@@ -90,7 +90,21 @@ $\qquad$ $$G_{i, t} = \sum^{T_i - 1}_{t'=0} r(s_{i, t'}, a_{i, t'}))$$<br>
 - - -
 
 
-위와 같은 update rule을 가지는 vanilla REINFORCE는 policy가 probabilistic하게 결정되기 때문에 특정 episode의 특정 state에서 서로 다른 action을 선택할 가능성이 늘 있습니다. 그런데 optimal vs suboptimal policy에 대한 $G_t$값의 차이가 지나치게 들쭉날쭉하다면 (variance가 크다면), $G_t$가 update rule의 매 gradient에 곱해지는 값이기 때문에 학습이 수렴되는 것을 어렵게 만듭니다. 이를 좀 완화하기 위해 cumulative reward ($G_t$)를 구할 때 discount rate ($\gamma$)를 추가하였지만 여전히 variance를 충분히 줄여주지는 못합니다. 그래서 **_baseline_**이 도입됩니다. 이 baseline은 action($\theta$)에 dependent하지만 않으면 gradient update rule에서 상수로 취급되어 소거가 가능하기 때문에 이 조건을 만족하면서 variance를 줄여줄 수 있습니다. 대표적인 예로 average performance를 baseline으로 잡아 reward에서 차감시키게 되면 variance를 줄일 수 있게되어 "좋은" policy는 선택될 확률를 (여전히) 증가시키면서도 "나쁜" policy는 선택될 확률을 감소시키는 효과를 발생시켜 모든 policy가 $>0$ 값을 가지는 경우에 비해 수렴이 쉽습니다. Baseline을 적용한 update rule은 다음과 같습니다:<br>
+위와 같은 update rule을 가지는 vanilla REINFORCE는 policy가 probabilistic하게 결정되기 때문에 특정 episode의 특정 state에서 서로 다른 action을 선택할 가능성이 늘 있습니다. 그런데 optimal vs suboptimal policy에 대한 $G_t$값의 차이가 지나치게 들쭉날쭉하다면 (variance가 크다면), $G_t$가 update rule의 매 gradient에 곱해지는 값이기 때문에 학습이 수렴되는 것을 어렵게 만듭니다. 이를 좀 완화하기 위해 cumulative reward ($G_t$)를 구할 때 discount rate ($\gamma$)를 추가하였지만 여전히 variance를 충분히 줄여주지는 못합니다. 이러한 variance 문제를 줄여주기 위한 몇 가지 방법이 고안되었습니다:<br>
+
+
+**Causality (Reward-to-go)**<br>
+앞서 $G_t$를 $t=0 \sim T$ ($T$: time of episode termination) 까지의 reward의 합으로 계산하였는데요, 이 cumulative reward는 'current state $s$에서 action $a$를 취할 때 받을 immediate reward 및 future reward의 총합'이기 때문에 과거에 이미 받은 reward를 현재의 cumulative reward에 더할 필요가 없습니다. 즉 $$G_{i, t} = \sum^{T_i - 1}_{t'=0} r(s_{i, t'}, a_{i, t'})$$가 $$G_{i, t} = \sum^{T_i - 1}_{t'=t} r(s_{i, t'}, a_{i, t'})$$ 로 바꿀 수 있으며, 이로 인해 전체적으로 gradient에 곱해지는 값의 magnitude를 떨어뜨려 variance 문제를 완화시킬 수 있습니다.<br>
+
+
+**Discount rate**<br>
+앞서 Q learning에서도 보셨듯이 future reward에 discount rate를 곱해서 $G_t$를 discounted cumulative reward로 만들 수 있으며, 이것 또한 variance를 줄여줍니다. 
+
+
+_Causality_ 와 _Discount rate_ trick을 적용한 gradient estimate은 다음과 같이 변경됩니다:<br>
+$\qquad$ $$\nabla_{\theta}J(\theta) \approx \frac{1}{N} \sum^N_{i=1} \sum^{T_i - 1}_{t=0} \nabla_{\theta} ln \; \pi_{\theta} (a_{i, t} \mid s_{i, t}) \times \left( \sum^{T_i - 1}_{t'=t} r(s_{i, t'}, a_{i, t'}) \right)$$<br>
+
+그래서 **_baseline_**이 도입됩니다. 이 baseline은 action($\theta$)에 dependent하지만 않으면 gradient update rule에서 상수로 취급되어 소거가 가능하기 때문에 이 조건을 만족하면서 variance를 줄여줄 수 있습니다. 대표적인 예로 average performance를 baseline으로 잡아 reward에서 차감시키게 되면 variance를 줄일 수 있게되어 "좋은" policy는 선택될 확률를 (여전히) 증가시키면서도 "나쁜" policy는 선택될 확률을 감소시키는 효과를 발생시켜 모든 policy가 $>0$ 값을 가지는 경우에 비해 수렴이 쉽습니다. Baseline을 적용한 update rule은 다음과 같습니다:<br>
 $\qquad$ $$\nabla \mathbb{E}_{\pi_{\theta}} \left[ r(\tau) \right] = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} (G_t - b) \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack$$
 <br><br>
 
