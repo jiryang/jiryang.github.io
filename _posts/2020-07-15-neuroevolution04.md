@@ -82,7 +82,8 @@ Initialize the policy parameter $\theta$ at random.<br>
 Do forever:
 - Generate $N$ episodes ($\tau_1 \sim \tau_N$) following the policy. Each episode $\tau_i$ has the following sequence: $s_{i, 0}, a_{i, 0}, r_{i, 1}, s_{i, 1}, ..., s_{i, T-1}, a_{i, T-1}, r_{i, T}, s_{i, T}$<br>
 - Evaluate the gradient using these samples:<br>
-$\qquad$ $\qquad$ $$\nabla_{\theta}J(\theta) \approx \frac{1}{N} \sum^N_{i=1} \left( \sum^{T_i - 1}_{t=0} G_{i, t} \nabla ln \; \pi_{\theta} (a_{i, t} \mid s_{i, t}) \right) \quad (\because G_{i, t} = \sum^{T_i - 1}_{t'=0} \gamma r(s_{i, t'}, a_{i, t'}))$$
+$\qquad$ $$\nabla_{\theta}J(\theta) \approx \frac{1}{N} \sum^N_{i=1} \left( \sum^{T_i - 1}_{t=0} G_{i, t} \nabla ln \; \pi_{\theta} (a_{i, t} \mid s_{i, t}) \right)$$<br>
+$\qquad$ where $$G_{i, t} = \sum^{T_i - 1}_{t'=0} \gamma r(s_{i, t'}, a_{i, t'}))$$<br>
   - $G_t \leftarrow \sum^T_{k=t+1} \gamma^{k-t-1}R_k$<br>
   - $\theta \leftarrow \theta + \alpha \nabla_{\theta}J(\theta)$
 
