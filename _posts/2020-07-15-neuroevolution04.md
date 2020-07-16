@@ -52,7 +52,7 @@ Episode#1에서의 학습을 통해 중간에 왼쪽으로 급하게 틀던 acti
 
 
 
-이제 이러한 학습 방법이 어떻게 해서 도출되는지를 하나하나 살펴보면서 추적해보도록 하겠습니다.
+지금부터 이러한 학습 방법이 어떻게 해서 도출되는지를 하나하나 살펴보면서 추적해보도록 하겠습니다.
 
 
 Policy gradient의 장점은 그 결과가 current state에 대한 각 action의 확률로 나오기 때문에 optimal policy가 deterministic한 경우라면 낮은 확률으로라도 randomness를 강제했던 value-based method의 $\epsilon$-greedy와 달리 stochastically deterministic하게 수렴하게 되며, optimal policy가 arbitrary한 경우에도 probability-based로 동작하기 때문에 대응이 가능하다는 점을 들 수 있습니다. 두 번째 경우를 좀 더 설명하자면, 예를들어 포커 게임을 학습한 경우 낮은 패를 쥐었을 때 Q learning과 같은 value-based 방법은 $argmax$로 도출한 optimal policy가 100% fold로 나오게 되는 반면 policy gradient는 가끔씩 블러핑을 할 수도 있습니다. 또한 앞서 설명한대로 모든 state-action space를 탐색하지 않고 probabilistically greedy하게 필요한 action을 선택하는 policy space만을 탐색하기 때문에 학습이 효과적입니다 (faster with fewer parameters). 또한 policy의 distribution이 Gaussian이라 가정하면 action space를 mean과 variance로 modeling할 수도 있게 됩니다. 즉, policy gradient를 DNN으로 구현했다면 이 output이 action들의 probability vector가 될 필요가 없고 action space를 나타내는 mean(zero-mean이라 가정하고 mean의 shift 값을 출력하면 되겠죠)과 variance만 출력해도 된다는 뜻입니다. 이렇게 되면 action space가 continuous하게 방대한 경우에도 modeling이 가능해집니다.
@@ -140,12 +140,12 @@ $\qquad$ $$G_{i, t} = \sum^{T_i - 1}_{t'=0} r(s_{i, t'}, a_{i, t'}))$$<br>
 
 
 _Causality_ 와 _Discount rate_ trick을 적용한 gradient estimate은 다음과 같이 변경됩니다:<br>
-$\qquad$ $$\nabla_{\theta}J(\theta) \approx \frac{1}{N} \sum^N_{i=1} \sum^{T_i - 1}_{t=0} \nabla_{\theta} ln \; \pi_{\theta} (a_{i, t} \mid s_{i, t}) \times \left( \sum^{T_i - 1}_{t'=t} r(s_{i, t'}, a_{i, t'}) \right)$$<br>
+$\qquad$ $$\nabla_{\theta}J(\theta) \approx \frac{1}{N} \sum^N_{i=1} \sum^{T_i - 1}_{t=0} \nabla_{\theta} ln \; \pi_{\theta} (a_{i, t} \mid s_{i, t}) \times \left( \sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'}) \right)$$<br>
 
 
 **_Baseline_**<br>
 위의 **policy gradient theorem**은 reward에서 action($\theta$)에 dependent하지 않은 어떠한 식을 차감하더라도 상수화해서 소거가 가능하기 때문에 variance를 줄여주기 위한 arbitrary function을 넣어줄 수 있습니다. 모든 policy가 $\ge$ 0인 대부분의 경우 "좋은" policy든 "나쁜" policy든 reward를 증가시키게 되는데, 이에 비해 "나쁜" policy가 reward를 감소시키도록 하면 variance도 줄어들고 수렴도 쉬울 것입니다. 이같은 역할을 위한 function을 _baseline_ 이라 하고, _baseline_ 이 적용된 update rule은 다음과 같이 바뀝니다 (_Causality_ 와 _Discount rate_ 도 적용):<br>
-$\qquad$ $$\nabla_{\theta}J(\theta) \approx \frac{1}{N} \sum^N_{i=1} \sum^{T_i - 1}_{t=0} \nabla_{\theta} ln \; \pi_{\theta} (a_{i, t} \mid s_{i, t}) \times \left( \sum^{T_i - 1}_{t'=t} r(s_{i, t'}, a_{i, t'}) - b(s_t) \right)$$<br><br>
+$\qquad$ $$\nabla_{\theta}J(\theta) \approx \frac{1}{N} \sum^N_{i=1} \sum^{T_i - 1}_{t=0} \nabla_{\theta} ln \; \pi_{\theta} (a_{i, t} \mid s_{i, t}) \times \left( \sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'}) - b(s_t) \right)$$<br><br>
 
 
 아무 function이나 _baseline_ 으로 쓸 수는 있지만 몇 가지 대표적인 예는 다음과 같습니다:
@@ -163,9 +163,10 @@ $\qquad$ $$b(s_t) = \mathbb{E} \lbrack r_t + r_{t+1} + r_{t+2} + ... + r_{T-1} \
 Policy-gradient도 variant들을 몇 개 소개합니다.<br>
 
 **Actor-Critic Method**<br>
-
-
-위의 baseline 중 마지막 state-dependent expected return은 **Actor-Critic Method**라고 합니다. $V(s)$를 학습하여
+_Causality_ 와 _Discount rate_ 까지 적용된 expected reward 식의 $G_t$ 부분을 보면 앞서 Q learning에서 보았던 Q value 수식과 동일하다는 것을 알 수 있습니다 ($\sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'})$, baseline은 편의상 생략). 이 Q table은 앞서 DQN을 이용하여 학습할 수 있다는 것을 보았었죠. 수식으로 나타내면 다음과 같습니다:<br>
+$\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack Q_w(s_t, a_t)$$<br>
+Q 네트워크는 policy-gradient와 별개의 네트워크이므로 parameter를 $w$로 표현합니다.  Action value function$V(s)$를 학습하여
+<!--위의 다양한 baseline 기법들 중 마지막에 언급된 state-dependent expected return을 Actor-Critic Method라고 합니다. -->
 
 **Trust Region Policy Optimization (TRPO)**<br>
 
