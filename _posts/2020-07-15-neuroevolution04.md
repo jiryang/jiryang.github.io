@@ -92,7 +92,9 @@ $\qquad$ $$G_{i, t} = \sum^{T_i - 1}_{t'=0} r(s_{i, t'}, a_{i, t'}))$$<br>
 이는 Monte-Carlo 방식의 REINFORCE로, on-policy로 동작하기 때문에 episode들을 수행한 뒤 update하는 방식이 아니라 매 step마다 online update를 하기 때문에 $i$ term이 추가되었습니다 (여전히 future reward는 online으로 알 방법이 없으니 일단 episode를 끝까지 돌려서 각 step의 reward를 구한 다음, 다시 해당 episode의 매 step을 복기하면서 step-wise gradient update를 하면 됩니다). 충분히 큰 $N$ 횟수만큼 돌리면 정답에 수렴하게 될 것이기 때문에 등호 대신에 $\approx$ 기호를 사용했습니다.
 
 
-위와 같은 update rule을 가지는 vanilla REINFORCE는 policy가 probabilistic하게 결정되기 때문에 특정 episode의 특정 state에서 서로 다른 action을 선택할 가능성이 늘 있습니다. 그런데 optimal vs suboptimal policy에 대한 $G_t$값의 차이가 지나치게 들쭉날쭉하다면 (variance가 크다면), $G_t$가 update rule의 매 gradient에 곱해지는 값이기 때문에 학습이 수렴되는 것을 어렵게 만듭니다. 이를 좀 완화하기 위해 cumulative reward ($G_t$)를 구할 때 discount rate ($\gamma$)를 추가하였지만 여전히 variance를 충분히 줄여주지는 못합니다. 이러한 variance 문제를 줄여주기 위한 몇 가지 방법이 고안되었습니다:<br>
+위와 같은 update rule을 가지는 vanilla REINFORCE는 policy가 probabilistic하게 결정되기 때문에 특정 episode의 특정 state에서 서로 다른 action을 선택할 가능성이 늘 있습니다. 그런데 optimal vs suboptimal policy에 대한 $G_t$값의 차이가 지나치게 들쭉날쭉하다면 (variance가 크다면), $G_t$가 update rule의 매 gradient에 곱해지는 값이기 때문에 학습이 수렴되는 것을 어렵게 만듭니다. 예를 들면 아래의 그래프처럼 수렴에 수많은 iteration이 필요하고 variance가 큰 것을 볼 수 있습니다 (David Silver의 RL Ch.7 강의자료이며, iteration 단위가 million임).이를 좀 완화하기 위해 cumulative reward ($G_t$)를 구할 때 discount rate ($\gamma$)를 추가하였지만 여전히 variance를 충분히 줄여주지는 못합니다. 이러한 variance 문제를 줄여주기 위한 몇 가지 방법이 고안되었습니다:<br>
+
+![Fig4](https://jiryang.github.io/img/vanilla_pg_convergence.PNG "Example of Convergence Graph of Monte-Carlo REINFORCE"){: width="50%"}{: .aligncenter}
 
 
 **_Causality (Reward-to-go)_**<br>
@@ -117,16 +119,14 @@ $\qquad$ $$\nabla_{\theta}J(\theta) \approx \frac{1}{N} \sum^N_{i=1} \sum^{T_i -
 $\qquad$ $$b = \mathbb{E} \lbrack R(\tau) \rbrack \approx \frac{1}{N} \sum^N_{i=1} R(\tau^{(i)})$$
 - Optimal Constant baseline: 수학적으로 variance ($$Var \lbrack x \rbrack = E \lbrack x^2 \rbrack - E {\lbrack x \rbrack}^2 $$)를 최소화하는 값을 계산한 optimal 값이지만 성능 개선 정도에 비해 computational burden이 심해서 자주 사용되지는 않음<br>
 $\qquad$ $$b = \frac{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}; \theta)^2)R(\tau^{(i)})}{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}); \theta)^2}$$<br>
-- Time-dependent baseline: episode 기준으로 reward를 계산하여 averaging을 하는 것이 아니라, 각 episode 내의 모든 step(state-action pair)들에 대해 reward를 구해 평균을 낸 것으로, 특정 시간 이후의 step만을 고려할 수도 있음 (수식에서는 episode마다 $t$ 시점 이후부터의 reward를 계산)<br>
+- Time-dependent baseline: episode 기준으로 reward를 계산하여 averaging을 하는 것이 아니라, 각 episode 내의 모든 step(state-action pair)들에 대해 reward를 구해 평균을 낸 것으로, _Causality (Reward-to-go)_ 적용 가능 (수식은 _Causality_ 적용)<br>
 $\qquad$ $$b_t = \frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t'=t} r(s_{i, t'}, a_{i, t'})$$
 - State-dependent expected return: episode나 time이 아니라 특정 state에 dependent한 reward (현재 policy에 의하면 state $t$에서는 평균 얼마만큼의 reward를 주는가)를 계산<br>
 $\qquad$ $$b(s_t) = \mathbb{E} \lbrack r_t + r_{t+1} + r_{t+2} + ... + r_{T-1} \rbrack = V^{\pi}(s_t)$$
-<br>
-
-Policy-gradient도 variant들을 몇 개 소개하고 DQN을 마무리할까 합니다.<br>
+<br><br>
 
 
-**Temporal Difference (TD) Method**
+Policy-gradient도 variant들을 몇 개 소개합니다.<br>
 
 **Actor-Critic Method**
 
