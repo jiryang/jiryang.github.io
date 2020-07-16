@@ -21,9 +21,43 @@ mathjax: true
 _* 이미지는 MIT 6.S191 lecture slide에서 가져왔습니다. 대신 [유튜브 링크](https://www.youtube.com/watch?v=nZfaHIxDD5w&t=1937s) 공유합니다. 잘 준비된 intro 강의라서 이해가 쉬우니 꼭 보시길 권합니다._
 
 
+MIT 6.S191에 대해 이야기한 김에, 이 강의에서 policy gradient의 학습 방법에 대해 자율주행차량의 예를 들면서 high-level로 굉장히 쉽게 설명한 부분이 있어서 보여드리고 시작하겠습니다. 우선 학습의 순서는 다음과 같습니다:
+1. Initialize the agent
+2. Run a policy until termination
+3. Record all states, actions, rewards
+4. Decrease probability of actions that resulted in low reward
+5. Increase probability of actions that resulted in high reward
+
+그리고 그림으로 시나리오를 설명합니다:
+
+Episode#1 | Episode#2 | Episode#3 | Episode#4
+:--------:|:---------:|:---------:|:---------:
+![Fig3](https://jiryang.github.io/img/pg_training_scene01.PNG "Episode#1"){: width="100%"} | ![Fig4](https://jiryang.github.io/img/pg_training_scene02.PNG "Episode#2"){: width="100%"} | ![Fig5](https://jiryang.github.io/img/pg_training_scene03.PNG "Episode#3"){: width="100%"} | ![Fig6](https://jiryang.github.io/img/pg_training_scene04.PNG "Episode#4"){: width="100%"}
+
+
+**Episode#1**<br>
+네트워크를 initialize하고 episode를 돌려봅니다. 첫 episode는 학습 전이기 때문에 금방 길가에 충돌하게 되었는데요, episode의 모든 step에 대해 state-action-reward tuple을 저장합니다. 이 중에서 crash라는 undesirable event에 기여도가 높은 충돌 전 몇 개의 step의 action의 선택 확률을 떨어뜨리는 쪽으로 네트워크를 학습하고, 처음 몇 step동안 어느정도 전진한 event에 기여도가 높은 초반 몇 step의 action에 대해서는 선택 확률을 높이는 쪽으로 네트워크를 학습합니다.<br>
+
+
+**Episode#2**<br>
+Episode#1에서의 학습을 통해 중간에 왼쪽으로 급하게 틀던 action이 선택되지 않으면서 앞으로 좀 더 가게 되었습니다만, 결국은 또 충돌이 생깁니다. Episode#1에서와 같은 방식으로 또 학습을 진행합니다.<br>
+
+
+**Episode#3**<br>
+이러한 학습을 반복할수록 자동차가 성공적으로 앞으로 나아가는 거리가 길어지게 됩니다.<br>
+
+
+**Episode#4**<br>
+결국은 충돌하지 않고 goal까지 도달하게 됩니다.<br>
+
+
+
+이제 이러한 학습 방법이 어떻게 해서 도출되는지를 하나하나 살펴보면서 추적해보도록 하겠습니다.
+
+
 Policy gradient의 장점은 그 결과가 current state에 대한 각 action의 확률로 나오기 때문에 optimal policy가 deterministic한 경우라면 낮은 확률으로라도 randomness를 강제했던 value-based method의 $\epsilon$-greedy와 달리 stochastically deterministic하게 수렴하게 되며, optimal policy가 arbitrary한 경우에도 probability-based로 동작하기 때문에 대응이 가능하다는 점을 들 수 있습니다. 두 번째 경우를 좀 더 설명하자면, 예를들어 포커 게임을 학습한 경우 낮은 패를 쥐었을 때 Q learning과 같은 value-based 방법은 $argmax$로 도출한 optimal policy가 100% fold로 나오게 되는 반면 policy gradient는 가끔씩 블러핑을 할 수도 있습니다. 또한 앞서 설명한대로 모든 state-action space를 탐색하지 않고 probabilistically greedy하게 필요한 action을 선택하는 policy space만을 탐색하기 때문에 학습이 효과적입니다 (faster with fewer parameters). 또한 policy의 distribution이 Gaussian이라 가정하면 action space를 mean과 variance로 modeling할 수도 있게 됩니다. 즉, policy gradient를 DNN으로 구현했다면 이 output이 action들의 probability vector가 될 필요가 없고 action space를 나타내는 mean(zero-mean이라 가정하고 mean의 shift 값을 출력하면 되겠죠)과 variance만 출력해도 된다는 뜻입니다. 이렇게 되면 action space가 continuous하게 방대한 경우에도 modeling이 가능해집니다.
 
-![Fig3](https://jiryang.github.io/img/model_continuous_action_space.PNG "PG Modeling Continuous Action Space"){: width="100%"}{: .aligncenter}
+![Fig7](https://jiryang.github.io/img/model_continuous_action_space.PNG "PG Modeling Continuous Action Space"){: width="100%"}{: .aligncenter}
 
 
 Value based 대비 policy gradient 방식의 단점은 environment의 작은 변화에도 성능이 영향을 받는다는 것을 들 수 있습니다. Value table을 학습한다는건 당장 optimal policy를 구하는 데는 쓰이지 않더라도 모든 state-action space의 lookahead table을 만들어둔다는 것이라고 생각할 수도 있는데요, 그렇기 때문에 environmental change에 어느정도 resilience를 가집니다. 하지만 current environment에서 optimal한 policy를 찾는데 최적화된 policy network는 작은 environmental change에도 학습을 새로 해야 합니다.
@@ -94,7 +128,7 @@ $\qquad$ $$G_{i, t} = \sum^{T_i - 1}_{t'=0} r(s_{i, t'}, a_{i, t'}))$$<br>
 
 위와 같은 update rule을 가지는 vanilla REINFORCE는 policy가 probabilistic하게 결정되기 때문에 특정 episode의 특정 state에서 서로 다른 action을 선택할 가능성이 늘 있습니다. 그런데 optimal vs suboptimal policy에 대한 $G_t$값의 차이가 지나치게 들쭉날쭉하다면 (variance가 크다면), $G_t$가 update rule의 매 gradient에 곱해지는 값이기 때문에 학습이 수렴되는 것을 어렵게 만듭니다. 예를 들면 아래의 그래프처럼 수렴에 수많은 iteration이 필요하고 variance가 큰 것을 볼 수 있습니다 (David Silver의 RL Ch.7 강의자료이며, iteration 단위가 million임).이를 좀 완화하기 위해 cumulative reward ($G_t$)를 구할 때 discount rate ($\gamma$)를 추가하였지만 여전히 variance를 충분히 줄여주지는 못합니다. 이러한 variance 문제를 줄여주기 위한 몇 가지 방법이 고안되었습니다:<br>
 
-![Fig4](https://jiryang.github.io/img/vanilla_pg_convergence.PNG "Example of Convergence Graph of Monte-Carlo REINFORCE"){: width="50%"}{: .aligncenter}
+![Fig8](https://jiryang.github.io/img/vanilla_pg_convergence.PNG "Example of Convergence Graph of Monte-Carlo REINFORCE"){: width="50%"}{: .aligncenter}
 
 
 **_Causality (Reward-to-go)_**<br>
@@ -128,10 +162,13 @@ $\qquad$ $$b(s_t) = \mathbb{E} \lbrack r_t + r_{t+1} + r_{t+2} + ... + r_{T-1} \
 
 Policy-gradient도 variant들을 몇 개 소개합니다.<br>
 
-**Actor-Critic Method**
+**Actor-Critic Method**<br>
+
 
 위의 baseline 중 마지막 state-dependent expected return은 **Actor-Critic Method**라고 합니다. $V(s)$를 학습하여
 
-**Trust Region Policy Optimization (TRPO)**
+**Trust Region Policy Optimization (TRPO)**<br>
 
-**Proximal Policy Optimization (PPO)**
+**Proximal Policy Optimization (PPO)**<br>
+
+
