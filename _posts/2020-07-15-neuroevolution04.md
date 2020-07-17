@@ -168,42 +168,25 @@ $V^{\pi}(s_t)$는 여러 다양한 function approximator를 사용해서 구현�
 $$\phi_{i+1} \leftarrow argmin_{\phi} \frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t=0} \left( V^{\pi}_{\phi}(s_{i, t}) - (\sum^{T_i - 1}_{t'=t} r(s_{i, t'}, a_{i, t'})) \right)^2$$<br><br>
 
 
-**Actor-Critic Method**<br>
+**Actor-Critic Method (A2C, A3C)**<br>
 
-Baseline $b(s_t)$(우린 $V^{\pi}(s_t)$로 하기로 했죠)의 앞부분($$\sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'})$$)을 보시면 앞서 살펴본 Q learning의 Q value (given current policy $\pi$)와 동일하다는 것을 알 수 있습니다. 앞서 Q value는 network로 학습할 수 있다는 것을 보았으니 여기서도 Q estimate를 network로 구할 수 있습니다. Policy network의 parameter를 $\theta$로 쓰고 있으니, Q network의 parameter는 $\mathcal{w}$으로 놓고, Q 함수를 $Q_{\mathcal{w}}(s, a)$라고 하겠습니다 (더 정확하게는 $Q^{\pi_{\theta}}(s, a)$ 이라고도 쓸 수 있겠죠). 이 별도의 Q network의 학습도 on-policy로 진행합니다.
-
-
-이런 이유로 $b(s_t)$는 $V^{\pi}(s_t)$로 정하도록 하고, 저 윗쪽의 _Causality_ 와 _Discount rate_ 과 _baseline_ 을 모두 적용한 update rule 식을 다시 소환해 보겠습니다:<br>
-$\qquad$ $$\nabla_{\theta}J(\theta) \approx \frac{1}{N} \sum^N_{i=1} \sum^{T_i - 1}_{t=0} \nabla_{\theta} ln \; \pi_{\theta} (a_{i, t} \mid s_{i, t}) \times \left( \sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'}) - b(s_t) \right)$$<br>
+Baseline $b(s_t)$(우린 $V^{\pi}(s_t)$로 하기로 했죠)의 앞부분($$\sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'})$$)을 보시면 앞서 살펴본 Q learning의 Q value (given current policy $\pi$)와 동일하다는 것을 알 수 있습니다. 앞서 Q value는 network로 학습할 수 있다는 것을 보았으니 여기서도 Q estimate를 network로 구할 수 있습니다. Policy network의 parameter를 $\theta$로 쓰고 있으니, Q network의 parameter는 $\mathcal{w}$으로 놓고, Q 함수를 $Q_{\mathcal{w}}(s, a)$라고 하겠습니다 (더 정확하게는 $Q^{\pi_{\theta}}(s, a)$ 이라고도 쓸 수 있겠죠). 이 별도의 Q network의 학습도 on-policy로 진행합니다.<br><br>
 
 
+이제 Actor-Critic의 기본 구조가 모두 완성되었습니다. "Actor"와 "Critic" 역할을 하는 두 개의 network를 사용해서, "Critic"에 의해 계산된 approximate policy gradient로 "Actor"을 update하는 방식니다. 즉, "Actor"는 given state의 policy distribution을 output하고, "Critic"은 "Actor"의 current policy를 평가하여 update의 방향 및 정도를 제공하는 역할을 하게 되는거죠. 이러한 역할 분담 때문에 이를 Actor-Cricit method라고 부릅니다.<br><br>
 
 
+Actor-critic만 해도 여러 variants가 있는데요, 앞서 설명드린 것이 바로 A2C와 A3C에 사용되는 Advantage Actor-Critic 방법입니다. Advantage Actor-Critic에서 쓰이는 Advantage 함수 $A(s, a)$는 이미 설명한 $= Q(s, a) - V(s)$를 하나로 묶은 함수에 불과합니다. 여기서 Q 함수를 정의대로 다시 풀어서 써보면 $A(s, a) = r_{t+1} + \gamma V_{\mathcal{v}}(s_{t+1}) - V_{\mathcal{v}}(s_t)$ (변수가 바뀌었으니 parameter도 이번엔 $\mathcal{v}$로 바꿔서 표현)가 될 것이므로, 결국 Critic network는 $V(s_t)$만 output해서 $A(s, a)$를 계산할 수 있게 되는거죠.<br><br>
 
-
-
-이 식의 $G_t$ 부분($\sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'})$)은 다음과 같이 전개할 수 있습니다:<br>
-
-
-의 $G_t$ 부분을 보면 앞서 Q learning에서 보았던 $V^{\pi}(s_t)$의 수식과 동일하다는 것을 알 수 있습니다 ($$\sum^{T_i - 1}_{t'=t} \gamma^{t'-t} r(s_{i, t'}, a_{i, t'})$$ , baseline은 편의상 생략). 교체한 수식으로 나타내면 다음과 같습니다:<br>
-$\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack Q_w(s_t, a_t) \quad \left( Q_w(s, a) \approx Q^{\pi_{\theta}}(s, a) \right)$$<br>
-
-Policy-gradient도 variant들을 몇 개 소개합니다.<br>
-
-
-
-Q 네트워크는 policy-gradient와 별개의 네트워크이므로 parameter를 $w$로 표현합니다. Discounted cumulative reward의 estimation을 $Q_w$을 output하는 "Critic" network로 교체하게 되면, true policy gradient가 아닌 "Critic"에 의해 계산된 approximate policy gradient로 policy network ("Actor")을 update하게 됩니다. 즉, "Actor"는 given state의 policy distribution을 출력하는 역할을 하고, "Critic"은 "Actor"로 하여금 보다 정확한 policy distribution 계산을 위한 Q 값(reward from now on)을 제공하는 역할을 하게 되는거죠. 이러한 역할 분담 때문에 이를 Actor-Cricit method라고 부릅니다.<br>
-
-
-여기서 Q value approximator인 "Critic"은 앞서 DQN을 이용하여 학습할 수 있다는 것을 보았는데요, 사실 neural network든 linear function approximator든 temporal difference function approximator든, 어떠한 형태의 function approximator라도 무관합니다. Linear function approximator Actor를 가진 Action-Value Actor-Critic의 pseudocode를 보겠습니다:<br>
 
 - - -
-
+<<Online Actor-Critic algorithm>><br>
+Take action $a$ following $\pi_{\theta}(a \mid s)$, get $(s, a, s', r)$<br>
+Update $V_{\mathcal{v}}$ using target $r + \gamma V_{\mathcal{v}}(s')$<br>
+Evaluate $A(s, a) = r_{t+1} + \gamma V_{\mathcal{v}}(s_{t+1})$<br>
+$nabla_{\theta} J(\theta) \approx \nabla_{\theta} ln \; \pi_{\theta}A(s, a)$<br>
+$\theta \leftarrow \theta + \alpha \nabla_{\theta} J(\theta)$
 - - -
-<!--위의 다양한 baseline 기법들 중 마지막에 언급된 state-dependent expected return을 Actor-Critic Method라고 합니다. -->
-
-**Trust Region Policy Optimization (TRPO)**<br>
-
-**Proximal Policy Optimization (PPO)**<br>
 
 
+Policy-gradient도 Actor-Critic variants를 포함하여 TRPO, PPO 등 수많은 variant들이 존재하지만, 기본적인 policy-based method의 동작방식 및 대표 알고리즘에 대해서는 살펴보았다고 생각되니 이것으로 마무리하고 다음으로 넘어가도록 하겠습니다. 원래 neuroevolution에 대해 이야기하려고 시작한 시리즈가 주변 설명에 시간이 너무 많이 소비되었네요. 취지대로 다음 포스트 부터는 Uber AI에서 진행된 (그리고 OpenAI에서도 연구된) neuroevolution에 대해 알아보도록 하겠습니다.
