@@ -155,26 +155,42 @@ $\qquad$ $$b = \mathbb{E} \lbrack R(\tau) \rbrack \approx \frac{1}{N} \sum^N_{i=
 $\qquad$ $$b = \frac{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}; \theta)^2)R(\tau^{(i)})}{\sum_i (\nabla_{\theta} log \; P(\tau^{(i)}); \theta)^2}$$<br>
 - Time-dependent baseline: episode 기준으로 reward를 계산하여 averaging을 하는 것이 아니라, 각 episode 내의 모든 step(state-action pair)들에 대해 reward를 구해 평균을 낸 것으로, _Causality (Reward-to-go)_ 적용 가능 (수식은 _Causality_ 적용)<br>
 $\qquad$ $$b_t = \frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t'=t} r(s_{i, t'}, a_{i, t'})$$
-- State-dependent expected return: episode나 time이 아니라 특정 state에 dependent한 reward (현재 policy에 의하면 state $t$에서는 평균 얼마만큼의 reward를 주는가)를 계산<br>
+- State-dependent expected return: episode나 step이 아니라 특정 state에 dependent한 reward (현재 policy에 의하면 state $t$에서 평균 얼마만큼의 reward가 예상되는가)를 계산<br>
 $\qquad$ $$b(s_t) = \mathbb{E} \lbrack r_t + r_{t+1} + r_{t+2} + ... + r_{T-1} \rbrack = V^{\pi}(s_t)$$
 <br><br>
 
+위의 여러가지 baseline 중 'current state $s_t$에서 current policy $\pi_{\theta}$로 취할 수 있는 평균 future reward'를 말하는 state-dependent expected return은 각 state에서 특정 action을 취하는 것이 해당 state의 평균 future reward보다 얼마나 더 좋은가를 측정하여, 그 정도에 따라서 특정 action이 선택될 확률을 높이거나 낮출 수 있는 기준이 될 수 있기 때문에 arbitrary function을 baseline으로 삼는 것에 비해 보다 효과적이라 할 수 있습니다.<br><br>
 
-이 중 'current state $s_t$에서 current policy $\pi_{\theta}$로 취할 수 있는 평균 future reward'를 말하는 state-dependent expected return은 그 값의 증감에 따라서 특정 action이 선택될 확률을 높이거나 낮출 수 있는 기준이 될 수 있기 때문에 arbitrary function을 baseline으로 삼는 것에 비해 보다 효과적이라 할 수 있습니다.<br>
-
-
-$V^{\pi}(s_t)$는 여러 다양한 function approximator를 사용해서 구현할 수 있습니다. 예를 들면 다음과 같이 regression을 통해서 구하는 것도 한 가지 방법이 될 수 있겠습니다:<br>
+$V^{\pi}(s_t)$는 여러 다양한 function approximator를 사용해서 구현할 수 있습니다. 예를 들면 별도의 network를 구성하여 다음과 같이 Monte-Carlo 방식으로 구하는 것도 한 가지 방법이 될 수 있습니다:<br>
 - Initialize $V^{\pi}_{\phi_0}$ ($\phi$: regressor parameter)
 - Collect episodes $\tau_1, \tau_2, ..., \tau_N$
 - Regress against reward from each episode:<br>
-$$\phi_{i+1} \leftarrow argmin_{\phi} \frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t=0} \left( V^{\pi}_{\phi}(s_{i, t}) - (\sum^{T_i - 1}_{t'=t} r(s_{i, t'}, a_{i, t'})) \right)^2$$
+$$\phi_{i+1} \leftarrow argmin_{\phi} \frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t=0} \left( V^{\pi}_{\phi}(s_{i, t}) - (\sum^{T_i - 1}_{t'=t} r(s_{i, t'}, a_{i, t'})) \right)^2$$<br><br>
 
-_Causality_ 와 _Discount rate_ 까지 적용된 expected reward 식의 $G_t$ 부분을 보면 앞서 Q learning에서 보았던 $V^{\pi}(s_t)$의 수식과 동일하다는 것을 알 수 있습니다 ($$\sum^{T_i - 1}_{t'=t} \gamma^{t'-t} r(s_{i, t'}, a_{i, t'})$$ , baseline은 편의상 생략). 교체한 수식으로 나타내면 다음과 같습니다:<br>
+
+**Actor-Critic Method**<br>
+
+Baseline $b(s_t)$(우린 $V^{\pi}(s_t)$로 하기로 했죠)의 앞부분($\sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'})$)을 보시면 앞서 살펴본 Q learning의 Q value (given current policy $\pi$)와 동일하다는 것을 알 수 있습니다. 앞서 Q value는 network로 학습할 수 있다는 것을 보았으니 여기서도 Q estimate를 network로 구할 수 있습니다. Policy network의 parameter를 $\theta$로 쓰고 있으니, Q network의 parameter는 $\mathcal{w}$으로 놓고, Q 함수를 $Q_{\mathcal{w}}(s, a)$라고 하겠습니다 (더 정확하게는 $Q^{\pi_{\theta}}(s, a)$ 이라고도 쓸 수 있겠죠). 이 별도의 Q network의 학습도 on-policy로 진행합니다.
+
+
+이런 이유로 $b(s_t)$는 $V^{\pi}(s_t)$로 정하도록 하고, 저 윗쪽의 _Causality_ 와 _Discount rate_ 과 _baseline_ 을 모두 적용한 update rule 식을 다시 소환해 보겠습니다:<br>
+$\qquad$ $$\nabla_{\theta}J(\theta) \approx \frac{1}{N} \sum^N_{i=1} \sum^{T_i - 1}_{t=0} \nabla_{\theta} ln \; \pi_{\theta} (a_{i, t} \mid s_{i, t}) \times \left( \sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'}) - b(s_t) \right)$$<br>
+
+
+
+
+
+
+
+이 식의 $G_t$ 부분($\sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'})$)은 다음과 같이 전개할 수 있습니다:<br>
+
+
+의 $G_t$ 부분을 보면 앞서 Q learning에서 보았던 $V^{\pi}(s_t)$의 수식과 동일하다는 것을 알 수 있습니다 ($$\sum^{T_i - 1}_{t'=t} \gamma^{t'-t} r(s_{i, t'}, a_{i, t'})$$ , baseline은 편의상 생략). 교체한 수식으로 나타내면 다음과 같습니다:<br>
 $\qquad$ $$\nabla_{\theta}J(\theta) = \mathbb{E}_{\pi_{\theta}} \lbrack \left( \sum^T_{t=1} \nabla ln \; \pi_{\theta} (a_t \mid s_t) \right) \rbrack Q_w(s_t, a_t) \quad \left( Q_w(s, a) \approx Q^{\pi_{\theta}}(s, a) \right)$$<br>
 
 Policy-gradient도 variant들을 몇 개 소개합니다.<br>
 
-**Actor-Critic Method**<br>
+
 
 Q 네트워크는 policy-gradient와 별개의 네트워크이므로 parameter를 $w$로 표현합니다. Discounted cumulative reward의 estimation을 $Q_w$을 output하는 "Critic" network로 교체하게 되면, true policy gradient가 아닌 "Critic"에 의해 계산된 approximate policy gradient로 policy network ("Actor")을 update하게 됩니다. 즉, "Actor"는 given state의 policy distribution을 출력하는 역할을 하고, "Critic"은 "Actor"로 하여금 보다 정확한 policy distribution 계산을 위한 Q 값(reward from now on)을 제공하는 역할을 하게 되는거죠. 이러한 역할 분담 때문에 이를 Actor-Cricit method라고 부릅니다.<br>
 
