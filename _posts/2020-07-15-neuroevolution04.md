@@ -176,7 +176,7 @@ Baseline $b(s_t)$(우린 $V^{\pi}(s_t)$로 하기로 했죠)의 앞부분($$\sum
 이제 Actor-Critic의 기본 구조가 모두 완성되었습니다. "Actor"와 "Critic" 역할을 하는 두 개의 network를 사용해서, "Critic"에 의해 계산된 approximate policy gradient로 "Actor"을 update하는 방식니다. 즉, "Actor"는 given state의 policy distribution을 output하고, "Critic"은 "Actor"의 current policy를 평가하여 update의 방향 및 정도를 제공하는 역할을 하게 되는거죠. 이러한 역할 분담 때문에 이를 Actor-Cricit method라고 부릅니다.<br><br>
 
 
-Actor-critic만 해도 여러 variants가 있는데요, 앞서 설명드린 것이 바로 A2C와 A3C에 사용되는 Advantage Actor-Critic 방법입니다. Advantage Actor-Critic에서 쓰이는 Advantage 함수 $A(s, a)$는 이미 설명한 $= Q(s, a) - V(s)$를 하나로 묶은 함수에 불과합니다. 여기서 Q 함수를 정의대로 다시 풀어서 써보면 $A(s, a) = r_{t+1} + \gamma V_{\mathcal{v}}(s_{t+1}) - V_{\mathcal{v}}(s_t)$ (변수가 바뀌었으니 parameter도 이번엔 $\mathcal{v}$로 바꿔서 표현)가 될 것이므로, 결국 Critic network는 $V(s_t)$만 output해서 $A(s, a)$를 계산할 수 있게 되는거죠.<br><br>
+Actor-critic만 해도 여러 variants가 있는데요, 앞서 설명드린 것이 바로 A2C와 A3C에 사용되는 Advantage Actor-Critic 방법입니다. Advantage Actor-Critic에서 쓰이는 Advantage 함수는 이미 설명한대로 다음과 같이 $A(s, a) = Q(s, a) - V(s)$ Q와 V를 하나로 묶은 함수에 불과합니다. 여기서 Q 함수를 정의대로 다시 풀어서 써보면 $A(s, a) = r_{t+1} + \gamma V_{\mathcal{v}}(s_{t+1}) - V_{\mathcal{v}}(s_t)$ (변수가 바뀌었으니 parameter도 이번엔 $\mathcal{v}$로 바꿔서 표현)가 될 것이므로, 결국 Critic network는 $V(s_t)$만 output해서 $A(s, a)$를 계산할 수 있게 되는거죠. 이러한 Advantage function을 이용한 것이 A2C, 그리고 A2C network를 parallel하게 여러 개를 돌리면서 동일한 구조를 가진 global network를 asynchronous하게 업데이트하는 것이 A3C 입니다.<br><br>
 
 
 - - -
@@ -188,6 +188,14 @@ Actor-critic만 해도 여러 variants가 있는데요, 앞서 설명드린 것�
 - $\theta \leftarrow \theta + \alpha \nabla_{\theta} J(\theta)$
 
 - - -
+<br>
+
+
+아래 그림과 같이 cyclic하게 동작하는 Actor와 Critic은 별개의 network 2개로 구현할 수도, 지난 포스트에서 본 duel network 1개로 구현할 수도 있습니다. 일반적으로 input이 simple해서 feature downsample이 간단한 경우에는 별개의 network로 구현해도 성능에 별 영향이 없으나, real image와 같이 high dimensional input이 들어오는 경우에는 두 network에서 동일한 feature selection 과정을 거치는 것이 낭비스럽고 수렴에도 영향이 있을 것이기 때문에 duel network 형태로 구현합니다.<br>
+
+
+![Fig9](https://jiryang.github.io/img/actor-critic.PNG "Actor-Critic Cycle"){: width="50%"}{: .aligncenter}
+
 
 
 Policy-gradient도 Actor-Critic variants를 포함하여 TRPO, PPO 등 수많은 variant들이 존재하지만, 기본적인 policy-based method의 동작방식 및 대표 알고리즘에 대해서는 살펴보았다고 생각되니 이것으로 마무리하고 다음으로 넘어가도록 하겠습니다. 원래 neuroevolution에 대해 이야기하려고 시작한 시리즈가 주변 설명에 시간이 너무 많이 소비되었네요. 취지대로 다음 포스트 부터는 Uber AI에서 진행된 (그리고 OpenAI에서도 연구된) neuroevolution에 대해 알아보도록 하겠습니다.
