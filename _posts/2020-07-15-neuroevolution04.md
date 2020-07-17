@@ -159,7 +159,7 @@ $\qquad$ $$b_t = \frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t'=t} r(s_{i, t'}, a_{i, t
 $\qquad$ $$b(s_t) = \mathbb{E} \lbrack r_t + r_{t+1} + r_{t+2} + ... + r_{T-1} \rbrack = V^{\pi}(s_t)$$
 <br><br>
 
-위의 여러가지 baseline 중 'current state $s_t$에서 current policy $\pi_{\theta}$로 취할 수 있는 평균 future reward'를 말하는 state-dependent expected return은 각 state에서 특정 action을 취하는 것이 해당 state의 평균 future reward보다 얼마나 더 좋은가를 측정하여, 그 정도에 따라서 특정 action이 선택될 확률을 높이거나 낮출 수 있는 기준이 될 수 있기 때문에 arbitrary function을 baseline으로 삼는 것에 비해 보다 효과적이라 할 수 있습니다.<br><br>
+위의 여러가지 baseline 중 'current state $s_t$에서 current policy $\pi_{\theta}$로 취할 수 있는 평균 future reward'를 말하는 state-dependent expected return $V^{\pi}(s_t)$은 각 state에서 특정 action을 취하는 것이 해당 state의 평균 future reward보다 얼마나 더 좋은가를 측정하여, 그 정도에 따라서 특정 action이 선택될 확률을 높이거나 낮출 수 있는 기준이 될 수 있기 때문에 arbitrary function을 baseline으로 삼는 것에 비해 보다 효과적이라 할 수 있습니다.<br><br>
 
 $V^{\pi}(s_t)$는 여러 다양한 function approximator를 사용해서 구현할 수 있습니다. 예를 들면 별도의 network를 구성하여 다음과 같이 Monte-Carlo 방식으로 구하는 것도 한 가지 방법이 될 수 있습니다:<br>
 - Initialize $V^{\pi}_{\phi_0}$ ($\phi$: regressor parameter)
@@ -170,7 +170,7 @@ $$\phi_{i+1} \leftarrow argmin_{\phi} \frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t=0} 
 
 **Actor-Critic Method**<br>
 
-Baseline $b(s_t)$(우린 $V^{\pi}(s_t)$로 하기로 했죠)의 앞부분($\sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'})$)을 보시면 앞서 살펴본 Q learning의 Q value (given current policy $\pi$)와 동일하다는 것을 알 수 있습니다. 앞서 Q value는 network로 학습할 수 있다는 것을 보았으니 여기서도 Q estimate를 network로 구할 수 있습니다. Policy network의 parameter를 $\theta$로 쓰고 있으니, Q network의 parameter는 $\mathcal{w}$으로 놓고, Q 함수를 $Q_{\mathcal{w}}(s, a)$라고 하겠습니다 (더 정확하게는 $Q^{\pi_{\theta}}(s, a)$ 이라고도 쓸 수 있겠죠). 이 별도의 Q network의 학습도 on-policy로 진행합니다.
+Baseline $b(s_t)$(우린 $V^{\pi}(s_t)$로 하기로 했죠)의 앞부분($$\sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'})$$)을 보시면 앞서 살펴본 Q learning의 Q value (given current policy $\pi$)와 동일하다는 것을 알 수 있습니다. 앞서 Q value는 network로 학습할 수 있다는 것을 보았으니 여기서도 Q estimate를 network로 구할 수 있습니다. Policy network의 parameter를 $\theta$로 쓰고 있으니, Q network의 parameter는 $\mathcal{w}$으로 놓고, Q 함수를 $Q_{\mathcal{w}}(s, a)$라고 하겠습니다 (더 정확하게는 $Q^{\pi_{\theta}}(s, a)$ 이라고도 쓸 수 있겠죠). 이 별도의 Q network의 학습도 on-policy로 진행합니다.
 
 
 이런 이유로 $b(s_t)$는 $V^{\pi}(s_t)$로 정하도록 하고, 저 윗쪽의 _Causality_ 와 _Discount rate_ 과 _baseline_ 을 모두 적용한 update rule 식을 다시 소환해 보겠습니다:<br>
