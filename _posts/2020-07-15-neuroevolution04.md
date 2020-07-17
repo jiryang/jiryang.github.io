@@ -181,11 +181,12 @@ Actor-critic만 해도 여러 variants가 있는데요, 앞서 설명드린 것�
 
 - - -
 <<Online Actor-Critic algorithm>><br>
-Take action $a$ following $\pi_{\theta}(a \mid s)$, get $(s, a, s', r)$<br>
-Update $V_{\mathcal{v}}$ using target $r + \gamma V_{\mathcal{v}}(s')$<br>
-Evaluate $A(s, a) = r_{t+1} + \gamma V_{\mathcal{v}}(s_{t+1})$<br>
-$nabla_{\theta} J(\theta) \approx \nabla_{\theta} ln \; \pi_{\theta}A(s, a)$<br>
-$\theta \leftarrow \theta + \alpha \nabla_{\theta} J(\theta)$
+- Take action $a$ following $\pi_{\theta}(a \mid s)$, get $(s, a, s', r)$<br>
+- Update $V_{\mathcal{v}}$ using target $r + \gamma V_{\mathcal{v}}(s')$<br>
+- Evaluate $A(s, a) = r_{t+1} + \gamma V_{\mathcal{v}}(s_{t+1})$<br>
+- $\nabla_{\theta} J(\theta) \approx \nabla_{\theta} ln \; \pi_{\theta}A(s, a)$<br>
+- $\theta \leftarrow \theta + \alpha \nabla_{\theta} J(\theta)$
+
 - - -
 
 
