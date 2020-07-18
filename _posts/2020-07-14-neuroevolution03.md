@@ -33,7 +33,7 @@ $\qquad$ $$\pi^{\ast} \equiv argmax_{\pi} V^{\pi}(s), (\forall s)$$<br><br>
 위 정의는 '어떤 state에서 $$optimal \; policy$$란 해당 state로부터의 cumulative reward를 최대화하는 policy이다'라는 의미로 직관적입니다.
 
 
-RL task는 크게 두 가지 종류로 나눌 수 있습니다. 하나는 학습을 통해 정확한 expected reward를 계산해내는 value-based method이고, 다른 하나는 취해야 하는 action을 학습하는 policy-based method 입니다. 두 번의 포스팅에 걸쳐 각각의 경우를 알아보겠습니다.<br>
+RL 솔루션은 크게 두 가지 방법론으로 나눌 수 있습니다. 하나는 학습을 통해 정확한 expected reward를 계산해내는 value-based method이고, 다른 하나는 취해야 하는 action을 학습하는 policy-based method 입니다. 두 번의 포스팅에 걸쳐 각각의 경우를 알아보겠습니다.<br>
 
 
 **Q-Learning (Value-based)**<br>
@@ -81,7 +81,7 @@ Toy example을 어떻게 state diagram으로 만들고, 그에 따른 reward tab
 
 
 _Experience Replay_<br>
-Q learning이 current episode의 연속적인 state-action pair에 대해 매번 Q table을 업데이트하는 방식이다보니 DQN도 episode가 진행되는 동안 계속해서 weight update를 하게 되는데, 이러면 매 episode의 sequence에 대해 DQN이 overfit되는 문제가 발생합니다. 이러한 consecutive sample 사이의 correlation을 없애기 위해 _Experience Replay_ 라는 기법이 사용됩니다. _Experience Replay_ 는 DQN을 on-policy로 업데이트하는 대신, 매번 consecutive하게 발생하는 experience를 별도의 replay memory에 저장해 두었다가 나중에 off-policy 방식으로 random하게 추출하면서 DQN을 업데이트하는 기법입니다. 이를 이용하면 consecutive expericne의 correlation도 줄일 수 있을 뿐더러, 한 experience가 DQN을 한 번 업데이트하고 사라져버리는 것이 아니라 재활용될 수 있고, mini-batch를 사용한 학습 속도 개선에도 기여할 수 있다는 부가적인 장점도 가지고 있습니다.<br><br>
+Q learning이 current episode의 연속적인 state-action pair에 대해 매번 Q table을 업데이트하는 방식이다보니 DQN도 episode가 진행되는 동안 계속해서 weight update를 하게 되는데, 이러면 매 episode의 sequence에 대해 DQN이 overfit되는 문제가 발생합니다. 이러한 consecutive sample 사이의 correlation을 없애기 위해 _Experience Replay_ 라는 기법이 사용됩니다. _Experience Replay_ 는 DQN을 on-policy로 업데이트하지 않고, 매번 consecutive하게 발생하는 experience를 별도의 replay memory에 저장해 두었다가 나중에 off-policy 방식으로 random하게 추출하면서 DQN을 업데이트하는 기법입니다. 이를 이용하면 consecutive expericne의 correlation도 줄일 수 있을 뿐더러, 한 experience가 DQN을 한 번 업데이트하고 사라져버리는 것이 아니라 재활용될 수 있고, mini-batch를 사용한 학습 속도 개선에도 기여할 수 있다는 부가적인 장점도 가지고 있습니다.<br><br>
 
 
 _$\epsilon$-Greedy_<br>
@@ -132,7 +132,7 @@ _Target Network_<br>
 ![Fig3](https://jiryang.github.io/img/soft_update.png "Soft Update Target Network in DQN"){: width="100%"}
 
 
-이 방식은 '모든 state가 관찰 가능하고, 모든 state에 대한 모든 action이 수행 가능한' perfect environment에서라면 그다지 문제가 되지 않을 수도 있으나, 실제 학습 상황에서는 sensory값이 누락된다거나 environment에 변화가 생긴다거나 $\epsilon$-greedy처럼 non-deterministic하게 action을 수행하게 되는 noisy한 environment일 경우가 많습니다. Perfect environment라면 stochastic하게 optimal Q value로 수렴이 될 가능성이 높지만, 그렇지 않은 경우 Q table의 값이 몇몇 경우의 잘못 계산된 $max \hat{Q}$ 값에 의해 suboptimal하게 수렴되는 경우가 발생할 수 있습니다. 특히 overestimation의 우려가 크다고 밝혀졌는데, 이를 방지하기 위해 primary Q network에서 하되, 그 action으로 인한 reward는 target Q network에서 가져오는 DDQN 방식이 고안되었습니다.
+이 방식은 '모든 state가 관찰 가능하고, 모든 state에 대한 모든 action이 수행 가능한' perfect environment에서라면 그다지 문제가 되지 않을 수도 있으나, 실제 학습 상황에서는 sensory값이 누락된다거나 environment에 변화가 생긴다거나 $\epsilon$-greedy처럼 non-deterministic하게 action을 수행하게 되는 noisy한 environment일 경우가 많습니다. Perfect environment라면 stochastic하게 optimal Q value로 수렴이 될 가능성이 높지만, 그렇지 않은 경우 Q table의 값이 몇몇 경우의 잘못 계산된 $max \hat{Q}$ 값에 의해 suboptimal하게 수렴되는 경우가 발생할 수 있습니다. 특히 overestimation의 우려가 크다고 밝혀졌는데, 이를 방지하기 위해 action selection은 primary Q network에서 하되, 그 action으로 인한 reward는 target Q network에서 가져오는 DDQN 방식이 고안되었습니다.
 
 ![Fig4](https://jiryang.github.io/img/ddqn.png "Double DQN"){: width="100%"}
 

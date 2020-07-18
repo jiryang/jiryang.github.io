@@ -173,10 +173,10 @@ $$\phi_{i+1} \leftarrow argmin_{\phi} \frac{1}{N} \sum^N_{i=1} \sum^{T-1}_{t=0} 
 Baseline $b(s_t)$(우린 $V^{\pi}(s_t)$로 하기로 했죠)의 앞부분($$\sum^{T_i - 1}_{t'=t} \gamma^{t'-t}r(s_{i, t'}, a_{i, t'})$$)을 보시면 앞서 살펴본 Q learning의 Q value (given current policy $\pi$)와 동일하다는 것을 알 수 있습니다. 앞서 Q value는 network로 학습할 수 있다는 것을 보았으니 여기서도 Q estimate를 network로 구할 수 있습니다. Policy network의 parameter를 $\theta$로 쓰고 있으니, Q network의 parameter는 $\mathcal{w}$으로 놓고, Q 함수를 $Q_{\mathcal{w}}(s, a)$라고 하겠습니다 (더 정확하게는 $Q^{\pi_{\theta}}(s, a)$ 이라고도 쓸 수 있겠죠). 이 별도의 Q network의 학습도 on-policy로 진행합니다.<br><br>
 
 
-이제 Actor-Critic의 기본 구조가 모두 완성되었습니다. "Actor"와 "Critic" 역할을 하는 두 개의 network를 사용해서, "Critic"에 의해 계산된 approximate policy gradient로 "Actor"을 update하는 방식니다. 즉, "Actor"는 given state의 policy distribution을 output하고, "Critic"은 "Actor"의 current policy를 평가하여 update의 방향 및 정도를 제공하는 역할을 하게 되는거죠. 이러한 역할 분담 때문에 이를 Actor-Cricit method라고 부릅니다.<br><br>
+이제 Actor-Critic의 기본 구조가 모두 완성되었습니다. "Actor"와 "Critic" 역할을 하는 두 개의 network를 사용해서, "Critic"에 의해 계산된 approximate policy gradient로 "Actor"을 update하는 방식입니다. 즉, "Actor"는 given state의 policy distribution을 output하고, "Critic"은 "Actor"의 current policy를 평가하여 update의 방향 및 정도를 제공하는 역할을 하게 되는거죠. 이러한 역할 분담 때문에 이를 Actor-Critic method라고 부릅니다.<br><br>
 
 
-Actor-critic만 해도 여러 variants가 있는데요, 앞서 설명드린 것이 바로 A2C와 A3C에 사용되는 Advantage Actor-Critic 방법입니다. Advantage Actor-Critic에서 쓰이는 Advantage 함수는 이미 설명한대로 다음과 같이 $A(s, a) = Q(s, a) - V(s)$ Q와 V를 하나로 묶은 함수에 불과합니다. 여기서 Q 함수를 정의대로 다시 풀어서 써보면 $A(s, a) = r_{t+1} + \gamma V_{\mathcal{v}}(s_{t+1}) - V_{\mathcal{v}}(s_t)$ (변수가 바뀌었으니 parameter도 이번엔 $\mathcal{v}$로 바꿔서 표현)가 될 것이므로, 결국 Critic network는 $V(s_t)$만 output해서 $A(s, a)$를 계산할 수 있게 되는거죠. 이러한 Advantage function을 이용한 것이 A2C, 그리고 A2C network를 parallel하게 여러 개를 돌리면서 동일한 구조를 가진 global network를 asynchronous하게 업데이트하는 것이 A3C 입니다.<br><br>
+Actor-critic만 해도 여러 variants가 있는데요, 앞서 설명드린 것이 바로 A2C와 A3C에 사용되는 Advantage Actor-Critic 방법입니다. Advantage Actor-Critic에서 쓰이는 Advantage 함수는 이미 설명한대로 다음과 같이 $A(s, a) = Q(s, a) - V(s)$ Q와 V를 하나로 묶은 함수에 불과합니다 (지난 포스트의 dueling DQN에서 이야기한 Advantage term과 동일합니다). 여기서 Q 함수를 정의대로 다시 풀어서 써보면 $A(s, a) = r_{t+1} + \gamma V_{\mathcal{v}}(s_{t+1}) - V_{\mathcal{v}}(s_t)$ (변수가 바뀌었으니 parameter도 이번엔 $\mathcal{v}$로 바꿔서 표현)가 될 것이므로, 결국 Critic network는 $V(s_t)$만 output해서 $A(s, a)$를 계산할 수 있게 되는거죠. 이러한 Advantage function을 이용한 것이 A2C, 그리고 A2C network를 parallel하게 여러 개를 돌리면서 동일한 구조를 가진 global network를 asynchronous하게 업데이트하는 것이 A3C 입니다.<br><br>
 
 
 - - -
